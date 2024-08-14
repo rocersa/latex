@@ -36,7 +36,7 @@ def generate_latex_source(invoice, totalPrice):
     
     \\begin{document}
     \\begin{center}
-        \\textbf{\\Huge \\textcolor{green}{WWW.COR-TEN-STEEL.CO.UK}}
+        \\textbf{\\Huge {WWW.COR-TEN-STEEL.CO.UK}}
     \\end{center}
     
     \\vspace{1cm}
