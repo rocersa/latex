@@ -1,9 +1,10 @@
 # Stage 1: Build the LaTeX document
 FROM texlive/texlive:latest AS texlive
 
-# Install additional LaTeX packages if needed
-RUN apt-get update && \
-    apt-get install -y texlive-latex-extra
+# Initialize tlmgr in user mode
+RUN tlmgr init-usertree && \
+    tlmgr update --self && \
+    tlmgr update --all
 
 # Stage 2: Setup Python environment and copy application code
 FROM python:3.9-slim
@@ -20,6 +21,11 @@ RUN apt-get update && \
     apt-get install -y texlive && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+# Initialize tlmgr in user mode in the second stage
+RUN tlmgr init-usertree && \
+    tlmgr update --self && \
+    tlmgr update --all
 
 # Copy LaTeX-related files from the texlive stage
 COPY --from=texlive /usr/share/texlive /usr/share/texlive
