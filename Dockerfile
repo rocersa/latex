@@ -1,10 +1,6 @@
 # Stage 1: Build the LaTeX document
 FROM texlive/texlive:latest AS texlive
 
-# Update TeX Live to ensure all packages are up to date
-RUN tlmgr update --self && \
-    tlmgr update --all
-
 # Stage 2: Setup Python environment and copy application code
 FROM python:3.9-slim
 
@@ -20,10 +16,6 @@ RUN apt-get update && \
     apt-get install -y texlive && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-
-# Update TeX Live in the second stage to ensure compatibility
-RUN tlmgr update --self && \
-    tlmgr update --all
 
 # Copy LaTeX-related files from the texlive stage
 COPY --from=texlive /usr/share/texlive /usr/share/texlive
