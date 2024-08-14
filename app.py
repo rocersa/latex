@@ -26,8 +26,12 @@ def generate_pdf():
     return send_file('invoice.pdf', as_attachment=True)
 
 def generate_latex_source(invoice, totalPrice):
-    print(invoice)
-    # Generate LaTeX content here (similar to the LaTeX source in your Node.js example)
+    # Generate table rows dynamically
+    table_rows = "\n".join([
+        f"\\texttt{{{component['ProductsT']['NameMetric']}}} & \\texttt{{{component['Quantity']}}} & £\\texttt{{{component['ProductsT']['UKRetailCost']:.2f}}} & £\\texttt{{{(component['Quantity'] * component['ProductsT']['UKRetailCost']):.2f}}} \\\\ \\hline"
+        for component in invoice['InvoiceComponentsT']
+    ])
+
     latex_source = f"""
     \\documentclass[a4paper,12pt]{{article}}
     \\usepackage{{graphicx}}
@@ -54,12 +58,12 @@ def generate_latex_source(invoice, totalPrice):
         Email: uk@cor-ten-steel.co.uk \\\\
         \\vspace{{0.5cm}}
         \\textbf{{\\large Customer Details:}} \\\\
-        Name: \\texttt{{{invoice.CustomerT.FirstName}}} \\texttt{{{invoice.CustomerT.LastName}}} \\\\
+        Name: \\texttt{{{invoice['CustomerT']['FirstName']}}} \\texttt{{{invoice['CustomerT']['LastName']}}} \\\\
         Address: \\\\
-        \\texttt{{{invoice.CustomerT.AddressNumber}}} \\texttt{{{invoice.CustomerT.AddressStreet}}} \\\\
-        \\texttt{{{invoice.CustomerT.AddressSuburb}}} \\texttt{{{invoice.CustomerT.AddressPostcode}}} \\\\
-        \\texttt{{{invoice.CustomerT.AddressCity}}} \\\\
-        \\texttt{{{invoice.CustomerT.AddressCountry}}}
+        \\texttt{{{invoice['CustomerT']['AddressNumber']}}} \\texttt{{{invoice['CustomerT']['AddressStreet']}}} \\\\
+        \\texttt{{{invoice['CustomerT']['AddressSuburb']}}} \\texttt{{{invoice['CustomerT']['AddressPostcode']}}} \\\\
+        \\texttt{{{invoice['CustomerT']['AddressCity']}}} \\\\
+        \\texttt{{{invoice['CustomerT']['AddressCountry']}}}
     \\end{{minipage}}
     \\hfill
     \\begin{{minipage}}[t]{{0.45\\textwidth}}
@@ -68,8 +72,8 @@ def generate_latex_source(invoice, totalPrice):
         Tax Invoice \\\\
         VAT Number: 161 6032 40 \\\\
         \\vspace{{1cm}}
-        Invoice Number: \\texttt{{{str(invoice.InvoiceID).zfill(5)}}} \\\\
-        Date Issued: \\texttt{{{datetime.date.today().strftime("%Y-%m-%d")}}}
+        Invoice Number: \\texttt{{{str(invoice['InvoiceID']).zfill(5)}}} \\\\
+        Date Issued: \\texttt{{{datetime.datetime.now().strftime('%Y-%m-%d')}}}
     \\end{{minipage}}
     
     \\vspace{{1cm}}
@@ -87,18 +91,20 @@ def generate_latex_source(invoice, totalPrice):
         \\endfoot
         \\hline
         \\endlastfoot
-        \\multicolumn{{2}}{{|c|}}{{}} & Subtotal & £\\texttt{{{totalPrice:.2f if totalPrice else 'ERROR'}}} \\\\
+        {table_rows}
+        \\multicolumn{{2}}{{|c|}}{{}} & Subtotal & £\\texttt{{{totalPrice:.2f}}} \\\\
         \\hline
-        \\multicolumn{{2}}{{|c|}}{{}} & VAT (20\\% Included) & £\\texttt{{{(0.2 * totalPrice):.2f if totalPrice else 'ERROR'}}} \\\\
+        \\multicolumn{{2}}{{|c|}}{{}} & VAT (20\\% Included) & £\\texttt{{{(0.2 * totalPrice):.2f}}} \\\\
         \\hline
-        \\multicolumn{{2}}{{|c|}}{{}} & Freight & £\\texttt{{{invoice.freight_charged:.2f if invoice.freight_charged else 'ERROR'}}} \\\\
+        \\multicolumn{{2}}{{|c|}}{{}} & Freight & £\\texttt{{{invoice.get('freight_charged', 0.00):.2f}}} \\\\
         \\hline
-        \\multicolumn{{2}}{{|c|}}{{}} & Total & £\\texttt{{{invoice.Price:.2f if invoice.Price else 'ERROR'}}} \\\\
+        \\multicolumn{{2}}{{|c|}}{{}} & Total & £\\texttt{{{invoice.get('Price', 0.00):.2f}}} \\\\
     \\end{{longtable}}
     
     \\end{{document}}
     """
     return latex_source
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
