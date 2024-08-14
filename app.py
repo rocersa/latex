@@ -14,7 +14,7 @@ def generate_pdf():
     latex = data['latex']
 
     # Generate LaTeX source code
-    latex_source = latex
+    latex_source = str(latex)
     
     # Write LaTeX source to a file
     with open('invoice.tex', 'w') as f:
