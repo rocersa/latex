@@ -15,29 +15,38 @@ def generate_pdf():
 
     if not invoice or not latex:
         return jsonify({"error": "Invalid input"}), 400
-
+    
     # Generate LaTeX source code
     latex_source = str(latex)
-
+    
     # Use a secure temporary directory
     with tempfile.TemporaryDirectory() as tmpdirname:
         tex_file_path = os.path.join(tmpdirname, 'invoice.tex')
         pdf_file_path = os.path.join(tmpdirname, 'invoice.pdf')
-
+    
         # Write LaTeX source to a file
         with open(tex_file_path, 'w') as f:
             f.write(latex_source)
-
+    
         # Run pdflatex to generate PDF
         try:
-            subprocess.run(['pdflatex', '-output-directory', tmpdirname, tex_file_path], check=True)
+            result = subprocess.run(
+                ['pdflatex', '-output-directory', tmpdirname, tex_file_path],
+                check=True,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True
+            )
         except subprocess.CalledProcessError as e:
-            return jsonify({"error": "PDF generation failed", "details": str(e)}), 500
-
+            return jsonify({
+                "error": "PDF generation failed",
+                "details": e.stderr
+            }), 500
+    
         # Ensure the generated PDF file exists
         if not os.path.exists(pdf_file_path):
             return jsonify({"error": "PDF file not found"}), 500
-
+    
         # Send the generated PDF file
         filename = f"invoice_{invoice['CustomerT']['FirstName']}_{invoice['CustomerT']['LastName']}.pdf"
         return send_file(pdf_file_path, as_attachment=True, download_name=filename)
