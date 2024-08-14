@@ -1,6 +1,10 @@
 # Stage 1: Build the LaTeX document
 FROM texlive/texlive:latest AS texlive
 
+# Install additional LaTeX packages if needed
+RUN apt-get update && \
+    apt-get install -y texlive-latex-extra
+
 # Stage 2: Setup Python environment and copy application code
 FROM python:3.9-slim
 
@@ -28,5 +32,3 @@ EXPOSE 5000
 
 # Define the command to run the Flask application
 CMD ["python", "app.py"]
-
-
