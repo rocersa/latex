@@ -1,8 +1,6 @@
 from flask import Flask, request, send_file, jsonify
 from flask_cors import CORS
 import subprocess
-import tempfile
-import os
 
 app = Flask(__name__)
 CORS(app)
@@ -11,6 +9,7 @@ CORS(app)
 def generate_pdf():
     data = request.json
     invoice = data.get('invoice')
+    totalPrice = data.get('totalPrice')
     latex = data.get('latex')
 
     if not invoice or not latex:
