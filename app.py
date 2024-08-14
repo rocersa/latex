@@ -11,9 +11,10 @@ def generate_pdf():
     data = request.json
     invoice = data['invoice']
     totalPrice = data['totalPrice']
+    latex = data['latex']
 
     # Generate LaTeX source code
-    latex_source = generate_latex_source(invoice, totalPrice)
+    latex_source = latex
     
     # Write LaTeX source to a file
     with open('invoice.tex', 'w') as f:
@@ -23,7 +24,8 @@ def generate_pdf():
     subprocess.run(['pdflatex', 'invoice.tex'], check=True)
 
     # Send the generated PDF file
-    return send_file('invoice.pdf', as_attachment=True)
+    filename = f"invoice_{invoice['CustomerT']['FirstName']}_{invoice['CustomerT']['LastName']}.pdf"
+    return send_file(filename, as_attachment=True)
 
 def generate_latex_source(invoice, totalPrice):
     # Generate table rows dynamically
