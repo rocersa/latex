@@ -1,5 +1,6 @@
 from flask import Flask, request, send_file
 from flask_cors import CORS
+import datetime
 import subprocess
 
 app = Flask(__name__)
@@ -25,25 +26,77 @@ def generate_pdf():
     return send_file('invoice.pdf', as_attachment=True)
 
 def generate_latex_source(invoice, totalPrice):
+    print(invoice)
     # Generate LaTeX content here (similar to the LaTeX source in your Node.js example)
-    latex_source = """
-    \\documentclass[a4paper,12pt]{article}
-    \\usepackage{graphicx}
-    \\usepackage{geometry}
-    \\geometry{a4paper, margin=1in}
-    \\usepackage{array}
-    \\usepackage{longtable}
+    latex_source = f"""
+    \\documentclass[a4paper,12pt]{{article}}
+    \\usepackage{{graphicx}}
+    \\usepackage{{geometry}}
+    \\geometry{{a4paper, margin=1cm}}
+    \\usepackage{{array}}
+    \\usepackage{{longtable}}
+    \\usepackage{{lscape}} % Add landscape package for wide tables
     
-    \\begin{document}
-    \\begin{center}
-        \\textbf{\\Huge {WWW.COR-TEN-STEEL.CO.UK}}
-    \\end{center}
+    \\begin{{document}}
     
-    \\vspace{1cm}
+    \\begin{{center}}
+        \\textbf{{\\Huge {{WWW.COR-TEN-STEEL.CO.UK}}}}
+    \\end{{center}}
     
-    % Add more LaTeX content here
+    \\vspace{{1cm}}
     
-    \\end{document}
+    \\begin{{minipage}}[t]{{0.45\\textwidth}}
+        \\raggedright
+        \\small
+        Cadley \\\\
+        SN8 4NE \\\\
+        Tel: 0118 234 9909 \\\\
+        Email: uk@cor-ten-steel.co.uk \\\\
+        \\vspace{{0.5cm}}
+        \\textbf{{\\large Customer Details:}} \\\\
+        Name: \\texttt{{{invoice.CustomerT.FirstName}}} \\texttt{{{invoice.CustomerT.LastName}}} \\\\
+        Address: \\\\
+        \\texttt{{{invoice.CustomerT.AddressNumber}}} \\texttt{{{invoice.CustomerT.AddressStreet}}} \\\\
+        \\texttt{{{invoice.CustomerT.AddressSuburb}}} \\texttt{{{invoice.CustomerT.AddressPostcode}}} \\\\
+        \\texttt{{{invoice.CustomerT.AddressCity}}} \\\\
+        \\texttt{{{invoice.CustomerT.AddressCountry}}}
+    \\end{{minipage}}
+    \\hfill
+    \\begin{{minipage}}[t]{{0.45\\textwidth}}
+        \\raggedleft
+        \\small
+        Tax Invoice \\\\
+        VAT Number: 161 6032 40 \\\\
+        \\vspace{{1cm}}
+        Invoice Number: \\texttt{{{str(invoice.InvoiceID).zfill(5)}}} \\\\
+        Date Issued: \\texttt{{{datetime.date.today().strftime("%Y-%m-%d")}}}
+    \\end{{minipage}}
+    
+    \\vspace{{1cm}}
+    
+    \\begin{{longtable}}{{|p{{0.4\\textwidth}}|p{{0.1\\textwidth}}|p{{0.2\\textwidth}}|p{{0.2\\textwidth}}|}}
+        \\hline
+        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total}} \\\\
+        \\hline
+        \\endfirsthead
+        \\hline
+        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total}} \\\\
+        \\hline
+        \\endhead
+        \\hline
+        \\endfoot
+        \\hline
+        \\endlastfoot
+        \\multicolumn{{2}}{{|c|}}{{}} & Subtotal & £\\texttt{{{totalPrice:.2f if totalPrice else 'ERROR'}}} \\\\
+        \\hline
+        \\multicolumn{{2}}{{|c|}}{{}} & VAT (20\\% Included) & £\\texttt{{{(0.2 * totalPrice):.2f if totalPrice else 'ERROR'}}} \\\\
+        \\hline
+        \\multicolumn{{2}}{{|c|}}{{}} & Freight & £\\texttt{{{invoice.freight_charged:.2f if invoice.freight_charged else 'ERROR'}}} \\\\
+        \\hline
+        \\multicolumn{{2}}{{|c|}}{{}} & Total & £\\texttt{{{invoice.Price:.2f if invoice.Price else 'ERROR'}}} \\\\
+    \\end{{longtable}}
+    
+    \\end{{document}}
     """
     return latex_source
 
