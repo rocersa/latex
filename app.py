@@ -17,7 +17,7 @@ def generate_pdf():
         return jsonify({"error": "Invalid input"}), 400
     
     # Generate LaTeX source code
-    latex_source = str(latex)
+    latex_source = latex
     
     # Use a secure temporary directory
     with tempfile.TemporaryDirectory() as tmpdirname:
