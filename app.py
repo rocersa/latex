@@ -81,11 +81,11 @@ def generate_latex_source(invoice, totalPrice):
         \\hline
         \\endhead
         {table_rows(invoice)}
-        \\multicolumn{{2}}{{|c|}}{{}} & Subtotal & £\\texttt{{{totalPrice:.2f}}} \\\\
+        \\multicolumn{{2}}{{c|}}{{}} & Subtotal & £\\texttt{{{totalPrice:.2f}}} \\\\
         \\cline{{3-4}}
-        \\multicolumn{{2}}{{|c|}}{{}} & Freight & £\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
+        \\multicolumn{{2}}{{c|}}{{}} & Freight & £\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
         \\cline{{3-4}}
-        \\multicolumn{{2}}{{|c|}}{{}} & Total & £\\texttt{{{invoice['Price']:.2f}}} \\\\
+        \\multicolumn{{2}}{{c|}}{{}} & Total & £\\texttt{{{invoice['Price']:.2f}}} \\\\
         \\cline{{3-4}}
         \\endfoot
     \\end{{longtable}}
