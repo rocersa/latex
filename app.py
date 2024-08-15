@@ -12,8 +12,7 @@ def generate_pdf():
     invoice = data.get('invoice')
     totalPrice = data.get('totalPrice')
     latex = data.get('latex')
-    print(latex)
-    print(type(latex))
+    
     if not invoice or not latex:
         return jsonify({"error": "Invalid input"}), 400
     
@@ -22,7 +21,7 @@ def generate_pdf():
     
     # Write LaTeX source to a file
     with open('invoice.tex', 'w') as f:
-        f.write(latex_source)
+        f.write(latex)
     
     # Run pdflatex to generate PDF
     subprocess.run(['pdflatex', 'invoice.tex'], check=True)
