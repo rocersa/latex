@@ -1,6 +1,7 @@
 from flask import Flask, request, send_file, jsonify
 from flask_cors import CORS
 import subprocess
+import datetime
 
 app = Flask(__name__)
 CORS(app)
@@ -29,7 +30,6 @@ def generate_pdf():
     return send_file('invoice.pdf', as_attachment=True)
 
 def generate_latex_source(invoice, totalPrice):
-    print(invoice)
     # Generate LaTeX content here (similar to the LaTeX source in your Node.js example)
     latex_source = f"""
     \\documentclass[a4paper,12pt]{{article}}
@@ -57,12 +57,12 @@ def generate_latex_source(invoice, totalPrice):
         Email: uk@cor-ten-steel.co.uk \\\\
         \\vspace{{0.5cm}}
         \\textbf{{\\large Customer Details:}} \\\\
-        Name: \\texttt{{{invoice.CustomerT.FirstName}}} \\texttt{{{invoice.CustomerT.LastName}}} \\\\
+        Name: \\texttt{{{invoice['CustomerT']['FirstName']}}} \\texttt{{{invoice['CustomerT']['LastName']}}} \\\\
         Address: \\\\
-        \\texttt{{{invoice.CustomerT.AddressNumber}}} \\texttt{{{invoice.CustomerT.AddressStreet}}} \\\\
-        \\texttt{{{invoice.CustomerT.AddressSuburb}}} \\texttt{{{invoice.CustomerT.AddressPostcode}}} \\\\
-        \\texttt{{{invoice.CustomerT.AddressCity}}} \\\\
-        \\texttt{{{invoice.CustomerT.AddressCountry}}}
+        \\texttt{{{invoice['CustomerT']['AddressNumber']}}} \\texttt{{{invoice['CustomerT']['AddressStreet']}}} \\\\
+        \\texttt{{{invoice['CustomerT']['AddressSuburb']}}} \\texttt{{{invoice['CustomerT']['AddressPostcode']}}} \\\\
+        \\texttt{{{invoice['CustomerT']['AddressCity']}}} \\\\
+        \\texttt{{{invoice['CustomerT']['AddressCountry']}}}
     \\end{{minipage}}
     \\hfill
     \\begin{{minipage}}[t]{{0.45\\textwidth}}
@@ -71,7 +71,7 @@ def generate_latex_source(invoice, totalPrice):
         Tax Invoice \\\\
         VAT Number: 161 6032 40 \\\\
         \\vspace{{1cm}}
-        Invoice Number: \\texttt{{{str(invoice.InvoiceID).zfill(5)}}} \\\\
+        Invoice Number: \\texttt{{{str(invoice['InvoiceID']).zfill(5)}}} \\\\
         Date Issued: \\texttt{{{datetime.date.today().strftime("%Y-%m-%d")}}}
     \\end{{minipage}}
     
@@ -94,14 +94,13 @@ def generate_latex_source(invoice, totalPrice):
         \\hline
         \\multicolumn{{2}}{{|c|}}{{}} & VAT (20\\% Included) & £\\texttt{{{(0.2 * totalPrice):.2f if totalPrice else 'ERROR'}}} \\\\
         \\hline
-        \\multicolumn{{2}}{{|c|}}{{}} & Freight & £\\texttt{{{invoice.freight_charged:.2f if invoice.freight_charged else 'ERROR'}}} \\\\
+        \\multicolumn{{2}}{{|c|}}{{}} & Freight & £\\texttt{{{invoice['freight_charged']:.2f if invoice['freight_charged'] else 'ERROR'}}} \\\\
         \\hline
-        \\multicolumn{{2}}{{|c|}}{{}} & Total & £\\texttt{{{invoice.Price:.2f if invoice.Price else 'ERROR'}}} \\\\
+        \\multicolumn{{2}}{{|c|}}{{}} & Total & £\\texttt{{{invoice['Price']:.2f if invoice['Price'] else 'ERROR'}}} \\\\
     \\end{{longtable}}
     
     \\end{{document}}
     """
     return latex_source
-
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
