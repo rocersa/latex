@@ -34,8 +34,10 @@ def generate_latex_source(invoice, totalPrice):
     \\geometry{{a4paper, margin=1cm}}
     \\usepackage{{array}}
     \\usepackage{{longtable}}
-    \\usepackage{{lscape}} % Add landscape package for wide tables
-    
+    \\usepackage{{fancyhdr}}
+    \\pagestyle{{fancy}}
+    \\fancyhf{{}}
+
     \\begin{{document}}
     
     \\begin{{center}}
@@ -73,7 +75,7 @@ def generate_latex_source(invoice, totalPrice):
     
     \\vspace{{1cm}}
     
-    \\begin{{longtable}}{{|p{{0.4\\textwidth}}|p{{0.1\\textwidth}}|p{{0.2\\textwidth}}|p{{0.2\\textwidth}}|}}
+    \\begin{{longtable}}{{|p{{0.4\\textwidth}}|>{{\\centering\\arraybackslash}}p{{0.1\\textwidth}}|p{{0.2\\textwidth}}|p{{0.2\\textwidth}}|}}
         \\hline
         \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total}} \\\\
         \\hline
