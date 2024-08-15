@@ -34,9 +34,7 @@ def generate_latex_source(invoice, totalPrice):
     \\geometry{{a4paper, margin=1cm}}
     \\usepackage{{array}}
     \\usepackage{{longtable}}
-    \\usepackage{{fancyhdr}}
-    \\pagestyle{{fancy}}
-    \\fancyhf{{}}
+    \\pagestyle{{empty}}
 
     \\begin{{document}}
     
@@ -85,7 +83,7 @@ def generate_latex_source(invoice, totalPrice):
         \\cline{{3-4}}
         \\multicolumn{{2}}{{c|}}{{}} & Freight & £\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
         \\cline{{3-4}}
-        \\multicolumn{{2}}{{c|}}{{}} & Total & £\\texttt{{{invoice['Price']:.2f}}} \\\\
+        \\multicolumn{{2}}{{c|}}{{}} & Balance due inc VAT & £\\texttt{{{invoice['Price']:.2f}}} \\\\
         \\cline{{3-4}}
         \\endfoot
     \\end{{longtable}}
