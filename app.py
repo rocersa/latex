@@ -12,9 +12,6 @@ def generate_pdf():
     invoice = data.get('invoice')
     totalPrice = data.get('totalPrice')
 
-    if not invoice or not latex:
-        return jsonify({"error": "Invalid input"}), 400
-    
     # Generate LaTeX source code
     latex_source = generate_latex_source(invoice, totalPrice)
     
