@@ -104,7 +104,7 @@ def generate_latex_source(invoice, totalPrice):
 def table_rows(invoice):
     table_rows = ""
     for product in invoice["InvoiceComponentsT"]:
-        table_rows += f"{product['ProductsT']['NameMetric']} & {product['Quantity']} & £{product['ProductsT']['UKRetailCost']} & £{product['ProductsT']['UKRetailCost'] * product['Quantity']} \\\\ \n"
+        table_rows += f"\\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{£{product['ProductsT']['UKRetailCost']}}} & \\texttt{{£{product['ProductsT']['UKRetailCost'] * product['Quantity']}}} \\\\ \n"
         table_rows += "\\hline \n"
     return table_rows
 
