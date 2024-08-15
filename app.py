@@ -78,7 +78,7 @@ def generate_latex_source(invoice, totalPrice):
         \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total}} \\\\
         \\hline
         \\endhead
-        {{{table_rows(invoice)}}}
+
         \\multicolumn{{2}}{{|c|}}{{}} & Subtotal & £\\texttt{{{totalPrice:.2f}}} \\\\
         \\cline{{3-4}}
         \\multicolumn{{2}}{{|c|}}{{}} & Freight & £\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
