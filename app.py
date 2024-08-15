@@ -11,8 +11,7 @@ def generate_pdf():
     data = request.json
     invoice = data.get('invoice')
     totalPrice = data.get('totalPrice')
-    latex = data.get('latex')
-    
+
     if not invoice or not latex:
         return jsonify({"error": "Invalid input"}), 400
     
@@ -21,7 +20,7 @@ def generate_pdf():
     
     # Write LaTeX source to a file
     with open('invoice.tex', 'w') as f:
-        f.write(latex)
+        f.write(latex_source)
     
     # Run pdflatex to generate PDF
     subprocess.run(['pdflatex', 'invoice.tex'], check=True)
@@ -47,7 +46,7 @@ def generate_latex_source(invoice, totalPrice):
     \\end{{center}}
     
     \\vspace{{1cm}}
-    
+    \\noindent
     \\begin{{minipage}}[t]{{0.45\\textwidth}}
         \\raggedright
         \\small
@@ -81,26 +80,36 @@ def generate_latex_source(invoice, totalPrice):
         \\hline
         \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total}} \\\\
         \\hline
-        \\endfirsthead
-        \\hline
-        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total}} \\\\
-        \\hline
         \\endhead
-        \\hline
-        \\endfoot
-        \\hline
-        \\endlastfoot
+        {{{table_rows(invoice)}}}
         \\multicolumn{{2}}{{|c|}}{{}} & Subtotal & £\\texttt{{{totalPrice:.2f}}} \\\\
-        \\hline
-        \\multicolumn{{2}}{{|c|}}{{}} & VAT (20\\% Included) & £\\texttt{{{(0.2 * totalPrice):.2f}}} \\\\
-        \\hline
+        \\cline{{3-4}}
         \\multicolumn{{2}}{{|c|}}{{}} & Freight & £\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
-        \\hline
+        \\cline{{3-4}}
         \\multicolumn{{2}}{{|c|}}{{}} & Total & £\\texttt{{{invoice['Price']:.2f}}} \\\\
+        \\cline{{3-4}}
+        \\endfoot
     \\end{{longtable}}
+    \\vspace{{1cm}}
+    \\noindent
+    Payment can be made by bank transfer to the following account:
+    \\begin{{center}}
+    \\texttt{{Account Name: Cor-Ten-Steel}} \\\\
+    \\texttt{{Sort Code: 12-34-56}} \\\\
+    \\texttt{{Account Number: 12345678}} \\\\
+    \\texttt{{Reference: 00003}}
+    \\end{{center}}
     
     \\end{{document}}
     """
     return latex_source
+
+def table_rows(invoice):
+    table_rows = ""
+    for product in invoice["InvoiceComponentsT"]:
+        table_rows += f"{product['ProductsT']['NameMetric']} & {product['Quantity']} & £{product['ProductsT']['UKRetailCost']} & £{product['ProductsT']['UKRetailCost'] * product['Quantity']} \\\\ \n"
+        table_rows += "\\hline \n"
+    return table_rows
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
