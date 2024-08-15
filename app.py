@@ -39,7 +39,7 @@ def generate_latex_source(invoice, totalPrice):
     \\begin{{document}}
     
     \\begin{{center}}
-        \\textbf{{\\Huge {{WWW.COR-TEN-STEEL.CO.UK}}}}
+        \\textbf{{\\Huge {{COR-TEN-STEEL UK}}}}
     \\end{{center}}
     
     \\vspace{{1cm}}
@@ -78,7 +78,7 @@ def generate_latex_source(invoice, totalPrice):
         \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total}} \\\\
         \\hline
         \\endhead
-
+        {table_rows(invoice)}
         \\multicolumn{{2}}{{|c|}}{{}} & Subtotal & £\\texttt{{{totalPrice:.2f}}} \\\\
         \\cline{{3-4}}
         \\multicolumn{{2}}{{|c|}}{{}} & Freight & £\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
@@ -104,9 +104,10 @@ def generate_latex_source(invoice, totalPrice):
 def table_rows(invoice):
     table_rows = ""
     for product in invoice["InvoiceComponentsT"]:
-        table_rows += f"\\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{£{product['ProductsT']['UKRetailCost']}}} & \\texttt{{£{product['ProductsT']['UKRetailCost'] * product['Quantity']}}} \\\\ \n"
+        table_rows += f"\\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{£{product['ProductsT']['UKRetailCost']:.2f}}} & \\texttt{{£{(product['ProductsT']['UKRetailCost'] * product['Quantity']):.2f}}} \\\\ \n"
         table_rows += "\\hline \n"
     return table_rows
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
