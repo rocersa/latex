@@ -90,13 +90,13 @@ def generate_latex_source(invoice, totalPrice):
         \\endfoot
         \\hline
         \\endlastfoot
-        \\multicolumn{{2}}{{|c|}}{{}} & Subtotal & £\\texttt{{{totalPrice:.2f if totalPrice else 'ERROR'}}} \\\\
+        \\multicolumn{{2}}{{|c|}}{{}} & Subtotal & £\\texttt{{{totalPrice:.2f}}} \\\\
         \\hline
-        \\multicolumn{{2}}{{|c|}}{{}} & VAT (20\\% Included) & £\\texttt{{{(0.2 * totalPrice):.2f if totalPrice else 'ERROR'}}} \\\\
+        \\multicolumn{{2}}{{|c|}}{{}} & VAT (20\\% Included) & £\\texttt{{{(0.2 * totalPrice):.2f}}} \\\\
         \\hline
-        \\multicolumn{{2}}{{|c|}}{{}} & Freight & £\\texttt{{{invoice['freight_charged']:.2f if invoice['freight_charged'] else 'ERROR'}}} \\\\
+        \\multicolumn{{2}}{{|c|}}{{}} & Freight & £\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
         \\hline
-        \\multicolumn{{2}}{{|c|}}{{}} & Total & £\\texttt{{{invoice['Price']:.2f if invoice['Price'] else 'ERROR'}}} \\\\
+        \\multicolumn{{2}}{{|c|}}{{}} & Total & £\\texttt{{{invoice['Price']:.2f}}} \\\\
     \\end{{longtable}}
     
     \\end{{document}}
