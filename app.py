@@ -179,12 +179,12 @@ def generate_latex_picklist(invoice, totalPrice):
     \\vspace{{0.5cm}}
 
     \\noindent
-    \\textsf{{\\Large{invoice['CustomerT']['FirstName']}}} \\textsf{{\\Large{invoice['CustomerT']['LastName']}}} \\\\
-    \\textsf{{\\Large{invoice['CustomerT']['AddressNumber']}}} \\textsf{{\\Large{invoice['CustomerT']['AddressStreet']}}} \\\\
+    \\textsf{{\\Large {invoice['CustomerT']['FirstName']}}} \\textsf{{\\Large {invoice['CustomerT']['LastName']}}} \\\\
+    \\textsf{{\\Large {invoice['CustomerT']['AddressNumber']}}} \\textsf{{\\Large {invoice['CustomerT']['AddressStreet']}}} \\\\
     \\textbf{{\\Huge {invoice['CustomerT']['AddressSuburb']}}} \\\\
     \\textbf{{\\Huge {invoice['CustomerT']['AddressPostcode']}}} \\\\
-    \\textsf{{\\Large{{Email}}}} \\textsf{{\\Large{invoice['CustomerT']['AddressStreet']}}} \\\\
-    \\textsf{{\\Large{{Phone}}}} \\textsf{{\\Large{invoice['CustomerT']['AddressStreet']}}} \\\\
+    \\textsf{{\\Large {{Email}}}} \\textsf{{\\Large {invoice['CustomerT']['AddressStreet']}}} \\\\
+    \\textsf{{\\Large {{Phone}}}} \\textsf{{\\Large {invoice['CustomerT']['AddressStreet']}}} \\\\
 
     \\vspace{{1cm}}
     
