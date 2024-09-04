@@ -241,7 +241,7 @@ def generate_latex_picklist(invoice, totalPrice):
 def picklist_table_rows(invoice):
     table_rows = ""
     for product in invoice["InvoiceComponentsT"]:
-        table_rows += f"\\texttt{{£{product['ProductsT']['ProductCode']:.2f}}} & \\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{£{(product['ProductsT']['Weight'] * product['Quantity']):.2f}}}  \\\\ \n"
+        table_rows += f"\\texttt{{£{product['ProductsT']['ProductCode']}}} & \\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{£{(product['ProductsT']['Weight'] * product['Quantity']):.2f}}}  \\\\ \n"
         table_rows += "\\hline \n"
     return table_rows
 
