@@ -162,7 +162,7 @@ def generate_pdf_picklist():
 def generate_latex_picklist(invoice, totalPrice):
     # Generate LaTeX content here (similar to the LaTeX source in your Node.js example)
     latex_source = f"""
-    \\documentclass[a4paper,16pt]{{article}}
+    \\documentclass[a4paper,24pt]{{article}}
     \\usepackage{{graphicx}}
     \\usepackage{{geometry}}
     \\geometry{{a4paper, margin=1cm}}
@@ -176,12 +176,18 @@ def generate_latex_picklist(invoice, totalPrice):
         \\textbf{{\\Huge {{COR-TEN-STEEL UK}}}}
     \\end{{center}}
     
-    \\vspace{{1cm}}
+    \\vspace{{0.5cm}}
+
+    \\noindent
+    \\textsf{{\\Large{invoice['CustomerT']['FirstName']}}} \\textsf{{\\Large{invoice['CustomerT']['LastName']}}} \\\\
+    \\textsf{{\\Large{invoice['CustomerT']['AddressNumber']}}} \\textsf{{\\Large{invoice['CustomerT']['AddressStreet']}}} \\\\
     \\textbf{{\\Huge {invoice['CustomerT']['AddressSuburb']}}} \\\\
     \\textbf{{\\Huge {invoice['CustomerT']['AddressPostcode']}}} \\\\
-    \\textsf{{{invoice['CustomerT']['AddressNumber']}}} \\textsf{{{invoice['CustomerT']['AddressStreet']}}} \\\\
-    \\texttt{{{invoice['CustomerT']['AddressCity']}}} \\\\
-    \\texttt{{{invoice['CustomerT']['AddressCountry']}}} \\\\
+    \\textsf{{\\Large{{Email}}}} \\textsf{{\\Large{invoice['CustomerT']['AddressStreet']}}} \\\\
+    \\textsf{{\\Large{{Phone}}}} \\textsf{{\\Large{invoice['CustomerT']['AddressStreet']}}} \\\\
+
+    \\vspace{{1cm}}
+    
     \\noindent
     \\begin{{minipage}}[t]{{0.45\\textwidth}}
         \\raggedright
@@ -191,10 +197,7 @@ def generate_latex_picklist(invoice, totalPrice):
         SN8 4NE \\\\
         Tel: 0118 234 9909 \\\\
         Email: uk@cor-ten-steel.co.uk \\\\
-        \\vspace{{0.5cm}}
-        \\textbf{{\\large Customer Details:}} \\\\
-        Name: \\texttt{{{invoice['CustomerT']['FirstName']}}} \\texttt{{{invoice['CustomerT']['LastName']}}} \\\\
-
+ 
     \\end{{minipage}}
     \\hfill
     \\begin{{minipage}}[t]{{0.45\\textwidth}}
@@ -203,7 +206,7 @@ def generate_latex_picklist(invoice, totalPrice):
         Picklist \\\\
         \\vspace{{1cm}}
         Invoice Number: \\texttt{{{str(invoice['InvoiceID']).zfill(5)}}} \\\\
-        Date Issued: \\texttt{{{datetime.datetime.now().strftime("%Y-%m-%d %H:%M")}}}
+        Date Issued: \\texttt{{{datetime.datetime.now().strftime("%Y-%m-%d %H:%M")}}} 
     \\end{{minipage}}
     
     \\vspace{{1cm}}
