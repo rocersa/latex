@@ -162,7 +162,7 @@ def generate_pdf_picklist():
 def generate_latex_picklist(invoice, totalPrice):
     # Generate LaTeX content here (similar to the LaTeX source in your Node.js example)
     latex_source = f"""
-    \\documentclass[a4paper,24pt]{{article}}
+    \\documentclass[a4paper,12pt]{{article}}
     \\usepackage{{graphicx}}
     \\usepackage{{geometry}}
     \\geometry{{a4paper, margin=1cm}}
