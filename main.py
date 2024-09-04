@@ -136,8 +136,8 @@ def generate_pdf_picklist():
     
     # Use a secure temporary directory
     with tempfile.TemporaryDirectory() as tmpdirname:
-        tex_file_path = os.path.join(tmpdirname, 'invoice.tex')
-        pdf_file_path = os.path.join(tmpdirname, 'invoice.pdf')
+        tex_file_path = os.path.join(tmpdirname, 'picklist.tex')
+        pdf_file_path = os.path.join(tmpdirname, 'picklist.pdf')
 
         # Write LaTeX source to a file
         with open(tex_file_path, 'w') as f:
@@ -162,7 +162,7 @@ def generate_pdf_picklist():
 def generate_latex_picklist(invoice, totalPrice):
     # Generate LaTeX content here (similar to the LaTeX source in your Node.js example)
     latex_source = f"""
-    \\documentclass[a4paper,12pt]{{article}}
+    \\documentclass[a4paper,16pt]{{article}}
     \\usepackage{{graphicx}}
     \\usepackage{{geometry}}
     \\geometry{{a4paper, margin=1cm}}
@@ -177,6 +177,13 @@ def generate_latex_picklist(invoice, totalPrice):
     \\end{{center}}
     
     \\vspace{{1cm}}
+\\textsf{{\\Huge {invoice['CustomerT']['AddressSuburb']}}} \\\\
+ \\texttt{{\\Huge {invoice['CustomerT']['AddressPostcode']}}} \\\\
+
+        \\textsf{{{invoice['CustomerT']['AddressNumber']}}} \\textsf{{{invoice['CustomerT']['AddressStreet']}}} \\\\
+        
+        \\texttt{{{invoice['CustomerT']['AddressCity']}}} \\\\
+        \\texttt{{{invoice['CustomerT']['AddressCountry']}}}
     \\noindent
     \\begin{{minipage}}[t]{{0.45\\textwidth}}
         \\raggedright
@@ -188,11 +195,7 @@ def generate_latex_picklist(invoice, totalPrice):
         \\vspace{{0.5cm}}
         \\textbf{{\\large Customer Details:}} \\\\
         Name: \\texttt{{{invoice['CustomerT']['FirstName']}}} \\texttt{{{invoice['CustomerT']['LastName']}}} \\\\
-        Address: \\\\
-        \\texttt{{{invoice['CustomerT']['AddressNumber']}}} \\texttt{{{invoice['CustomerT']['AddressStreet']}}} \\\\
-        \\texttt{{{invoice['CustomerT']['AddressSuburb']}}} \\texttt{{{invoice['CustomerT']['AddressPostcode']}}} \\\\
-        \\texttt{{{invoice['CustomerT']['AddressCity']}}} \\\\
-        \\texttt{{{invoice['CustomerT']['AddressCountry']}}}
+
     \\end{{minipage}}
     \\hfill
     \\begin{{minipage}}[t]{{0.45\\textwidth}}
@@ -209,7 +212,7 @@ def generate_latex_picklist(invoice, totalPrice):
     
     \\begin{{longtable}}{{|p{{0.4\\textwidth}}|>{{\\centering\\arraybackslash}}p{{0.1\\textwidth}}|p{{0.2\\textwidth}}|p{{0.2\\textwidth}}|}}
         \\hline
-        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total}} \\\\
+        \\textbf{{Code}} & \\textbf{{Description}} & \\textbf{{Qty}} & \\textbf{{Weight (kgs)}} \\\\
         \\hline
         \\endhead
         {picklist_table_rows(invoice)}
@@ -238,7 +241,7 @@ def generate_latex_picklist(invoice, totalPrice):
 def picklist_table_rows(invoice):
     table_rows = ""
     for product in invoice["InvoiceComponentsT"]:
-        table_rows += f"\\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{£{product['ProductsT']['UKRetailCost']:.2f}}} & \\texttt{{£{(product['ProductsT']['UKRetailCost'] * product['Quantity']):.2f}}} \\\\ \n"
+        table_rows += f"\\texttt{{£{product['ProductsT']['ProductCode']:.2f}}} & \\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{£{(product['ProductsT']['Weight'] * product['Quantity']):.2f}}}  \\\\ \n"
         table_rows += "\\hline \n"
     return table_rows
 
