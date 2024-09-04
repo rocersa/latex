@@ -177,17 +177,16 @@ def generate_latex_picklist(invoice, totalPrice):
     \\end{{center}}
     
     \\vspace{{1cm}}
-\\textsf{{\\Huge {invoice['CustomerT']['AddressSuburb']}}} \\\\
- \\texttt{{\\Huge {invoice['CustomerT']['AddressPostcode']}}} \\\\
-
-        \\textsf{{{invoice['CustomerT']['AddressNumber']}}} \\textsf{{{invoice['CustomerT']['AddressStreet']}}} \\\\
-        
-        \\texttt{{{invoice['CustomerT']['AddressCity']}}} \\\\
-        \\texttt{{{invoice['CustomerT']['AddressCountry']}}}
+    \\textbf{{\\Huge {invoice['CustomerT']['AddressSuburb']}}} \\\\
+    \\textbf{{\\Huge {invoice['CustomerT']['AddressPostcode']}}} \\\\
+    \\textsf{{{invoice['CustomerT']['AddressNumber']}}} \\textsf{{{invoice['CustomerT']['AddressStreet']}}} \\\\
+    \\texttt{{{invoice['CustomerT']['AddressCity']}}} \\\\
+    \\texttt{{{invoice['CustomerT']['AddressCountry']}}} \\\\
     \\noindent
     \\begin{{minipage}}[t]{{0.45\\textwidth}}
         \\raggedright
         \\small
+        COR-TEN-STEEL UK \\\\
         Cadley \\\\
         SN8 4NE \\\\
         Tel: 0118 234 9909 \\\\
@@ -201,38 +200,39 @@ def generate_latex_picklist(invoice, totalPrice):
     \\begin{{minipage}}[t]{{0.45\\textwidth}}
         \\raggedleft
         \\small
-        Tax Invoice \\\\
-        VAT Number: 161 6032 40 \\\\
+        Picklist \\\\
         \\vspace{{1cm}}
         Invoice Number: \\texttt{{{str(invoice['InvoiceID']).zfill(5)}}} \\\\
-        Date Issued: \\texttt{{{datetime.date.today().strftime("%Y-%m-%d")}}}
+        Date Issued: \\texttt{{{datetime.datetime.now().strftime("%Y-%m-%d %H:%M")}}}
     \\end{{minipage}}
     
     \\vspace{{1cm}}
-    
+
+    \\noindent
+    \\begin{{center}}
+    \\texttt{{Packing Instructions}} \\\\
+    \\texttt{{Con Note}} \\\\
+    \\texttt{{Carrier}} \\\\
+    \\texttt{{Stickers}} \\\\
+    \\end{{center}}
+
+    \\vspace{{1cm}}
+
     \\begin{{longtable}}{{|p{{0.4\\textwidth}}|>{{\\centering\\arraybackslash}}p{{0.1\\textwidth}}|p{{0.2\\textwidth}}|p{{0.2\\textwidth}}|}}
         \\hline
         \\textbf{{Code}} & \\textbf{{Description}} & \\textbf{{Qty}} & \\textbf{{Weight (kgs)}} \\\\
         \\hline
         \\endhead
         {picklist_table_rows(invoice)}
-        \\multicolumn{{2}}{{c|}}{{}} & Subtotal & £\\texttt{{{totalPrice:.2f}}} \\\\
+        \\multicolumn{{2}}{{c|}}{{}} & Total Weight & £\\texttt{{{totalPrice:.2f}}} \\\\
         \\cline{{3-4}}
-        \\multicolumn{{2}}{{c|}}{{}} & Freight & £\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
+        \\multicolumn{{2}}{{c|}}{{}} & Total Items & £\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
         \\cline{{3-4}}
         \\multicolumn{{2}}{{c|}}{{}} & Balance due inc VAT & £\\texttt{{{invoice['Price']:.2f}}} \\\\
         \\cline{{3-4}}
         \\endfoot
     \\end{{longtable}}
-    \\vspace{{1cm}}
-    \\noindent
-    Payment can be made by bank transfer to the following account:
-    \\begin{{center}}
-    \\texttt{{Account Name: Cor-Ten-Steel}} \\\\
-    \\texttt{{Sort Code: 12-34-56}} \\\\
-    \\texttt{{Account Number: 12345678}} \\\\
-    \\texttt{{Reference: 00003}}
-    \\end{{center}}
+    
     
     \\end{{document}}
     """
@@ -241,7 +241,7 @@ def generate_latex_picklist(invoice, totalPrice):
 def picklist_table_rows(invoice):
     table_rows = ""
     for product in invoice["InvoiceComponentsT"]:
-        table_rows += f"\\texttt{{£{product['ProductsT']['ProductCode']}}} & \\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{£{(product['ProductsT']['Weight'] * product['Quantity']):.2f}}}  \\\\ \n"
+        table_rows += f"\\texttt{{{product['ProductsT']['ProductCode']}}} & \\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{{(product['ProductsT']['Weight'] * product['Quantity']):.2f}}}  \\\\ \n"
         table_rows += "\\hline \n"
     return table_rows
 
