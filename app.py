@@ -222,7 +222,7 @@ def generate_latex_picklist(invoice, totalPrice, components):
 
     \\vspace{{1cm}}
 
-    \\begin{{longtable}}{{|p{{0.4\\textwidth}}|>{{\\centering\\arraybackslash}}p{{0.1\\textwidth}}|p{{0.2\\textwidth}}|p{{0.2\\textwidth}}|}}
+    \\begin{{longtable}}{{|p{{0.25\\textwidth}}|>{{\\centering\\arraybackslash}}p{{0.45\\textwidth}}|p{{0.1\\textwidth}}|p{{0.2\\textwidth}}|}}
         \\hline
         \\textbf{{Code}} & \\textbf{{Description}} & \\textbf{{Qty}} & \\textbf{{Weight (kgs)}} \\\\
         \\hline
