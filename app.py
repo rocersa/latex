@@ -183,13 +183,15 @@ def generate_latex_picklist(invoice, totalPrice, components):
     \\noindent
     \\texttt{{Deliver to:}} \\\\
 
-    \\noindent
     \\textbf{{\\fontsize{{20}}{{24}}\\selectfont {invoice['CustomerT']['FirstName']}}} \\textbf{{\\fontsize{{20}}{{24}}\\selectfont {invoice['CustomerT']['LastName']}}} \\\\
+
     \\textbf{{\\fontsize{{30}}{{36}}\\selectfont {invoice['CustomerT']['AddressNumber']}}} \\textbf{{\\fontsize{{30}}{{36}}\\selectfont {invoice['CustomerT']['AddressStreet']}}} \\\\
+ 
     \\textbf{{\\fontsize{{50}}{{60}}\\selectfont {invoice['CustomerT']['AddressSuburb']}}} \\\\
 
-    \\noindent
     \\textbf{{\\fontsize{{70}}{{84}}\\selectfont {invoice['CustomerT']['AddressPostcode']}}} \\\\
+
+    \\noindent
     \\textsf{{\\Large {{Email: }}}} \\textsf{{\\Large {invoice['CustomerT']['Email']}}} \\\\
     \\textsf{{\\Large {{Phone: }}}} \\textsf{{\\Large {invoice['CustomerT']['Phone']}}} \\\\
 
@@ -218,13 +220,6 @@ def generate_latex_picklist(invoice, totalPrice, components):
     
     \\vspace{{0.5cm}}
 
-    \\begin{{longtable}}{{|l|l|l|l|}}
-        \\hline
-        \\textbf{{Code}} & \\textbf{{Description}} & \\textbf{{Qty}} & \\textbf{{Weight (kgs)}} \\\\
-        \\hline
-        {picklist_table_rows(invoice, components)}
-    \\end{{longtable}}
-    
     \\noindent
     \\begin{{tabular}}{{l l}}
     \\textbf{{Total Items:}} & \\texttt{{17}} \\\\ 
@@ -235,6 +230,17 @@ def generate_latex_picklist(invoice, totalPrice, components):
     \\textbf{{Con Note:}} & \\texttt{{N/A}} \\\\ 
     \\end{{tabular}}
 
+    \\vspace{{0.5cm}}
+
+    \\begin{{longtable}}{{|l|l|l|l|}}
+        \\hline
+        \\textbf{{Code}} & \\textbf{{Description}} & \\textbf{{Qty}} & \\textbf{{Weight (kgs)}} \\\\
+        \\hline
+        {picklist_table_rows(invoice, components)}
+    \\end{{longtable}}
+    
+
+
     \\end{{document}}
     """
     return latex_source
@@ -242,7 +248,7 @@ def generate_latex_picklist(invoice, totalPrice, components):
 def picklist_table_rows(invoice, components):
     table_rows = ""
     for product in components:
-        table_rows += f"\\texttt{{{product['ProductsT']['ProductCode']}}} & \\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{{(product['ProductsT']['Weight'] * product['Quantity']):.2f}}}  \\\\ \n"
+        table_rows += f"\\texttt{{{product['ProductsT']['ProductCode']}}} & \\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{{(product['ProductsT']['Weight'] * product['Quantity']):.1f}}}  \\\\ \n"
         table_rows += "\\hline \n"
     return table_rows
 
