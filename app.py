@@ -184,12 +184,12 @@ def generate_latex_picklist(invoice, totalPrice, components):
     \\texttt{{Deliver to:}} \\\\
 
     \\noindent
-    \\textbf{{\\fontsize{{20}}{{24}} {invoice['CustomerT']['FirstName']}}} \\textbf{{\\fontsize{{20}}{{24}} {invoice['CustomerT']['LastName']}}} \\\\
-    \\textbf{{\\fontsize{{30}}{{36}} {invoice['CustomerT']['AddressNumber']}}} \\textbf{{\\fontsize{{30}}{{36}} {invoice['CustomerT']['AddressStreet']}}} \\\\
-    \\textbf{{\\fontsize{{50}}{{60}} {invoice['CustomerT']['AddressSuburb']}}} \\\\
+    \\textbf{{\\fontsize{{20}}{{24}}\\selectfont {invoice['CustomerT']['FirstName']}}} \\textbf{{\\fontsize{{20}}{{24}}\\selectfont {invoice['CustomerT']['LastName']}}} \\\\
+    \\textbf{{\\fontsize{{30}}{{36}}\\selectfont {invoice['CustomerT']['AddressNumber']}}} \\textbf{{\\fontsize{{30}}{{36}}\\selectfont {invoice['CustomerT']['AddressStreet']}}} \\\\
+    \\textbf{{\\fontsize{{50}}{{60}}\\selectfont {invoice['CustomerT']['AddressSuburb']}}} \\\\
 
     \\noindent
-    \\textbf{{\\fontsize{{70}}{{84}} {invoice['CustomerT']['AddressPostcode']}}} \\\\
+    \\textbf{{\\fontsize{{70}}{{84}}\\selectfont {invoice['CustomerT']['AddressPostcode']}}} \\\\
     \\textsf{{\\Large {{Email: }}}} \\textsf{{\\Large {invoice['CustomerT']['Email']}}} \\\\
     \\textsf{{\\Large {{Phone: }}}} \\textsf{{\\Large {invoice['CustomerT']['Phone']}}} \\\\
 
@@ -222,7 +222,6 @@ def generate_latex_picklist(invoice, totalPrice, components):
         \\hline
         \\textbf{{Code}} & \\textbf{{Description}} & \\textbf{{Qty}} & \\textbf{{Weight (kgs)}} \\\\
         \\hline
-        \\endhead
         {picklist_table_rows(invoice, components)}
     \\end{{longtable}}
     
