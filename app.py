@@ -169,6 +169,7 @@ def generate_latex_picklist(invoice, totalPrice, components):
     \\geometry{{a4paper, margin=1cm}}
     \\usepackage{{array}}
     \\usepackage{{longtable}}
+    \\usepackage{{anyfontsize}}
     \\pagestyle{{empty}}
 
     \\begin{{document}}
@@ -180,14 +181,19 @@ def generate_latex_picklist(invoice, totalPrice, components):
     \\vspace{{0.5cm}}
 
     \\noindent
-    \\textsf{{\\Large {invoice['CustomerT']['FirstName']}}} \\textsf{{\\Large {invoice['CustomerT']['LastName']}}} \\\\
-    \\textsf{{\\Large {invoice['CustomerT']['AddressNumber']}}} \\textsf{{\\Large {invoice['CustomerT']['AddressStreet']}}} \\\\
-    \\textbf{{\\Huge {invoice['CustomerT']['AddressSuburb']}}} \\\\
-    \\textbf{{\\Huge {invoice['CustomerT']['AddressPostcode']}}} \\\\
-    \\textsf{{\\Large {{Email}}}} \\textsf{{\\Large {invoice['CustomerT']['AddressStreet']}}} \\\\
-    \\textsf{{\\Large {{Phone}}}} \\textsf{{\\Large {invoice['CustomerT']['AddressStreet']}}} \\\\
+    \\texttt{{Deliver to:}} \\\\
 
-    \\vspace{{1cm}}
+    \\noindent
+    \\textbf{{\\fontsize{{20}}{{24}} {invoice['CustomerT']['FirstName']}}} \\textbf{{\\fontsize{{20}}{{24}} {invoice['CustomerT']['LastName']}}} \\\\
+    \\textbf{{\\fontsize{{30}}{{36}} {invoice['CustomerT']['AddressNumber']}}} \\textbf{{\\fontsize{{30}}{{36}} {invoice['CustomerT']['AddressStreet']}}} \\\\
+    \\textbf{{\\fontsize{{50}}{{60}} {invoice['CustomerT']['AddressSuburb']}}} \\\\
+
+    \\noindent
+    \\textbf{{\\fontsize{{70}}{{84}} {invoice['CustomerT']['AddressPostcode']}}} \\\\
+    \\textsf{{\\Large {{Email: }}}} \\textsf{{\\Large {invoice['CustomerT']['Email']}}} \\\\
+    \\textsf{{\\Large {{Phone: }}}} \\textsf{{\\Large {invoice['CustomerT']['Phone']}}} \\\\
+
+    \\vspace{{0.5cm}}
     
     \\noindent
     \\begin{{minipage}}[t]{{0.45\\textwidth}}
@@ -210,34 +216,26 @@ def generate_latex_picklist(invoice, totalPrice, components):
         Date Issued: \\texttt{{{datetime.datetime.now().strftime("%Y-%m-%d %H:%M")}}} 
     \\end{{minipage}}
     
-    \\vspace{{1cm}}
+    \\vspace{{0.5cm}}
 
-    \\noindent
-    \\begin{{center}}
-    \\texttt{{Packing Instructions}} \\\\
-    \\texttt{{Con Note}} \\\\
-    \\texttt{{Carrier}} \\\\
-    \\texttt{{Stickers}} \\\\
-    \\end{{center}}
-
-    \\vspace{{1cm}}
-
-    \\begin{{longtable}}{{|p{{0.25\\textwidth}}|>{{\\centering\\arraybackslash}}p{{0.45\\textwidth}}|p{{0.1\\textwidth}}|p{{0.2\\textwidth}}|}}
+    \\begin{{longtable}}{{|l|>{{\\centering\\arraybackslash}}p{{0.45\\textwidth}}|p{{0.1\\textwidth}}|p{{0.2\\textwidth}}|}}
         \\hline
         \\textbf{{Code}} & \\textbf{{Description}} & \\textbf{{Qty}} & \\textbf{{Weight (kgs)}} \\\\
         \\hline
         \\endhead
         {picklist_table_rows(invoice, components)}
-        \\multicolumn{{2}}{{c|}}{{}} & Total Weight & £\\texttt{{{totalPrice:.2f}}} \\\\
-        \\cline{{3-4}}
-        \\multicolumn{{2}}{{c|}}{{}} & Total Items & £\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
-        \\cline{{3-4}}
-        \\multicolumn{{2}}{{c|}}{{}} & Balance due inc VAT & £\\texttt{{{invoice['Price']:.2f}}} \\\\
-        \\cline{{3-4}}
-        \\endfoot
     \\end{{longtable}}
     
-    
+    \\noindent
+    \\begin{{tabular}}{{l l}}
+    \\textbf{{Total Items:}} & \\texttt{{17}} \\\\ 
+    \\textbf{{Total Weight:}} & \\texttt{{100 kgs}} \\\\ 
+    \\textbf{{Carrier:}} & \\texttt{{Fastways}} \\\\ 
+    \\textbf{{Stickers:}} & \\texttt{{1 Orange 1 Green}} \\\\ 
+    \\textbf{{Packing Instructions:}} & \\texttt{{2 Parcels 20 kg each}} \\\\ 
+    \\textbf{{Con Note:}} & \\texttt{{N/A}} \\\\ 
+    \\end{{tabular}}
+
     \\end{{document}}
     """
     return latex_source
