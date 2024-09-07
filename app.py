@@ -130,9 +130,10 @@ def generate_pdf_picklist():
     data = request.json
     invoice = data.get('invoice')
     totalPrice = data.get('totalPrice')
+    components = data.get('components')
 
     # Generate LaTeX source code
-    latex_source = generate_latex_picklist(invoice, totalPrice)
+    latex_source = generate_latex_picklist(invoice, totalPrice, components)
     
     # Use a secure temporary directory
     with tempfile.TemporaryDirectory() as tmpdirname:
@@ -159,7 +160,7 @@ def generate_pdf_picklist():
         # Send the generated PDF file
         return send_file(pdf_file_path, as_attachment=True)
 
-def generate_latex_picklist(invoice, totalPrice):
+def generate_latex_picklist(invoice, totalPrice, components):
     # Generate LaTeX content here (similar to the LaTeX source in your Node.js example)
     latex_source = f"""
     \\documentclass[a4paper,12pt]{{article}}
@@ -226,7 +227,7 @@ def generate_latex_picklist(invoice, totalPrice):
         \\textbf{{Code}} & \\textbf{{Description}} & \\textbf{{Qty}} & \\textbf{{Weight (kgs)}} \\\\
         \\hline
         \\endhead
-        {picklist_table_rows(invoice)}
+        {picklist_table_rows(invoice, components)}
         \\multicolumn{{2}}{{c|}}{{}} & Total Weight & £\\texttt{{{totalPrice:.2f}}} \\\\
         \\cline{{3-4}}
         \\multicolumn{{2}}{{c|}}{{}} & Total Items & £\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
@@ -241,9 +242,9 @@ def generate_latex_picklist(invoice, totalPrice):
     """
     return latex_source
 
-def picklist_table_rows(invoice):
+def picklist_table_rows(invoice, components):
     table_rows = ""
-    for product in invoice["InvoiceComponentsT"]:
+    for product in components:
         table_rows += f"\\texttt{{{product['ProductsT']['ProductCode']}}} & \\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{{(product['ProductsT']['Weight'] * product['Quantity']):.2f}}}  \\\\ \n"
         table_rows += "\\hline \n"
     return table_rows
