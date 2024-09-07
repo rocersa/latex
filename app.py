@@ -218,7 +218,7 @@ def generate_latex_picklist(invoice, totalPrice, components):
     
     \\vspace{{0.5cm}}
 
-    \\begin{{longtable}}{{|l|>{{\\centering\\arraybackslash}}p{{0.45\\textwidth}}|p{{0.1\\textwidth}}|p{{0.2\\textwidth}}|}}
+    \\begin{{longtable}}{{|l|l|l|l|}}
         \\hline
         \\textbf{{Code}} & \\textbf{{Description}} & \\textbf{{Qty}} & \\textbf{{Weight (kgs)}} \\\\
         \\hline
