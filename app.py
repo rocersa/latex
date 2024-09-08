@@ -129,11 +129,11 @@ def invoice_table_rows(invoice):
 def generate_pdf_picklist():
     data = request.json
     invoice = data.get('invoice')
-    totalPrice = data.get('totalPrice')
+    info = data.get('info')
     components = data.get('components')
 
     # Generate LaTeX source code
-    latex_source = generate_latex_picklist(invoice, totalPrice, components)
+    latex_source = generate_latex_picklist(invoice, info, components)
     
     # Use a secure temporary directory
     with tempfile.TemporaryDirectory() as tmpdirname:
@@ -160,7 +160,7 @@ def generate_pdf_picklist():
         # Send the generated PDF file
         return send_file(pdf_file_path, as_attachment=True)
 
-def generate_latex_picklist(invoice, totalPrice, components):
+def generate_latex_picklist(invoice, info, components):
     # Generate LaTeX content here (similar to the LaTeX source in your Node.js example)
     latex_source = f"""
     \\documentclass[a4paper,12pt]{{article}}
@@ -173,10 +173,6 @@ def generate_latex_picklist(invoice, totalPrice, components):
     \\pagestyle{{empty}}
 
     \\begin{{document}}
-    
-    \\begin{{center}}
-        \\textbf{{\\Huge {{COR-TEN-STEEL UK}}}}
-    \\end{{center}}
     
     \\vspace{{0.5cm}}
 
@@ -221,13 +217,18 @@ def generate_latex_picklist(invoice, totalPrice, components):
     \\vspace{{0.5cm}}
 
     \\noindent
+    \\rule{{\\textwidth}}{{0.5pt}}
+
+    \\vspace{{0.5cm}}
+
+    \\noindent
     \\begin{{tabular}}{{l l}}
-    \\textbf{{Total Items:}} & \\texttt{{17}} \\\\ 
-    \\textbf{{Total Weight:}} & \\texttt{{100 kgs}} \\\\ 
-    \\textbf{{Carrier:}} & \\texttt{{Fastways}} \\\\ 
-    \\textbf{{Stickers:}} & \\texttt{{1 Orange 1 Green}} \\\\ 
-    \\textbf{{Packing Instructions:}} & \\texttt{{2 Parcels 20 kg each}} \\\\ 
-    \\textbf{{Con Note:}} & \\texttt{{N/A}} \\\\ 
+    \\textbf{{Total Items:}} & \\texttt{{{info['total_items']}}} \\\\ 
+    \\textbf{{Total Weight:}} & \\texttt{{{info['total_weight']}}} \\\\ 
+    \\textbf{{Carrier:}} & \\texttt{{{info['carrier']}}} \\\\ 
+    \\textbf{{Stickers:}} & \\texttt{{{info['stickers']}}} \\\\ 
+    \\textbf{{Packing Instructions:}} & \\texttt{{{info['packing_instructions']}}} \\\\ 
+    \\textbf{{Con Note:}} & \\texttt{{{info['con_note']}}} \\\\ 
     \\end{{tabular}}
 
     \\vspace{{0.5cm}}
