@@ -6,7 +6,7 @@ import os
 import datetime
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 @app.route('/generate-pdf-invoice', methods=['POST'])
 def generate_pdf_invoice():
