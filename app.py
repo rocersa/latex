@@ -70,12 +70,12 @@ def generate_latex_invoice(invoice, totalPrice):
         Email: uk@cor-ten-steel.co.uk \\\\
         \\vspace{{0.5cm}}
         \\textbf{{\\large Customer Details:}} \\\\
-        Name: \\texttt{{{invoice['CustomerT']['FirstName']}}} \\texttt{{{invoice['CustomerT']['LastName']}}} \\\\
+        Name: \\texttt{{{invoice['customers']['first_name']}}} \\texttt{{{invoice['customers']['last_name']}}} \\\\
         Address: \\\\
-        \\texttt{{{invoice['CustomerT']['AddressNumber']}}} \\texttt{{{invoice['CustomerT']['AddressStreet']}}} \\\\
-        \\texttt{{{invoice['CustomerT']['AddressSuburb']}}} \\texttt{{{invoice['CustomerT']['AddressPostcode']}}} \\\\
-        \\texttt{{{invoice['CustomerT']['AddressCity']}}} \\\\
-        \\texttt{{{invoice['CustomerT']['AddressCountry']}}}
+        \\texttt{{{invoice['addresses']['street_address']}}} \\\\
+        \\texttt{{{invoice['addresses']['suburb']}}} \\texttt{{{invoice['addresses']['postal_code']}}} \\\\
+        \\texttt{{{invoice['addresses']['city']}}} \\\\
+        \\texttt{{{invoice['addresses']['country']}}}
     \\end{{minipage}}
     \\hfill
     \\begin{{minipage}}[t]{{0.45\\textwidth}}
@@ -179,17 +179,17 @@ def generate_latex_picklist(invoice, info, components):
     \\noindent
     \\texttt{{Deliver to:}} \\\\
 
-    \\textbf{{\\fontsize{{20}}{{24}}\\selectfont {invoice['CustomerT']['FirstName']}}} \\textbf{{\\fontsize{{20}}{{24}}\\selectfont {invoice['CustomerT']['LastName']}}} \\\\
+    \\textbf{{\\fontsize{{20}}{{24}}\\selectfont {invoice['customers']['first_name']}}} \\textbf{{\\fontsize{{20}}{{24}}\\selectfont {invoice['customers']['last_name']}}} \\\\
 
-    \\textbf{{\\fontsize{{30}}{{36}}\\selectfont {invoice['CustomerT']['AddressNumber']}}} \\textbf{{\\fontsize{{30}}{{36}}\\selectfont {invoice['CustomerT']['AddressStreet']}}} \\\\
+    \\textbf{{\\fontsize{{30}}{{36}}\\selectfont {invoice['addresses']['street_address']}}} \\\\
  
-    \\textbf{{\\fontsize{{50}}{{60}}\\selectfont {invoice['CustomerT']['AddressSuburb']}}} \\\\
+    \\textbf{{\\fontsize{{50}}{{60}}\\selectfont {invoice['addresses']['suburb']}}} \\\\
 
-    \\textbf{{\\fontsize{{70}}{{84}}\\selectfont {invoice['CustomerT']['AddressPostcode']}}} \\\\
+    \\textbf{{\\fontsize{{70}}{{84}}\\selectfont {invoice['addresses']['postal_code']}}} \\\\
 
     \\noindent
-    \\textsf{{\\Large {{Email: }}}} \\textsf{{\\Large {invoice['CustomerT']['Email']}}} \\\\
-    \\textsf{{\\Large {{Phone: }}}} \\textsf{{\\Large {invoice['CustomerT']['Phone']}}} \\\\
+    \\textsf{{\\Large {{Email: }}}} \\textsf{{\\Large {invoice['customers']['email']}}} \\\\
+    \\textsf{{\\Large {{Phone: }}}} \\textsf{{\\Large {invoice['customers']['phone']}}} \\\\
 
     \\vspace{{0.5cm}}
     
