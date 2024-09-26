@@ -112,7 +112,7 @@ def generate_latex_invoice(invoice, totalPrice):
     \\noindent
     Payment can be made by bank transfer to the following account:
     \\begin{{center}}
-    \\texttt{{Account Name: Cor-Ten-Steel}} \\\\
+    \\texttt{{Account/Business Name: Rocersa Limited}} \\\\
     \\texttt{{Sort Code: 40-05-16}} \\\\
     \\texttt{{Account Number: 02371960}} \\\\
     \\texttt{{Reference: {str(invoice['InvoiceID']).zfill(5)}}}
