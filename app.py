@@ -4,9 +4,12 @@ import subprocess
 import tempfile
 import os
 import datetime
+import pytz
 
 app = Flask(__name__)
 CORS(app)
+
+uk_time = utc_now.astimezone(pytz.timezone('Europe/London'))
 
 @app.route('/generate-pdf-invoice', methods=['POST'])
 def generate_pdf_invoice():
@@ -85,7 +88,7 @@ def generate_latex_invoice(invoice, totalPrice):
         VAT Number: 161 6032 40 \\\\
         \\vspace{{1cm}}
         Invoice Number: \\texttt{{{str(invoice['InvoiceID']).zfill(5)}}} \\\\
-        Date Issued: \\texttt{{{datetime.date.today().strftime("%Y-%m-%d")}}}
+        Date Issued: \\texttt{{{datetime.date.today().strftime("%d-%b-%Y")}}}
     \\end{{minipage}}
     
     \\vspace{{1cm}}
@@ -109,9 +112,9 @@ def generate_latex_invoice(invoice, totalPrice):
     Payment can be made by bank transfer to the following account:
     \\begin{{center}}
     \\texttt{{Account Name: Cor-Ten-Steel}} \\\\
-    \\texttt{{Sort Code: 12-34-56}} \\\\
-    \\texttt{{Account Number: 12345678}} \\\\
-    \\texttt{{Reference: 00003}}
+    \\texttt{{Sort Code: 40-05-16}} \\\\
+    \\texttt{{Account Number: 02371960}} \\\\
+    \\texttt{{Reference: {str(invoice['InvoiceID']).zfill(5)}}}
     \\end{{center}}
     
     \\end{{document}}
@@ -211,7 +214,7 @@ def generate_latex_picklist(invoice, info, components):
         Picklist \\\\
         \\vspace{{1cm}}
         Invoice Number: \\texttt{{{str(invoice['InvoiceID']).zfill(5)}}} \\\\
-        Date Issued: \\texttt{{{datetime.datetime.now().strftime("%Y-%m-%d %H:%M")}}} 
+        Date Issued: \\texttt{{{uk_time.strftime("%d-%b-%Y %H:%M")}}} 
     \\end{{minipage}}
     
     \\vspace{{0.5cm}}
