@@ -89,7 +89,7 @@ def generate_latex_invoice(invoice, totalPrice):
         VAT Number: 161 6032 40 \\\\
         \\vspace{{1cm}}
         Invoice Number: \\texttt{{{str(invoice['InvoiceID']).zfill(5)}}} \\\\
-        Date Issued: \\texttt{{{datetime.date.today().strftime("%d-%b-%Y")}}}
+        Date Issued: \\texttt{{{uk_time.strftime("%d-%b-%Y")}}}
     \\end{{minipage}}
     
     \\vspace{{1cm}}
