@@ -9,6 +9,7 @@ import pytz
 app = Flask(__name__)
 CORS(app)
 
+utc_now = datetime.now(pytz.utc)
 uk_time = utc_now.astimezone(pytz.timezone('Europe/London'))
 
 @app.route('/generate-pdf-invoice', methods=['POST'])
