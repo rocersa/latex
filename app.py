@@ -17,14 +17,13 @@ us_time = utc_now.astimezone(pytz.timezone('America/Los_Angeles'))
 def generate_pdf_invoice():
     data = request.json
     invoice = data.get('invoice')
-    totalPrice = data.get('totalPrice')
     country = data.get('country')
 
     # Generate LaTeX source code
     if country == 'UK':
-        latex_source = generate_latex_invoice(invoice, totalPrice)
+        latex_source = generate_latex_invoice(invoice)
     elif country == 'US':
-        latex_source = generate_latex_invoice_us(invoice, totalPrice)
+        latex_source = generate_latex_invoice_us(invoice)
     
     # Use a secure temporary directory
     with tempfile.TemporaryDirectory() as tmpdirname:
@@ -51,7 +50,7 @@ def generate_pdf_invoice():
         # Send the generated PDF file
         return send_file(pdf_file_path, as_attachment=True)
 
-def generate_latex_invoice(invoice, totalPrice):
+def generate_latex_invoice(invoice):
     # Generate LaTeX content here (similar to the LaTeX source in your Node.js example)
     latex_source = f"""
     \\documentclass[a4paper,12pt]{{article}}
@@ -106,7 +105,7 @@ def generate_latex_invoice(invoice, totalPrice):
         \\hline
         \\endhead
         {invoice_table_rows(invoice)}
-        \\multicolumn{{2}}{{c|}}{{}} & Subtotal & £\\texttt{{{totalPrice:.2f}}} \\\\
+        \\multicolumn{{2}}{{c|}}{{}} & Subtotal & £\\texttt{{{invoice['Price']:.2f}}} \\\\
         \\cline{{3-4}}
         \\multicolumn{{2}}{{c|}}{{}} & Freight & £\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
         \\cline{{3-4}}
@@ -135,7 +134,7 @@ def invoice_table_rows(invoice):
         table_rows += "\\hline \n"
     return table_rows
 
-def generate_latex_invoice_us(invoice, totalPrice):
+def generate_latex_invoice_us(invoice):
     # Generate LaTeX content here (similar to the LaTeX source in your Node.js example)
     latex_source = f"""
     \\documentclass[a4paper,12pt]{{article}}
@@ -190,7 +189,7 @@ def generate_latex_invoice_us(invoice, totalPrice):
         \\hline
         \\endhead
         {invoice_table_rows_us(invoice)}
-        \\multicolumn{{2}}{{c|}}{{}} & Subtotal & £\\texttt{{{totalPrice:.2f}}} \\\\
+        \\multicolumn{{2}}{{c|}}{{}} & Subtotal & £\\texttt{{{invoice['Price']:.2f}}} \\\\
         \\cline{{3-4}}
         \\multicolumn{{2}}{{c|}}{{}} & Freight & £\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
         \\cline{{3-4}}
@@ -326,10 +325,10 @@ def generate_latex_picklist(invoice, info, components):
     \\begin{{tabular}}{{l l}}
     \\textbf{{Total Items:}} & \\texttt{{{info['total_items']}}} \\\\ 
     \\textbf{{Total Weight:}} & \\texttt{{{info['total_weight']}}} \\\\ 
-    \\textbf{{Carrier:}} & \\texttt{{{info['carrier']}}} \\\\ 
-    \\textbf{{Stickers:}} & \\texttt{{{info['stickers']}}} \\\\ 
-    \\textbf{{Packing Instructions:}} & \\texttt{{{info['packing_instructions']}}} \\\\ 
-    \\textbf{{Con Note:}} & \\texttt{{{info['con_note']}}} \\\\ 
+    \\textbf{{Carrier:}} & \\texttt{{{invoice['carrier']}}} \\\\ 
+    \\textbf{{Stickers:}} & \\texttt{{{invoice['stickers']}}} \\\\ 
+    \\textbf{{Packing Instructions:}} & \\texttt{{{invoice['packing_instructions']}}} \\\\ 
+    \\textbf{{Con Note:}} & \\texttt{{{invoice['con_note']}}} \\\\ 
     \\end{{tabular}}
 
     \\vspace{{0.5cm}}
