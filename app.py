@@ -11,15 +11,20 @@ CORS(app)
 
 utc_now = datetime.now(pytz.utc)
 uk_time = utc_now.astimezone(pytz.timezone('Europe/London'))
+us_time = utc_now.astimezone(pytz.timezone('America/Los_Angeles'))
 
 @app.route('/generate-pdf-invoice', methods=['POST'])
 def generate_pdf_invoice():
     data = request.json
     invoice = data.get('invoice')
     totalPrice = data.get('totalPrice')
+    country = data.get('country')
 
     # Generate LaTeX source code
-    latex_source = generate_latex_invoice(invoice, totalPrice)
+    if country == 'UK':
+        latex_source = generate_latex_invoice(invoice, totalPrice)
+    elif country == 'US':
+        latex_source = generate_latex_invoice_us(invoice, totalPrice)
     
     # Use a secure temporary directory
     with tempfile.TemporaryDirectory() as tmpdirname:
@@ -126,6 +131,90 @@ def invoice_table_rows(invoice):
     table_rows = ""
     for product in invoice["InvoiceComponentsT"]:
         table_rows += f"\\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{£{product['ProductsT']['UKRetailCost']:.2f}}} & \\texttt{{£{(product['ProductsT']['UKRetailCost'] * product['Quantity']):.2f}}} \\\\ \n"
+        table_rows += "\\hline \n"
+    return table_rows
+
+def generate_latex_invoice_us(invoice, totalPrice):
+    # Generate LaTeX content here (similar to the LaTeX source in your Node.js example)
+    latex_source = f"""
+    \\documentclass[a4paper,12pt]{{article}}
+    \\usepackage{{graphicx}}
+    \\usepackage{{geometry}}
+    \\geometry{{a4paper, margin=1cm}}
+    \\usepackage{{array}}
+    \\usepackage{{longtable}}
+    \\pagestyle{{empty}}
+
+    \\begin{{document}}
+    
+    \\begin{{center}}
+        \\textbf{{\\Huge {{COR-TEN-STEEL USA}}}}
+    \\end{{center}}
+    
+    \\vspace{{1cm}}
+    \\noindent
+    \\begin{{minipage}}[t]{{0.45\\textwidth}}
+        \\raggedright
+        \\small
+        Mesa Street \\\\
+        Hesperia \\\\
+        92345 CA \\\\
+        Tel: 760-995-2555 \\\\
+        Email: usa@cor-ten-steel.com \\\\
+        \\vspace{{0.5cm}}
+        \\textbf{{\\large Customer Details:}} \\\\
+        Name: \\texttt{{{invoice['customers']['first_name']}}} \\texttt{{{invoice['customers']['last_name']}}} \\\\
+        Address: \\\\
+        \\texttt{{{invoice['addresses']['street_address']}}} \\\\
+        \\texttt{{{invoice['addresses']['suburb']}}} \\texttt{{{invoice['addresses']['postal_code']}}} \\\\
+        \\texttt{{{invoice['addresses']['city']}}} \\\\
+        \\texttt{{{invoice['addresses']['country']}}}
+    \\end{{minipage}}
+    \\hfill
+    \\begin{{minipage}}[t]{{0.45\\textwidth}}
+        \\raggedleft
+        \\small
+        Tax Invoice \\\\
+        VAT Number: 161 6032 40 \\\\
+        \\vspace{{1cm}}
+        Invoice Number: \\texttt{{{str(invoice['InvoiceID']).zfill(5)}}} \\\\
+        Date Issued: \\texttt{{{us_time.strftime("%d-%b-%Y")}}}
+    \\end{{minipage}}
+    
+    \\vspace{{1cm}}
+    
+    \\begin{{longtable}}{{|p{{0.4\\textwidth}}|>{{\\centering\\arraybackslash}}p{{0.1\\textwidth}}|p{{0.2\\textwidth}}|p{{0.2\\textwidth}}|}}
+        \\hline
+        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total}} \\\\
+        \\hline
+        \\endhead
+        {invoice_table_rows_us(invoice)}
+        \\multicolumn{{2}}{{c|}}{{}} & Subtotal & £\\texttt{{{totalPrice:.2f}}} \\\\
+        \\cline{{3-4}}
+        \\multicolumn{{2}}{{c|}}{{}} & Freight & £\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
+        \\cline{{3-4}}
+        \\multicolumn{{2}}{{c|}}{{}} & Balance due inc VAT & £\\texttt{{{invoice['Price']:.2f}}} \\\\
+        \\cline{{3-4}}
+        \\endfoot
+    \\end{{longtable}}
+    \\vspace{{1cm}}
+    \\noindent
+    Payment can be made by bank transfer to the following account:
+    \\begin{{center}}
+    \\texttt{{Account/Business Name: Rocersa Limited}} \\\\
+    \\texttt{{ACH Routing Number: 121000358}} \\\\
+    \\texttt{{Account Number: 325056815335}} \\\\
+    \\texttt{{Reference: {str(invoice['InvoiceID']).zfill(5)}}}
+    \\end{{center}}
+    
+    \\end{{document}}
+    """
+    return latex_source
+
+def invoice_table_rows_us(invoice):
+    table_rows = ""
+    for product in invoice["InvoiceComponentsT"]:
+        table_rows += f"\\texttt{{{product['ProductsT']['NameImperial']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{£{product['ProductsT']['USRetailCost']:.2f}}} & \\texttt{{£{(product['ProductsT']['USRetailCost'] * product['Quantity']):.2f}}} \\\\ \n"
         table_rows += "\\hline \n"
     return table_rows
 
