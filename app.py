@@ -19,12 +19,14 @@ def generate_pdf_invoice():
     invoice = data.get('invoice')
     totalPrice = data.get('totalPrice')
     country = data.get('country')
-
+    print(country)
     # Generate LaTeX source code
-    if country == 'UK':
-        latex_source = generate_latex_invoice(invoice, totalPrice)
-    elif country == 'US':
-        latex_source = generate_latex_invoice_us(invoice, totalPrice)
+    # if country == 'UK':
+    #     latex_source = generate_latex_invoice(invoice, totalPrice)
+    # elif country == 'US':
+    #     latex_source = generate_latex_invoice_us(invoice, totalPrice)
+    
+    latex_source = generate_latex_invoice_us(invoice, totalPrice)
     
     # Use a secure temporary directory
     with tempfile.TemporaryDirectory() as tmpdirname:
