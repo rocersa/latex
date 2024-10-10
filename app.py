@@ -81,6 +81,7 @@ def generate_latex_invoice(invoice, totalPrice):
         \\textbf{{\\large Customer Details:}} \\\\
         Name: \\texttt{{{invoice['customers']['first_name']}}} \\texttt{{{invoice['customers']['last_name']}}} \\\\
         Address: \\\\
+        \\texttt{{{invoice['addresses']['building_name']}}} \\\\
         \\texttt{{{invoice['addresses']['street_address']}}} \\\\
         \\texttt{{{invoice['addresses']['suburb']}}} \\texttt{{{invoice['addresses']['postal_code']}}} \\\\
         \\texttt{{{invoice['addresses']['city']}}} \\\\
@@ -273,7 +274,14 @@ def generate_latex_picklist(invoice, info, components):
     \\texttt{{Deliver to:}} \\\\
 
     \\textbf{{\\fontsize{{20}}{{24}}\\selectfont {invoice['customers']['first_name']}}} \\textbf{{\\fontsize{{20}}{{24}}\\selectfont {invoice['customers']['last_name']}}} \\\\
+    """
+    if invoice['addresses']['building_name'] != "":
+        latex_source += f"""
 
+    \\textbf{{\\fontsize{{30}}{{36}}\\selectfont {invoice['addresses']['building_name']}}} \\\\
+
+    """
+    latex_source += f"""
     \\textbf{{\\fontsize{{30}}{{36}}\\selectfont {invoice['addresses']['street_address']}}} \\\\
  
     \\textbf{{\\fontsize{{50}}{{60}}\\selectfont {invoice['addresses']['suburb']}}} \\\\
