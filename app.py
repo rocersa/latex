@@ -80,7 +80,12 @@ def generate_latex_invoice(invoice):
         \\textbf{{\\large Customer Details:}} \\\\
         Name: \\texttt{{{invoice['customers']['first_name']}}} \\texttt{{{invoice['customers']['last_name']}}} \\\\
         Address: \\\\
-        \\texttt{{{invoice['addresses']['building_name']}}} \\\\
+    """
+    if invoice['addresses']['building_name'] != "":
+        latex_source += f"""
+    \\texttt{{{invoice['addresses']['building_name']}}} \\\\
+    """
+    latex_source += f"""
         \\texttt{{{invoice['addresses']['street_address']}}} \\\\
         \\texttt{{{invoice['addresses']['suburb']}}} \\texttt{{{invoice['addresses']['postal_code']}}} \\\\
         \\texttt{{{invoice['addresses']['city']}}} \\\\
@@ -325,7 +330,7 @@ def generate_latex_picklist(invoice, info, components):
     \\begin{{tabular}}{{l l}}
     \\textbf{{Total Items:}} & \\texttt{{{info['total_items']}}} \\\\ 
     \\textbf{{Total Weight:}} & \\texttt{{{info['total_weight']}}} \\\\ 
-    \\textbf{{Carrier:}} & \\texttt{{{invoice['carrier']}}} \\\\ 
+    \\textbf{{Carrier:}} & \\texttt{{{invoice['freight_carrier']}}} \\\\ 
     \\textbf{{Stickers:}} & \\texttt{{{invoice['stickers']}}} \\\\ 
     \\textbf{{Packing Instructions:}} & \\texttt{{{invoice['packing_instructions']}}} \\\\ 
     \\textbf{{Con Note:}} & \\texttt{{{invoice['con_note']}}} \\\\ 
