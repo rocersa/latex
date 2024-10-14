@@ -194,11 +194,11 @@ def generate_latex_invoice_us(invoice):
         \\hline
         \\endhead
         {invoice_table_rows_us(invoice)}
-        \\multicolumn{{2}}{{c|}}{{}} & Subtotal & $\\texttt{{{invoice['Price']:.2f}}} \\\\
+        \\multicolumn{{2}}{{c|}}{{}} & Subtotal & \\$\\texttt{{{invoice['Price']:.2f}}} \\\\
         \\cline{{3-4}}
-        \\multicolumn{{2}}{{c|}}{{}} & Freight & $\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
+        \\multicolumn{{2}}{{c|}}{{}} & Freight & \\$\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
         \\cline{{3-4}}
-        \\multicolumn{{2}}{{c|}}{{}} & Balance due & $\\texttt{{{invoice['Price']:.2f}}} \\\\
+        \\multicolumn{{2}}{{c|}}{{}} & Balance due & \\$\\texttt{{{invoice['Price']:.2f}}} \\\\
         \\cline{{3-4}}
         \\endfoot
     \\end{{longtable}}
