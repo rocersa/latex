@@ -21,7 +21,7 @@ def generate_pdf_invoice():
 
     # Generate LaTeX source code
     if country == 'UK':
-        latex_source = generate_latex_invoice(invoice)
+        latex_source = generate_latex_invoice_uk(invoice)
     elif country == 'US':
         latex_source = generate_latex_invoice_us(invoice)
     
@@ -50,7 +50,7 @@ def generate_pdf_invoice():
         # Send the generated PDF file
         return send_file(pdf_file_path, as_attachment=True)
 
-def generate_latex_invoice(invoice):
+def generate_latex_invoice_uk(invoice):
     # Generate LaTeX content here (similar to the LaTeX source in your Node.js example)
     latex_source = f"""
     \\documentclass[a4paper,12pt]{{article}}
@@ -109,7 +109,7 @@ def generate_latex_invoice(invoice):
         \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total}} \\\\
         \\hline
         \\endhead
-        {invoice_table_rows(invoice)}
+        {invoice_table_rows_uk(invoice)}
         \\multicolumn{{2}}{{c|}}{{}} & Subtotal & £\\texttt{{{invoice['Price']:.2f}}} \\\\
         \\cline{{3-4}}
         \\multicolumn{{2}}{{c|}}{{}} & Freight & £\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
@@ -132,7 +132,7 @@ def generate_latex_invoice(invoice):
     """
     return latex_source
 
-def invoice_table_rows(invoice):
+def invoice_table_rows_uk(invoice):
     table_rows = ""
     for product in invoice["InvoiceComponentsT"]:
         table_rows += f"\\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{£{product['ProductsT']['UKRetailCost']:.2f}}} & \\texttt{{£{(product['ProductsT']['UKRetailCost'] * product['Quantity']):.2f}}} \\\\ \n"
@@ -229,9 +229,11 @@ def generate_pdf_picklist():
     invoice = data.get('invoice')
     info = data.get('info')
     components = data.get('components')
+    country = data.get('country')
 
     # Generate LaTeX source code
-    latex_source = generate_latex_picklist(invoice, info, components)
+    if country == 'UK':
+        latex_source = generate_latex_picklist_uk(invoice, info, components)
     
     # Use a secure temporary directory
     with tempfile.TemporaryDirectory() as tmpdirname:
@@ -258,7 +260,7 @@ def generate_pdf_picklist():
         # Send the generated PDF file
         return send_file(pdf_file_path, as_attachment=True)
 
-def generate_latex_picklist(invoice, info, components):
+def generate_latex_picklist_uk(invoice, info, components):
     # Generate LaTeX content here (similar to the LaTeX source in your Node.js example)
     latex_source = f"""
     \\documentclass[a4paper,12pt]{{article}}
@@ -342,7 +344,7 @@ def generate_latex_picklist(invoice, info, components):
         \\hline
         \\textbf{{Code}} & \\textbf{{Description}} & \\textbf{{Qty}} & \\textbf{{Weight (kgs)}} \\\\
         \\hline
-        {picklist_table_rows(invoice, components)}
+        {picklist_table_rows_uk(invoice, components)}
     \\end{{longtable}}
     
 
@@ -351,7 +353,7 @@ def generate_latex_picklist(invoice, info, components):
     """
     return latex_source
 
-def picklist_table_rows(invoice, components):
+def picklist_table_rows_uk(invoice, components):
     table_rows = ""
     for product in components:
         table_rows += f"\\texttt{{{product['ProductsT']['ProductCode']}}} & \\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{{(product['ProductsT']['Weight'] * product['Quantity']):.1f}}}  \\\\ \n"
