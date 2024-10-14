@@ -180,7 +180,7 @@ def generate_latex_invoice_us(invoice):
         \\raggedleft
         \\small
         Tax Invoice \\\\
-        VAT Number: 161 6032 40 \\\\
+        Tax Number: XXX XXX XXX (California Only) \\\\
         \\vspace{{1cm}}
         Invoice Number: \\texttt{{{str(invoice['InvoiceID']).zfill(5)}}} \\\\
         Date Issued: \\texttt{{{us_time.strftime("%d-%b-%Y")}}}
@@ -194,11 +194,11 @@ def generate_latex_invoice_us(invoice):
         \\hline
         \\endhead
         {invoice_table_rows_us(invoice)}
-        \\multicolumn{{2}}{{c|}}{{}} & Subtotal & £\\texttt{{{invoice['Price']:.2f}}} \\\\
+        \\multicolumn{{2}}{{c|}}{{}} & Subtotal & $\\texttt{{{invoice['Price']:.2f}}} \\\\
         \\cline{{3-4}}
-        \\multicolumn{{2}}{{c|}}{{}} & Freight & £\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
+        \\multicolumn{{2}}{{c|}}{{}} & Freight & $\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
         \\cline{{3-4}}
-        \\multicolumn{{2}}{{c|}}{{}} & Balance due inc VAT & £\\texttt{{{invoice['Price']:.2f}}} \\\\
+        \\multicolumn{{2}}{{c|}}{{}} & Balance due & $\\texttt{{{invoice['Price']:.2f}}} \\\\
         \\cline{{3-4}}
         \\endfoot
     \\end{{longtable}}
@@ -219,7 +219,7 @@ def generate_latex_invoice_us(invoice):
 def invoice_table_rows_us(invoice):
     table_rows = ""
     for product in invoice["InvoiceComponentsT"]:
-        table_rows += f"\\texttt{{{product['ProductsT']['NameImperial']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{£{product['ProductsT']['USRetailCost']:.2f}}} & \\texttt{{£{(product['ProductsT']['USRetailCost'] * product['Quantity']):.2f}}} \\\\ \n"
+        table_rows += f"\\texttt{{{product['ProductsT']['NameImperial']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{${product['ProductsT']['USRetailCost']:.2f}}} & \\texttt{{${(product['ProductsT']['USRetailCost'] * product['Quantity']):.2f}}} \\\\ \n"
         table_rows += "\\hline \n"
     return table_rows
 
