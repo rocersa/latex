@@ -64,8 +64,7 @@ def generate_latex_invoice_uk(invoice, uk_time):
     \\begin{{center}}
         \\textbf{{\\Huge {{COR-TEN-STEEL UK}}}}
     \\end{{center}}
-    
-    \\vspace{{1cm}}
+    \\vspace{{0.5cm}}
     \\noindent
     \\begin{{minipage}}[t]{{0.45\\textwidth}}
         \\raggedright
@@ -101,7 +100,6 @@ def generate_latex_invoice_uk(invoice, uk_time):
         Invoice Number: \\texttt{{{str(invoice['InvoiceID']).zfill(5)}}} \\\\
         Date Issued: \\texttt{{{uk_time.strftime("%d-%b-%Y")}}}
     \\end{{minipage}}
-    
     \\begin{{longtable}}{{|p{{0.5\\textwidth}}|>{{\\centering\\arraybackslash}}p{{0.1\\textwidth}}|p{{0.2\\textwidth}}|p{{0.1\\textwidth}}|}}
         \\hline
         \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total}} \\\\
