@@ -9,21 +9,19 @@ import pytz
 app = Flask(__name__)
 CORS(app)
 
-utc_now = datetime.now(pytz.utc)
-uk_time = utc_now.astimezone(pytz.timezone('Europe/London'))
-us_time = utc_now.astimezone(pytz.timezone('America/Los_Angeles'))
-
 @app.route('/generate-pdf-invoice', methods=['POST'])
 def generate_pdf_invoice():
     data = request.json
     invoice = data.get('invoice')
     country = data.get('country')
-
+    utc_now = datetime.now(pytz.utc)
+    uk_time = utc_now.astimezone(pytz.timezone('Europe/London'))
+    us_time = utc_now.astimezone(pytz.timezone('America/Los_Angeles'))
     # Generate LaTeX source code
     if country == 'UK':
-        latex_source = generate_latex_invoice_uk(invoice)
+        latex_source = generate_latex_invoice_uk(invoice, uk_time)
     elif country == 'US':
-        latex_source = generate_latex_invoice_us(invoice)
+        latex_source = generate_latex_invoice_us(invoice, us_time)
     
     # Use a secure temporary directory
     with tempfile.TemporaryDirectory() as tmpdirname:
@@ -50,7 +48,7 @@ def generate_pdf_invoice():
         # Send the generated PDF file
         return send_file(pdf_file_path, as_attachment=True)
 
-def generate_latex_invoice_uk(invoice):
+def generate_latex_invoice_uk(invoice, uk_time):
     # Generate LaTeX content here (similar to the LaTeX source in your Node.js example)
     latex_source = f"""
     \\documentclass[a4paper,12pt]{{article}}
@@ -78,8 +76,7 @@ def generate_latex_invoice_uk(invoice):
         Email: uk@cor-ten-steel.co.uk \\\\
         \\vspace{{0.5cm}}
         \\textbf{{\\large Customer Details:}} \\\\
-        Name: \\texttt{{{invoice['customers']['first_name']}}} \\texttt{{{invoice['customers']['last_name']}}} \\\\
-        Address: \\\\
+        \\texttt{{{invoice['customers']['first_name']}}} \\texttt{{{invoice['customers']['last_name']}}} \\\\
     """
     if invoice['addresses']['building_name']:
         latex_source += f"""
@@ -139,7 +136,7 @@ def invoice_table_rows_uk(invoice):
         table_rows += "\\hline \n"
     return table_rows
 
-def generate_latex_invoice_us(invoice):
+def generate_latex_invoice_us(invoice, us_time):
     # Generate LaTeX content here (similar to the LaTeX source in your Node.js example)
     latex_source = f"""
     \\documentclass[a4paper,12pt]{{article}}
@@ -168,8 +165,7 @@ def generate_latex_invoice_us(invoice):
         Email: usa@cor-ten-steel.com \\\\
         \\vspace{{0.5cm}}
         \\textbf{{\\large Customer Details:}} \\\\
-        Name: \\texttt{{{invoice['customers']['first_name']}}} \\texttt{{{invoice['customers']['last_name']}}} \\\\
-        Address: \\\\
+        \\texttt{{{invoice['customers']['first_name']}}} \\texttt{{{invoice['customers']['last_name']}}} \\\\
         \\texttt{{{invoice['addresses']['street_address']}}} \\\\
         \\texttt{{{invoice['addresses']['suburb']}}} \\texttt{{{invoice['addresses']['postal_code']}}} \\\\
         \\texttt{{{invoice['addresses']['city']}}} \\\\
@@ -230,12 +226,14 @@ def generate_pdf_picklist():
     info = data.get('info')
     components = data.get('components')
     country = data.get('country')
-
+    utc_now = datetime.now(pytz.utc)
+    uk_time = utc_now.astimezone(pytz.timezone('Europe/London'))
+    us_time = utc_now.astimezone(pytz.timezone('America/Los_Angeles'))
     # Generate LaTeX source code
     if country == 'UK':
-        latex_source = generate_latex_picklist_uk(invoice, info, components)
+        latex_source = generate_latex_picklist_uk(invoice, info, components, uk_time)
     elif country == 'US':
-        latex_source = generate_latex_picklist_us(invoice, info, components)
+        latex_source = generate_latex_picklist_us(invoice, info, components, us_time)
     
     # Use a secure temporary directory
     with tempfile.TemporaryDirectory() as tmpdirname:
@@ -262,7 +260,7 @@ def generate_pdf_picklist():
         # Send the generated PDF file
         return send_file(pdf_file_path, as_attachment=True)
 
-def generate_latex_picklist_uk(invoice, info, components):
+def generate_latex_picklist_uk(invoice, info, components, uk_time):
     # Generate LaTeX content here (similar to the LaTeX source in your Node.js example)
     latex_source = f"""
     \\documentclass[a4paper,12pt]{{article}}
@@ -362,7 +360,7 @@ def picklist_table_rows_uk(invoice, components):
         table_rows += "\\hline \n"
     return table_rows
 
-def generate_latex_picklist_us(invoice, info, components):
+def generate_latex_picklist_us(invoice, info, components, us_time):
     # Generate LaTeX content here (similar to the LaTeX source in your Node.js example)
     latex_source = f"""
     \\documentclass[a4paper,12pt]{{article}}
