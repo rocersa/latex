@@ -72,11 +72,14 @@ def generate_latex_invoice_uk(invoice, uk_time):
         \\small
         Cadley \\\\
         SN8 4NE \\\\
-        Tel: 0118 234 9909 \\\\
-        Email: uk@cor-ten-steel.co.uk \\\\
+        0118 234 9909 \\\\
+        uk@cor-ten-steel.co.uk \\\\
+        www.cor-ten-steel.co.uk \\\\
         \\vspace{{0.5cm}}
         \\textbf{{\\large Customer Details:}} \\\\
         \\texttt{{{invoice['customers']['first_name']}}} \\texttt{{{invoice['customers']['last_name']}}} \\\\
+        \\texttt{{{invoice['customers']['email']}}} \\\\
+        \\texttt{{{invoice['customers']['phone']}}} \\\\
     """
     if invoice['addresses']['building_name']:
         latex_source += f"""
@@ -101,7 +104,7 @@ def generate_latex_invoice_uk(invoice, uk_time):
     
     \\vspace{{1cm}}
     
-    \\begin{{longtable}}{{|p{{0.5\\textwidth}}|>{{\\centering\\arraybackslash}}p{{0.1\\textwidth}}|p{{0.2\\textwidth}}|p{{0.15\\textwidth}}|}}
+    \\begin{{longtable}}{{|p{{0.5\\textwidth}}|>{{\\centering\\arraybackslash}}p{{0.1\\textwidth}}|p{{0.2\\textwidth}}|p{{0.1\\textwidth}}|}}
         \\hline
         \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total}} \\\\
         \\hline
