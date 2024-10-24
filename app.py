@@ -101,7 +101,7 @@ def generate_latex_invoice_uk(invoice, uk_time):
     
     \\vspace{{1cm}}
     
-    \\begin{{longtable}}{{|p{{0.4\\textwidth}}|>{{\\centering\\arraybackslash}}p{{0.1\\textwidth}}|p{{0.2\\textwidth}}|p{{0.2\\textwidth}}|}}
+    \\begin{{longtable}}{{|p{{0.5\\textwidth}}|>{{\\centering\\arraybackslash}}p{{0.1\\textwidth}}|p{{0.2\\textwidth}}|p{{0.15\\textwidth}}|}}
         \\hline
         \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total}} \\\\
         \\hline
