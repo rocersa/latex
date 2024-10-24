@@ -113,7 +113,6 @@ def generate_latex_invoice_uk(invoice, uk_time):
         \\multicolumn{{2}}{{c|}}{{}} & Balance due inc VAT & £\\texttt{{{invoice['Price']:.2f}}} \\\\
         \\cline{{3-4}}
     \\end{{longtable}}
-    \\vspace{{1cm}}
     \\noindent
     Payment can be made by bank transfer to the following account:
     \\begin{{center}}
