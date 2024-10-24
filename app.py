@@ -102,22 +102,19 @@ def generate_latex_invoice_uk(invoice, uk_time):
         Date Issued: \\texttt{{{uk_time.strftime("%d-%b-%Y")}}}
     \\end{{minipage}}
     
-    \\vspace{{1cm}}
+    \\vspace{{0.1cm}}
     
     \\begin{{longtable}}{{|p{{0.5\\textwidth}}|>{{\\centering\\arraybackslash}}p{{0.1\\textwidth}}|p{{0.2\\textwidth}}|p{{0.1\\textwidth}}|}}
         \\hline
         \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total}} \\\\
         \\hline
         {invoice_table_rows_uk(invoice)}
-    \\end{{longtable}}
-    
-    \\begin{{longtable}}{{|p{{0.5\\textwidth}}|p{{0.1\\textwidth}}|p{{0.2\\textwidth}}|p{{0.1\\textwidth}}|}}
         \\hline
-        & & \\textbf{{Subtotal}} & £\\texttt{{{(invoice['Price'] - invoice['freight_charged']):.2f}}} \\\\
+        \\multicolumn{{2}}{{c|}}{{}} & Subtotal & £\\texttt{{{(invoice['Price'] - invoice['freight_charged']):.2f}}} \\\\
         \\cline{{3-4}}
-        & & \\textbf{{Freight}} & £\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
+        \\multicolumn{{2}}{{c|}}{{}} & Freight & £\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
         \\cline{{3-4}}
-        & & \\textbf{{Balance due inc VAT}} & £\\texttt{{{invoice['Price']:.2f}}} \\\\
+        \\multicolumn{{2}}{{c|}}{{}} & Balance due inc VAT & £\\texttt{{{invoice['Price']:.2f}}} \\\\
         \\cline{{3-4}}
     \\end{{longtable}}
     \\vspace{{1cm}}
