@@ -102,8 +102,6 @@ def generate_latex_invoice_uk(invoice, uk_time):
         Date Issued: \\texttt{{{uk_time.strftime("%d-%b-%Y")}}}
     \\end{{minipage}}
     
-    \\vspace{{0.1cm}}
-    
     \\begin{{longtable}}{{|p{{0.5\\textwidth}}|>{{\\centering\\arraybackslash}}p{{0.1\\textwidth}}|p{{0.2\\textwidth}}|p{{0.1\\textwidth}}|}}
         \\hline
         \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total}} \\\\
