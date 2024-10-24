@@ -110,6 +110,10 @@ def generate_latex_invoice_uk(invoice, uk_time):
         \\hline
         \\endhead
         {invoice_table_rows_uk(invoice)}
+    \\end{{longtable}}
+    
+    \\begin{{longtable}}{{|p{{0.5\\textwidth}}|>{{\\centering\\arraybackslash}}p{{0.1\\textwidth}}|p{{0.2\\textwidth}}|p{{0.1\\textwidth}}|}}
+        \\hline
         & & \\textbf{{Subtotal}} & £\\texttt{{{(invoice['Price'] - invoice['freight_charged']):.2f}}} \\\\
         \\cline{{3-4}}
         & & \\textbf{{Freight}} & £\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
