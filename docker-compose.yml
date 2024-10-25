@@ -4,5 +4,5 @@ services:
   pdf-generator:
     build: .
     ports:
-      - "5000:5000"
-      restart: always
+      - '5000:5000'
+    restart: always
