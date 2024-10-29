@@ -80,7 +80,7 @@ def generate_latex_invoice_uk(invoice, uk_time):
     """
     if invoice['customers']['company']:
         latex_source += f"""
-    \\texttt{{{invoice['customers']['company']}}} \\\\
+        \\texttt{{{invoice['customers']['company']}}} \\\\
     """
     latex_source += f"""
         \\texttt{{{invoice['customers']['email']}}} \\\\
@@ -88,7 +88,7 @@ def generate_latex_invoice_uk(invoice, uk_time):
     """
     if invoice['addresses']['building_name']:
         latex_source += f"""
-    \\texttt{{{invoice['addresses']['building_name']}}} \\\\
+        \\texttt{{{invoice['addresses']['building_name']}}} \\\\
     """
     latex_source += f"""
         \\texttt{{{invoice['addresses']['street_address']}}} \\\\
