@@ -77,6 +77,12 @@ def generate_latex_invoice_uk(invoice, uk_time):
         \\vspace{{0.5cm}}
         \\textbf{{\\large Customer Details:}} \\\\
         \\texttt{{{invoice['customers']['first_name']}}} \\texttt{{{invoice['customers']['last_name']}}} \\\\
+    """
+    if invoice['customers']['company']:
+        latex_source += f"""
+    \\texttt{{{invoice['customers']['company']}}} \\\\
+    """
+    latex_source += f"""
         \\texttt{{{invoice['customers']['email']}}} \\\\
         \\texttt{{{invoice['customers']['phone']}}} \\\\
     """
@@ -163,6 +169,12 @@ def generate_latex_invoice_us(invoice, us_time):
         \\vspace{{0.5cm}}
         \\textbf{{\\large Customer Details:}} \\\\
         \\texttt{{{invoice['customers']['first_name']}}} \\texttt{{{invoice['customers']['last_name']}}} \\\\
+    """
+    if invoice['customers']['company']:
+        latex_source += f"""
+    \\texttt{{{invoice['customers']['company']}}} \\\\
+    """
+    latex_source += f"""
         \\texttt{{{invoice['addresses']['street_address']}}} \\\\
         \\texttt{{{invoice['addresses']['suburb']}}} \\texttt{{{invoice['addresses']['postal_code']}}} \\\\
         \\texttt{{{invoice['addresses']['city']}}} \\\\
@@ -278,6 +290,12 @@ def generate_latex_picklist_uk(invoice, info, components, uk_time):
 
     \\textbf{{\\fontsize{{20}}{{24}}\\selectfont {invoice['customers']['first_name']}}} \\textbf{{\\fontsize{{20}}{{24}}\\selectfont {invoice['customers']['last_name']}}} \\\\
     """
+    if invoice['customers']['company']:
+        latex_source += f"""
+    \\texttt{{{invoice['customers']['company']}}} \\\\
+    """
+    latex_source += f"""
+    """
     if invoice['addresses']['building_name']:
         latex_source += f"""
 
@@ -377,6 +395,10 @@ def generate_latex_picklist_us(invoice, info, components, us_time):
     \\texttt{{Deliver to:}} \\\\
 
     \\textbf{{\\fontsize{{20}}{{24}}\\selectfont {invoice['customers']['first_name']}}} \\textbf{{\\fontsize{{20}}{{24}}\\selectfont {invoice['customers']['last_name']}}} \\\\
+    """
+    if invoice['customers']['company']:
+        latex_source += f"""
+    \\texttt{{{invoice['customers']['company']}}} \\\\
     """
     latex_source += f"""
     \\textbf{{\\fontsize{{30}}{{36}}\\selectfont {invoice['addresses']['street_address']}}} \\\\
