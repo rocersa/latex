@@ -80,21 +80,21 @@ def generate_latex_invoice_uk(invoice, uk_time):
     """
     if invoice['customers']['company']:
         latex_source += f"""
-        \\texttt{{{invoice['customers']['company']}}} \\\\
+            \\texttt{{{invoice['customers']['company']}}} \\\\
     """
     latex_source += f"""
-        \\texttt{{{invoice['customers']['email']}}} \\\\
-        \\texttt{{{invoice['customers']['phone']}}} \\\\
+            \\texttt{{{invoice['customers']['email']}}} \\\\
+            \\texttt{{{invoice['customers']['phone']}}} \\\\
     """
     if invoice['addresses']['building_name']:
         latex_source += f"""
-        \\texttt{{{invoice['addresses']['building_name']}}} \\\\
+            \\texttt{{{invoice['addresses']['building_name']}}} \\\\
     """
     latex_source += f"""
-        \\texttt{{{invoice['addresses']['street_address']}}} \\\\
-        \\texttt{{{invoice['addresses']['suburb']}}} \\texttt{{{invoice['addresses']['postal_code']}}} \\\\
-        \\texttt{{{invoice['addresses']['city']}}} \\\\
-        \\texttt{{{invoice['addresses']['country']}}}
+            \\texttt{{{invoice['addresses']['street_address']}}} \\\\
+            \\texttt{{{invoice['addresses']['suburb']}}} \\texttt{{{invoice['addresses']['postal_code']}}} \\\\
+            \\texttt{{{invoice['addresses']['city']}}} \\\\
+            \\texttt{{{invoice['addresses']['country']}}}
     \\end{{minipage}}
     \\hfill
     \\begin{{minipage}}[t]{{0.45\\textwidth}}
