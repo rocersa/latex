@@ -75,7 +75,7 @@ def generate_latex_invoice_uk(invoice, uk_time):
         uk@cor-ten-steel.co.uk \\\\
         www.cor-ten-steel.co.uk \\\\
         \\vspace{{0.5cm}}
-        \\textbf{{\\large Customer Details:}} \\\\
+        \\noindent
         \\texttt{{{invoice['customers']['first_name']}}} \\texttt{{{invoice['customers']['last_name']}}} \\\\
     """
     if invoice['customers']['company']:
