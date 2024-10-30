@@ -306,8 +306,9 @@ def generate_latex_picklist_uk(invoice, info, components, uk_time):
     \\textbf{{\\fontsize{{70}}{{84}}\\selectfont {invoice['addresses']['postal_code']}}} \\\\
 
     \\noindent
-    \\textsf{{\\Large {{Email: }}}} \\textsf{{\\Large {invoice['customers']['email']}}} \\\\
-    \\textsf{{\\Large {{Phone: }}}} \\textsf{{\\Large {invoice['customers']['phone']}}} \\\\
+    \\textsf{{\\Large {invoice['customers']['email']}}} \\\\
+    \\textsf{{\\Large {invoice['customers']['phone']}}} \\\\
+    \\textsf{{\\Large {invoice['delivery_instructions']}}} \\\\
 
     \\vspace{{0.5cm}}
     
