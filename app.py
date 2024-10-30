@@ -86,7 +86,7 @@ def generate_latex_invoice_uk(invoice, uk_time):
     """
     if invoice['customers']['second_phone']:
         latex_source += f"""
-    \\textsf{{\\Large {invoice['customers']['second_phone']}}} \\\\
+    \\texttt{{{invoice['customers']['second_phone']}}} \\\\
     """
     if invoice['addresses']['building_name']:
         latex_source += f"""
@@ -315,10 +315,9 @@ def generate_latex_picklist_uk(invoice, info, components, uk_time):
     \\textsf{{\\Large {invoice['customers']['phone']}}} \\\\
     """
     if invoice['customers']['second_phone']:
-        latex_source += f"""
-    \\textsf{{\\Large {invoice['customers']['second_phone']}}} \\\\
-    """
+        latex_source += f"""\\textsf{{\\Large {invoice['customers']['second_phone']}}} \\\\"""
     latex_source += f"""
+    \\noindent
     \\textsf{{\\Large {invoice['delivery_instructions']}}} \\\\
 
     \\vspace{{0.5cm}}
