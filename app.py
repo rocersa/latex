@@ -156,8 +156,7 @@ def generate_latex_invoice_us(invoice, us_time):
     \\begin{{center}}
         \\textbf{{\\Huge {{COR-TEN-STEEL USA}}}}
     \\end{{center}}
-    
-    \\vspace{{1cm}}
+    \\vspace{{0.5cm}}
     \\noindent
     \\begin{{minipage}}[t]{{0.45\\textwidth}}
         \\raggedright
@@ -168,7 +167,6 @@ def generate_latex_invoice_us(invoice, us_time):
         Tel: 760-995-2555 \\\\
         Email: usa@cor-ten-steel.com \\\\
         \\vspace{{0.5cm}}
-        \\textbf{{\\large Customer Details:}} \\\\
         \\texttt{{{invoice['customers']['first_name']}}} \\texttt{{{invoice['customers']['last_name']}}} \\\\
     """
     if invoice['customers']['company']:
@@ -177,9 +175,8 @@ def generate_latex_invoice_us(invoice, us_time):
     """
     latex_source += f"""
         \\texttt{{{invoice['addresses']['street_address']}}} \\\\
-        \\texttt{{{invoice['addresses']['suburb']}}} \\texttt{{{invoice['addresses']['postal_code']}}} \\\\
+        \\texttt{{{invoice['addresses']['postal_code']}}} \\\\
         \\texttt{{{invoice['addresses']['city']}}} \\\\
-        \\texttt{{{invoice['addresses']['country']}}}
     \\end{{minipage}}
     \\hfill
     \\begin{{minipage}}[t]{{0.45\\textwidth}}
@@ -191,9 +188,6 @@ def generate_latex_invoice_us(invoice, us_time):
         Invoice Number: \\texttt{{{str(invoice['InvoiceID']).zfill(5)}}} \\\\
         Date Issued: \\texttt{{{us_time.strftime("%d-%b-%Y")}}}
     \\end{{minipage}}
-    
-    \\vspace{{1cm}}
-    
     \\begin{{longtable}}{{|p{{0.4\\textwidth}}|>{{\\centering\\arraybackslash}}p{{0.1\\textwidth}}|p{{0.2\\textwidth}}|p{{0.2\\textwidth}}|}}
         \\hline
         \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total}} \\\\
