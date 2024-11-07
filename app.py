@@ -204,6 +204,18 @@ def generate_latex_invoice_us(invoice, us_time):
         \\cline{{3-4}}
         \\multicolumn{{2}}{{c|}}{{}} & Freight & \\$\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
         \\cline{{3-4}}
+        """
+    if invoice['addresses']['postal_code'].startswith('9'):
+        latex_source += f"""
+        \\multicolumn{{2}}{{c|}}{{}} & Tax & \\$\\texttt{{{(invoice['Price'] * invoice['taxRate']['rate']):.2f}}} \\\\
+        \\cline{{3-4}}
+        \\multicolumn{{2}}{{c|}}{{}} & Tax & \\$\\texttt{{{(invoice['Price'] * (1 + invoice['taxRate']['rate'])):.2f}}} \\\\
+        \\cline{{3-4}}
+        \\endfoot
+    \\end{{longtable}}
+    """
+    else:
+        latex_source += f"""
         \\multicolumn{{2}}{{c|}}{{}} & Balance due & \\$\\texttt{{{invoice['Price']:.2f}}} \\\\
         \\cline{{3-4}}
         \\endfoot
@@ -211,6 +223,7 @@ def generate_latex_invoice_us(invoice, us_time):
     """
     if invoice['addresses']['postal_code'].startswith('9'):
         latex_source += f"""
+    \\noindent
     \\texttt{{Tax Information:}} \\\\
     \\texttt{{city: {invoice['taxRate']['city']}}} \\\\
     \\texttt{{county: {invoice['taxRate']['county']}}} \\\\
