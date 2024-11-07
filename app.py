@@ -186,7 +186,7 @@ def generate_latex_invoice_us(invoice, us_time):
         \\raggedleft
         \\small
         Tax Invoice \\\\
-        EIN Number: 47-3791745 \\\\
+        EIN: 47-3791745 \\\\
         \\vspace{{1cm}}
         Invoice Number: \\texttt{{{str(invoice['InvoiceID']).zfill(5)}}} \\\\
         Date Issued: \\texttt{{{us_time.strftime("%d-%b-%Y")}}}
