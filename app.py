@@ -225,7 +225,6 @@ def generate_latex_invoice_us(invoice, us_time):
     \\texttt{{rate: {invoice['taxRate']['rate']}}} \\\\
     """
     latex_source += f"""
-    \\vspace{{1cm}}
     \\noindent
     Payment can be made by bank transfer to the following account:
     \\begin{{center}}
@@ -234,7 +233,6 @@ def generate_latex_invoice_us(invoice, us_time):
     \\texttt{{Account Number: 325056815335}} \\\\
     \\texttt{{Reference: {str(invoice['InvoiceID']).zfill(5)}}}
     \\end{{center}}
-    
     \\end{{document}}
     """
     return latex_source
