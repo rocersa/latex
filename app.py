@@ -209,7 +209,7 @@ def generate_latex_invoice_us(invoice, us_time):
         latex_source += f"""
         \\multicolumn{{2}}{{c|}}{{}} & Tax & \\$\\texttt{{{(invoice['Price'] * invoice['taxRate']['rate']):.2f}}} \\\\
         \\cline{{3-4}}
-        \\multicolumn{{2}}{{c|}}{{}} & Tax & \\$\\texttt{{{(invoice['Price'] * (1 + invoice['taxRate']['rate'])):.2f}}} \\\\
+        \\multicolumn{{2}}{{c|}}{{}} & Balance Due & \\$\\texttt{{{(invoice['Price'] * (1 + invoice['taxRate']['rate'])):.2f}}} \\\\
         \\cline{{3-4}}
         \\endfoot
     \\end{{longtable}}
