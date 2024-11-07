@@ -352,9 +352,9 @@ def generate_latex_picklist_uk(invoice, info, components, uk_time):
     \\hfill
     \\begin{{minipage}}[t]{{0.45\\textwidth}}
         \\raggedleft
-        \\small
-        Picklist \\\\
+        \\textbf{{\\fontsize{{20}}{{24}}\\selectfont Picklist}} \\\\
         \\vspace{{1cm}}
+        \\small
         Invoice Number: \\texttt{{{str(invoice['InvoiceID']).zfill(5)}}} \\\\
         Date Issued: \\texttt{{{uk_time.strftime("%d-%b-%Y %H:%M")}}} 
     \\end{{minipage}}
