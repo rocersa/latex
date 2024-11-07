@@ -452,7 +452,7 @@ def generate_latex_picklist_us(invoice, info, components, us_time):
     \\begin{{minipage}}[t]{{0.45\\textwidth}}
         \\raggedleft
         \\large
-        Picklist \\\\
+        \\textbf{{Picklist}} \\\\
         \\vspace{{1cm}}
         \\small
         Invoice Number: \\texttt{{{str(invoice['InvoiceID']).zfill(5)}}} \\\\
