@@ -208,6 +208,16 @@ def generate_latex_invoice_us(invoice, us_time):
         \\cline{{3-4}}
         \\endfoot
     \\end{{longtable}}
+    """
+    if invoice['addresses']['postal_code'].startswith('9'):
+        latex_source += f"""
+    \\texttt{{Tax Information:}} \\\\
+    \\texttt{{city: {invoice['taxRate']['city']}}} \\\\
+    \\texttt{{county: {invoice['taxRate']['county']}}} \\\\
+    \\texttt{{jurisdiction: {invoice['taxRate']['jurisdiction']}}} \\\\
+    \\texttt{{rate: {invoice['taxRate']['rate']}}} \\\\
+    """
+    latex_source += f"""
     \\vspace{{1cm}}
     \\noindent
     Payment can be made by bank transfer to the following account:
