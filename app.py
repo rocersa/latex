@@ -199,7 +199,7 @@ def generate_latex_invoice_us(invoice, us_time):
         \\multicolumn{{2}}{{c|}}{{}} & Freight & \\$\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
         \\cline{{3-4}}
         """
-    if invoice['us_tax_rate']:
+    if invoice['us_tax_rate'] != 0:
         latex_source += f"""
         \\multicolumn{{2}}{{c|}}{{}} & Tax & \\$\\texttt{{{(invoice['Price'] * invoice['us_tax_rate'] / 100):.2f}}} \\\\
         \\cline{{3-4}}
