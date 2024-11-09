@@ -214,6 +214,8 @@ def generate_latex_invoice_us(invoice, us_time):
         \\cline{{3-4}}
         \\endfoot
     \\end{{longtable}}
+    """
+    latex_source += f"""
     \\vfill
     \\noindent
     Payment can be made by bank transfer to the following account:
