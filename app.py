@@ -201,15 +201,23 @@ def generate_latex_invoice_us(invoice, us_time):
         """
     if invoice['us_tax_rate'] != 0:
         latex_source += f"""
-        \\multicolumn{{2}}{{c|}}{{}} & Tax & \\$\\texttt{{{(invoice['Price'] * 7.5 / 100):.2f}}} \\\\
+        \\multicolumn{{2}}{{c|}}{{}} & Subtotal & \\$\\texttt{{{(invoice['Price'] * (100/107.5) - invoice['freight_charged']):.2f}}} \\\\
         \\cline{{3-4}}
-        \\multicolumn{{2}}{{c|}}{{}} & Balance Due & \\$\\texttt{{{(invoice['Price'] * (1 + 7.5 / 100)):.2f}}} \\\\
+        \\multicolumn{{2}}{{c|}}{{}} & Freight & \\$\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
+        \\cline{{3-4}}
+        \\multicolumn{{2}}{{c|}}{{}} & Tax & \\$\\texttt{{{(invoice['Price'] * (7.5 / 100)):.2f}}} \\\\
+        \\cline{{3-4}}
+        \\multicolumn{{2}}{{c|}}{{}} & Balance Due & \\$\\texttt{{{(invoice['Price'] ):.2f}}} \\\\
         \\cline{{3-4}}
         \\endfoot
     \\end{{longtable}}
     """
     else:
         latex_source += f"""
+        \\multicolumn{{2}}{{c|}}{{}} & Subtotal & \\$\\texttt{{{(invoice['Price'] - invoice['freight_charged']):.2f}}} \\\\
+        \\cline{{3-4}}
+        \\multicolumn{{2}}{{c|}}{{}} & Freight & \\$\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
+        \\cline{{3-4}}
         \\multicolumn{{2}}{{c|}}{{}} & Balance due & \\$\\texttt{{{invoice['Price']:.2f}}} \\\\
         \\cline{{3-4}}
         \\endfoot
