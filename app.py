@@ -80,6 +80,9 @@ def generate_latex_invoice_uk(invoice, uk_time):
     if invoice['customers']['company']:
         latex_source += f"""
         \\texttt{{{invoice['customers']['company']}}} \\\\"""
+    if invoice['customers']['company']:
+        latex_source += f"""
+        \\texttt{{{invoice['customer_order_number']}}} \\\\"""
     latex_source += f"""
         \\texttt{{{invoice['customers']['email']}}} \\\\
         \\texttt{{{invoice['customers']['phone']}}} \\\\
@@ -220,7 +223,6 @@ def generate_latex_invoice_us(invoice, us_time):
     \\end{{longtable}}
     """
     latex_source += f"""
-    \\vfill
     \\noindent
     Payment can be made by bank transfer to the following account:
     \\begin{{center}}
