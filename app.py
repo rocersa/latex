@@ -125,10 +125,15 @@ def generate_latex_invoice_uk(invoice, uk_time):
         \\multicolumn{{2}}{{c|}}{{}} & Total & £\\texttt{{{invoice['Price']:.2f}}} \\\\
         \\cline{{3-4}}
         \\multicolumn{{2}}{{c|}}{{}} & Amount Paid & £\\texttt{{{invoice['amount_paid']:.2f}}} \\\\
-        \\cline{{3-4}}"""
-    latex_source += f"""
+        \\cline{{3-4}}
         \\multicolumn{{2}}{{c|}}{{}} & Balance due inc VAT & £\\texttt{{{(invoice['Price'] - invoice['amount_paid']):.2f}}} \\\\
         \\cline{{3-4}}
+        """
+    else:
+        latex_source += f"""
+        \\multicolumn{{2}}{{c|}}{{}} & Balance due inc VAT & £\\texttt{{{(invoice['Price']):.2f}}} \\\\
+        \\cline{{3-4}}"""
+    latex_source += f"""
     \\end{{longtable}}
     \\noindent
     Payment can be made by bank transfer to the following account:
