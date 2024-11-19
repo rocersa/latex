@@ -205,9 +205,6 @@ def generate_latex_invoice_us(invoice, us_time):
     \\texttt{{{invoice['addresses']['state_province']}}} \\\\
     """
     latex_source += f"""
-        
-        \\texttt{{{invoice['addresses']['postal_code']}}} \\\\
-        \\texttt{{{invoice['addresses']['city']}}} \\\\
     \\end{{minipage}}
     \\hfill
     \\begin{{minipage}}[t]{{0.45\\textwidth}}
