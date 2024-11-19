@@ -447,7 +447,7 @@ def generate_latex_picklist_us(invoice, info, components, us_time):
     """
     if invoice['freight_carrier'] == 'Collect':
         latex_source += f"""
-    \\textbf{{\\fontsize{{70}}{{84}}\\selectfont Collecting From Yard}} \\\\
+    \\textbf{{\\fontsize{{50}}{{60}}\\selectfont {invoice['addresses']['street_address']}}} \\\\
     """
     else: 
         latex_source += f"""
