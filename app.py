@@ -188,8 +188,24 @@ def generate_latex_invoice_us(invoice, us_time):
         latex_source += f"""
     \\texttt{{{invoice['customers']['company']}}} \\\\
     """
+    if invoice['addresses']['street_address']:
+        latex_source += f"""
+    \\texttt{{{invoice['addresses']['street_address']}}} \\\\
+    """
+    if invoice['addresses']['postal_code']:
+        latex_source += f"""
+    \\texttt{{{invoice['addresses']['postal_code']}}} \\\\
+    """
+    if invoice['addresses']['city']:
+        latex_source += f"""
+    \\texttt{{{invoice['addresses']['city']}}} \\\\
+    """
+    if invoice['addresses']['state_province']:
+        latex_source += f"""
+    \\texttt{{{invoice['addresses']['state_province']}}} \\\\
+    """
     latex_source += f"""
-        \\texttt{{{invoice['addresses']['street_address']}}} \\\\
+        
         \\texttt{{{invoice['addresses']['postal_code']}}} \\\\
         \\texttt{{{invoice['addresses']['city']}}} \\\\
     \\end{{minipage}}
