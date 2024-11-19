@@ -448,13 +448,19 @@ def generate_latex_picklist_us(invoice, info, components, us_time):
         latex_source += f"""
     \\texttt{{{invoice['customers']['company']}}} \\\\
     """
-    latex_source += f"""
+    if invoice['freight_carrier'] == 'Collect':
+        latex_source += f"""
+    \\textbf{{\\fontsize{{70}}{{84}}\\selectfont Collecting From Yard}} \\\\
+    """
+    else: 
+        latex_source += f"""
     \\textbf{{\\fontsize{{30}}{{36}}\\selectfont {invoice['addresses']['street_address']}}} \\\\
  
-    \\textbf{{\\fontsize{{50}}{{60}}\\selectfont {invoice['addresses']['suburb']}}} \\\\
+    \\textbf{{\\fontsize{{50}}{{60}}\\selectfont {invoice['addresses']['city']}}} \\\\
 
-    \\textbf{{\\fontsize{{70}}{{84}}\\selectfont {invoice['addresses']['postal_code']}}} \\\\
-
+    \\textbf{{\\fontsize{{70}}{{84}}\\selectfont {invoice['addresses']['postal_code']} {invoice['addresses']['state_province']}}} \\\\
+    """
+    latex_source += f"""
     \\noindent
     \\textsf{{\\Large {{Email: }}}} \\textsf{{\\Large {invoice['customers']['email']}}} \\\\
     \\textsf{{\\Large {{Phone: }}}} \\textsf{{\\Large {invoice['customers']['phone']}}} \\\\
