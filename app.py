@@ -80,7 +80,7 @@ def generate_latex_invoice_uk(invoice, uk_time):
     if invoice['customers']['company']:
         latex_source += f"""
         \\texttt{{{invoice['customers']['company']}}} \\\\"""
-    if invoice['customers']['company']:
+    if invoice['customer_order_number']:
         latex_source += f"""
         \\texttt{{{invoice['customer_order_number']}}} \\\\"""
     latex_source += f"""
@@ -119,11 +119,14 @@ def generate_latex_invoice_uk(invoice, uk_time):
         \\multicolumn{{2}}{{c|}}{{}} & Subtotal & £\\texttt{{{(invoice['Price'] - invoice['freight_charged']):.2f}}} \\\\
         \\cline{{3-4}}
         \\multicolumn{{2}}{{c|}}{{}} & Freight & £\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
-        \\cline{{3-4}}
+        \\cline{{3-4}}"""
+    if invoice['amount_paid']:
+        latex_source += f"""
         \\multicolumn{{2}}{{c|}}{{}} & Total & £\\texttt{{{invoice['Price']:.2f}}} \\\\
         \\cline{{3-4}}
         \\multicolumn{{2}}{{c|}}{{}} & Amount Paid & £\\texttt{{{invoice['amount_paid']:.2f}}} \\\\
-        \\cline{{3-4}}
+        \\cline{{3-4}}"""
+    latex_source += f"""
         \\multicolumn{{2}}{{c|}}{{}} & Balance due inc VAT & £\\texttt{{{(invoice['Price'] - invoice['amount_paid']):.2f}}} \\\\
         \\cline{{3-4}}
     \\end{{longtable}}
