@@ -60,6 +60,7 @@ def generate_latex_invoice_uk(invoice, uk_time):
     \\geometry{{a4paper, margin=1cm}}
     \\usepackage{{array}}
     \\usepackage{{longtable}}
+    \\usepackage{{makecell}}
     \\pagestyle{{empty}}
 
     \\begin{{document}}
@@ -116,7 +117,7 @@ def generate_latex_invoice_uk(invoice, uk_time):
     \\begin{{small}}
     \\begin{{longtable}}{{|p{{0.4\\textwidth}}|>{{\\centering\\arraybackslash}}p{{0.1\\textwidth}}|p{{0.1\\textwidth}}|p{{0.1\\textwidth}}|p{{0.1\\textwidth}}|p{{0.1\\textwidth}}|}}
         \\hline
-        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{Unit Price}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{Total excl. VAT}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{VAT}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{Total}}}} \\\\
+        \\makecell{{\\textbf{{Item}} \\\\ \\textbf{{Description}}}} & \\makecell{{\\textbf{{Qty}}}} & \\makecell{{\\textbf{{Unit}} \\\\ \\textbf{{Price}}}} & \\makecell{{\\textbf{{Total}} \\\\ \\textbf{{excl. VAT}}}} & \\makecell{{\\textbf{{VAT}}}} & \\makecell{{\\textbf{{Total}}}} \\\\
         \\hline
         {invoice_table_rows_uk(invoice)}
         \\hline
