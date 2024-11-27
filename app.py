@@ -120,16 +120,10 @@ def generate_latex_invoice_uk(invoice, uk_time):
         \\hline
         {invoice_table_rows_uk(invoice)}
         \\hline
-        \\multicolumn{{3}}{{c|}}{{}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{((invoice['Price'] - invoice['freight_charged']) * (5/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(invoice['Price']*(1/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{invoice['Price']:.2f}}}}} \\\\
-        \\cline{{4-6}}
-        \\multicolumn{{3}}{{c|}}{{}} & \\multicolumn{{2}}{{r|}}{{Total excl. VAT}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(invoice['Price'] * (5/6)):.2f}}}}} \\\\
-        \\cline{{4-6}}
-        \\multicolumn{{3}}{{c|}}{{}} & \\multicolumn{{2}}{{r|}}{{VAT}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(invoice['Price']*(1/6)):.2f}}}}} \\\\
+        \\multicolumn{{3}}{{c|}}{{}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{£{((invoice['Price'] - invoice['freight_charged']) * (5/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{£{(invoice['Price']*(1/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{£{invoice['Price']:.2f}}}}} \\\\
         \\cline{{4-6}}"""
     if invoice['amount_paid']:
         latex_source += f"""
-        \\multicolumn{{3}}{{c|}}{{}} & \\multicolumn{{2}}{{r|}}{{Total inc. VAT}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{invoice['Price']:.2f}}}}} \\\\
-        \\cline{{4-6}}
         \\multicolumn{{3}}{{c|}}{{}} & \\multicolumn{{2}}{{r|}}{{Amount Paid}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{invoice['amount_paid']:.2f}}}}} \\\\
         \\cline{{4-6}}
         \\multicolumn{{3}}{{c|}}{{}} & \\multicolumn{{2}}{{r|}}{{Balance due inc. VAT}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{£{(invoice['Price'] - invoice['amount_paid']):.2f}}}}} \\\\
