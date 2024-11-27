@@ -123,7 +123,7 @@ def generate_latex_invoice_uk(invoice, uk_time):
     \\begingroup % limit the scope of the next two instructions
     \\footnotesize % switch to 10pt font
     \\setlength\\tabcolsep{{3pt}} % default: 6pt
-    \\begin{{longtable}}{{@{{}} L{{0.35}} C{{0.05}} R{{0.1}} R{{0.1}} R{{0.1}} R{{0.1}} @{{}}}}
+    \\begin{{longtable}}{{@{{}} L{{0.4}} C{{0.05}} R{{0.1}} R{{0.1}} R{{0.1}} R{{0.1}} @{{}}}}
         \\toprule
         \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total excl. VAT}} & \\textbf{{VAT}} & \\textbf{{Total}} \\\\
         \\midrule
