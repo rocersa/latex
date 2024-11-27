@@ -113,8 +113,8 @@ def generate_latex_invoice_uk(invoice, uk_time):
         Invoice Number: \\texttt{{{str(invoice['InvoiceID']).zfill(5)}}} \\\\
         Date Issued: \\texttt{{{uk_time.strftime("%d-%b-%Y")}}}
     \\end{{minipage}}
+    \\begin{{small}}
     \\begin{{longtable}}{{|p{{0.4\\textwidth}}|>{{\\centering\\arraybackslash}}p{{0.1\\textwidth}}|p{{0.1\\textwidth}}|p{{0.1\\textwidth}}|p{{0.1\\textwidth}}|p{{0.1\\textwidth}}|}}
-        \\small
         \\hline
         \\textbf{{Item Description}} & \\textbf{{Qty}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{Unit Price}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{Total excl. VAT}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{VAT}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{Total}}}} \\\\
         \\hline
@@ -130,11 +130,11 @@ def generate_latex_invoice_uk(invoice, uk_time):
         \\cline{{5-6}}"""
     if invoice['amount_paid']:
         latex_source += f"""
-        \\multicolumn{{4}}{{c|}}{{}} & Total inc. VAT & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{invoice['Price']:.2f}}}}} \\\\
+        \\multicolumn{{3}}{{c|}}{{}} & Total inc. VAT & \\multicolumn{{2}}{{r|}}{{\\texttt{{£{invoice['Price']:.2f}}}}} \\\\
         \\cline{{5-6}}
-        \\multicolumn{{4}}{{c|}}{{}} & Amount Paid & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{invoice['amount_paid']:.2f}}}}} \\\\
+        \\multicolumn{{3}}{{c|}}{{}} & Amount Paid & \\multicolumn{{2}}{{r|}}{{\\texttt{{£{invoice['amount_paid']:.2f}}}}} \\\\
         \\cline{{5-6}}
-        \\multicolumn{{4}}{{c|}}{{}} & Balance due inc VAT & \\multicolumn{{1}}{{r|}}{{\\textbf{{£{(invoice['Price'] - invoice['amount_paid']):.2f}}}}} \\\\
+        \\multicolumn{{3}}{{c|}}{{}} & Balance due inc VAT & \\multicolumn{{2}}{{r|}}{{\\textbf{{£{(invoice['Price'] - invoice['amount_paid']):.2f}}}}} \\\\
         \\cline{{5-6}}
         """
     else:
@@ -143,6 +143,7 @@ def generate_latex_invoice_uk(invoice, uk_time):
         \\cline{{5-6}}"""
     latex_source += f"""
     \\end{{longtable}}
+    \\end{{small}}
     \\noindent
     Payment can be made by bank transfer to the following account:
     \\begin{{center}}
