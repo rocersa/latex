@@ -113,7 +113,7 @@ def generate_latex_invoice_uk(invoice, uk_time):
         Invoice Number: \\texttt{{{str(invoice['InvoiceID']).zfill(5)}}} \\\\
         Date Issued: \\texttt{{{uk_time.strftime("%d-%b-%Y")}}}
     \\end{{minipage}}
-    \\begin{{longtable}}{{|p{{\\textwidth}}|>{{\\centering\\arraybackslash}}p{{\\textwidth}}|p{{\\textwidth}}|p{{\\textwidth}}|p{{\\textwidth}}|p{{\\textwidth}}|}}
+    \\begin{{longtable}}{{|p{{0.4\\textwidth}}|>{{\\centering\\arraybackslash}}p{{0.1\\textwidth}}|p{{0.1\\textwidth}}|p{{0.1\\textwidth}}|p{{0.1\\textwidth}}|p{{0.1\\textwidth}}|}}
         \\hline
         \\textbf{{Item Description}} & \\textbf{{Qty}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{Unit Price}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{Total excl. VAT}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{VAT}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{Total}}}} \\\\
         \\hline
