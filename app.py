@@ -124,14 +124,12 @@ def generate_latex_invoice_uk(invoice, uk_time):
     \\footnotesize % switch to 10pt font
     \\setlength\\tabcolsep{{3pt}} % default: 6pt
     \\begin{{longtable}}{{@{{}} L{{0.4}} C{{0.05}} R{{0.1}} R{{0.1}} R{{0.1}} R{{0.1}} @{{}}}}
-        \\toprule
         \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total excl. VAT}} & \\textbf{{VAT}} & \\textbf{{Total}} \\\\
         \\midrule
         \\endfirsthead
 
         \\multicolumn{{6}}{{@{{}}l}}{{{{\\bfseries\\tablename\\ \\thetable}}, continued from previous page}} \\\\
         \\addlinespace
-        \\toprule
         \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total excl. VAT}} & \\textbf{{VAT}} & \\textbf{{Total}} \\\\
         \\midrule
         \\endhead
@@ -140,7 +138,6 @@ def generate_latex_invoice_uk(invoice, uk_time):
         \\multicolumn{{6}}{{r@{{}}}}{{(Continued on next page)}} \\\\
         \\endfoot
 
-        \\bottomrule
         \\endlastfoot
 
         {invoice_table_rows_uk(invoice)}
