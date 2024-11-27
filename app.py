@@ -125,14 +125,14 @@ def generate_latex_invoice_uk(invoice, uk_time):
     \\setlength\\tabcolsep{{3pt}} % default: 6pt
     \\begin{{longtable}}{{@{{}} L{{0.5}} C{{0.1}} R{{0.1}} R{{0.1}} R{{0.1}} R{{0.1}} @{{}}}}
         \\toprule
-        \\makecell{{\\textbf{{Item Description}}}} & \\makecell{{\\textbf{{Qty}}}} & \\makecell{{\\textbf{{Unit Price}}}} & \\makecell{{\\textbf{{Total excl. VAT}}}} & \\makecell{{\\textbf{{VAT}}}} & \\makecell{{\\textbf{{Total}}}} \\\\
+        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total excl. VAT}} & \\textbf{{VAT}} & \\textbf{{Total}} \\\\
         \\midrule
         \\endfirsthead
 
         \\multicolumn{{6}}{{@{{}}l}}{{{{\\bfseries\\tablename\\ \\thetable}}, continued from previous page}} \\\\
         \\addlinespace
         \\toprule
-        \\makecell{{\\textbf{{Item Description}}}} & \\makecell{{\\textbf{{Qty}}}} & \\makecell{{\\textbf{{Unit Price}}}} & \\makecell{{\\textbf{{Total excl. VAT}}}} & \\makecell{{\\textbf{{VAT}}}} & \\makecell{{\\textbf{{Total}}}} \\\\
+        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total excl. VAT}} & \\textbf{{VAT}} & \\textbf{{Total}} \\\\
         \\midrule
         \\endhead
 
