@@ -116,31 +116,31 @@ def generate_latex_invoice_uk(invoice, uk_time):
     \\begin{{small}}
     \\begin{{longtable}}{{|p{{0.4\\textwidth}}|>{{\\centering\\arraybackslash}}p{{0.1\\textwidth}}|p{{0.1\\textwidth}}|p{{0.1\\textwidth}}|p{{0.1\\textwidth}}|p{{0.1\\textwidth}}|}}
         \\hline
-        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{Unit Price}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{Total excl. VAT}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{VAT}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{Total}}}} \\\\
+        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{Unit $}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{T-VAT}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{VAT}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{Total}}}} \\\\
         \\hline
         {invoice_table_rows_uk(invoice)}
         \\hline
-        \\multicolumn{{4}}{{c|}}{{}} & Subtotal & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{((invoice['Price'] - invoice['freight_charged']) * (5/6)):.2f}}}}} \\\\
-        \\cline{{5-6}}
-        \\multicolumn{{4}}{{c|}}{{}} & Freight & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(invoice['freight_charged'] * (5/6)):.2f}}}}} \\\\
-        \\cline{{5-6}}
-        \\multicolumn{{4}}{{c|}}{{}} & Total excl. VAT & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(invoice['Price'] * (5/6)):.2f}}}}} \\\\
-        \\cline{{5-6}}
-        \\multicolumn{{4}}{{c|}}{{}} & VAT & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(invoice['Price']*(1/6)):.2f}}}}} \\\\
-        \\cline{{5-6}}"""
+        \\multicolumn{{3}}{{c|}}{{}} & \\multicolumn{{2}}{{r|}}{{Subtotal}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{((invoice['Price'] - invoice['freight_charged']) * (5/6)):.2f}}}}} \\\\
+        \\cline{{4-6}}
+        \\multicolumn{{3}}{{c|}}{{}} & \\multicolumn{{2}}{{r|}}{{Freight}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(invoice['freight_charged'] * (5/6)):.2f}}}}} \\\\
+        \\cline{{4-6}}
+        \\multicolumn{{3}}{{c|}}{{}} & \\multicolumn{{2}}{{r|}}{{Total excl. VAT}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(invoice['Price'] * (5/6)):.2f}}}}} \\\\
+        \\cline{{4-6}}
+        \\multicolumn{{3}}{{c|}}{{}} & \\multicolumn{{2}}{{r|}}{{VAT}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(invoice['Price']*(1/6)):.2f}}}}} \\\\
+        \\cline{{4-6}}"""
     if invoice['amount_paid']:
         latex_source += f"""
-        \\multicolumn{{3}}{{c|}}{{}} & Total inc. VAT & \\multicolumn{{2}}{{r|}}{{\\texttt{{£{invoice['Price']:.2f}}}}} \\\\
-        \\cline{{5-6}}
-        \\multicolumn{{3}}{{c|}}{{}} & Amount Paid & \\multicolumn{{2}}{{r|}}{{\\texttt{{£{invoice['amount_paid']:.2f}}}}} \\\\
-        \\cline{{5-6}}
-        \\multicolumn{{3}}{{c|}}{{}} & Balance due inc VAT & \\multicolumn{{2}}{{r|}}{{\\textbf{{£{(invoice['Price'] - invoice['amount_paid']):.2f}}}}} \\\\
-        \\cline{{5-6}}
+        \\multicolumn{{3}}{{c|}}{{}} & \\multicolumn{{2}}{{r|}}{{Total inc. VAT}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{invoice['Price']:.2f}}}}} \\\\
+        \\cline{{4-6}}
+        \\multicolumn{{3}}{{c|}}{{}} & \\multicolumn{{2}}{{r|}}{{Amount Paid}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{invoice['amount_paid']:.2f}}}}} \\\\
+        \\cline{{4-6}}
+        \\multicolumn{{3}}{{c|}}{{}} & \\multicolumn{{2}}{{r|}}{{Balance due inc. VAT}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{£{(invoice['Price'] - invoice['amount_paid']):.2f}}}}} \\\\
+        \\cline{{4-6}}
         """
     else:
         latex_source += f"""
-        \\multicolumn{{4}}{{c|}}{{}} & Balance due inc VAT & \\multicolumn{{1}}{{r|}}{{\\textbf{{£{(invoice['Price']):.2f}}}}} \\\\
-        \\cline{{5-6}}"""
+        \\multicolumn{{3}}{{c|}}{{}} & \\multicolumn{{2}}{{r|}}{{Balance due inc. VAT}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{£{(invoice['Price']):.2f}}}}} \\\\
+        \\cline{{4-6}}"""
     latex_source += f"""
     \\end{{longtable}}
     \\end{{small}}
