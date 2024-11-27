@@ -17,11 +17,14 @@ def generate_pdf_invoice():
     utc_now = datetime.now(pytz.utc)
     uk_time = utc_now.astimezone(pytz.timezone('Europe/London'))
     us_time = utc_now.astimezone(pytz.timezone('America/Los_Angeles'))
+    nz_time = utc_now.astimezone(pytz.timezone('Pacific/Auckland'))
     # Generate LaTeX source code
     if country == 'UK':
         latex_source = generate_latex_invoice_uk(invoice, uk_time)
     elif country == 'US':
         latex_source = generate_latex_invoice_us(invoice, us_time)
+    elif country == 'NZ':
+        latex_source = generate_latex_invoice_nz(invoice, nz_time)
     
     # Use a secure temporary directory
     with tempfile.TemporaryDirectory() as tmpdirname:
@@ -116,13 +119,15 @@ def generate_latex_invoice_uk(invoice, uk_time):
         \\hline
         {invoice_table_rows_uk(invoice)}
         \\hline
-        \\multicolumn{{2}}{{c|}}{{}} & Subtotal & £\\texttt{{{(invoice['Price'] - invoice['freight_charged']):.2f}}} \\\\
+        \\multicolumn{{2}}{{c|}}{{}} & Subtotal inc VAT & £\\texttt{{{(invoice['Price'] - invoice['freight_charged']):.2f}}} \\\\
         \\cline{{3-4}}
-        \\multicolumn{{2}}{{c|}}{{}} & Freight & £\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
+        \\multicolumn{{2}}{{c|}}{{}} & Freight inc VAT & £\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
+        \\cline{{3-4}}
+        \\multicolumn{{2}}{{c|}}{{}} & VAT & £\\texttt{{{(invoice['Price']*(1/6)):.2f}}} \\\\
         \\cline{{3-4}}"""
     if invoice['amount_paid']:
         latex_source += f"""
-        \\multicolumn{{2}}{{c|}}{{}} & Total & £\\texttt{{{invoice['Price']:.2f}}} \\\\
+        \\multicolumn{{2}}{{c|}}{{}} & Total inc VAT & £\\texttt{{{invoice['Price']:.2f}}} \\\\
         \\cline{{3-4}}
         \\multicolumn{{2}}{{c|}}{{}} & Amount Paid & £\\texttt{{{invoice['amount_paid']:.2f}}} \\\\
         \\cline{{3-4}}
