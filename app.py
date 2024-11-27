@@ -60,8 +60,14 @@ def generate_latex_invoice_uk(invoice, uk_time):
     \\geometry{{a4paper, margin=1cm}}
     \\usepackage{{array}}
     \\usepackage{{longtable}}
-    \\usepackage{{makecell}}
+    \\usepackage{{booktabs}}
+    \\usepackage{{ragged2e}}
     \\pagestyle{{empty}}
+
+    %% Define new column types:
+    \\newcolumntype{{L}}[1]{{>{{\\RaggedRight}}p{{#1\\linewidth}}}}
+    \\newcolumntype{{R}}[1]{{>{{\\RaggedLeft}}p{{#1\\linewidth}}}}
+    \\newcolumntype{{C}}[1]{{>{{\\Centering}}p{{#1\\linewidth}}}}
 
     \\begin{{document}}
     
@@ -80,13 +86,13 @@ def generate_latex_invoice_uk(invoice, uk_time):
         www.cor-ten-steel.co.uk \\\\
         \\vspace{{0.5cm}}
         \\noindent
-        \\texttt{{{invoice['customers']['first_name']}}} \\texttt{{{invoice['customers']['last_name']}}} \\\\"""
+        \\texttt{{{invoice['customers']['first_name']}}} \\texttt{{{invoice['customers']['last_name']}}} \\\\""" 
     if invoice['customers']['company']:
         latex_source += f"""
-        \\texttt{{{invoice['customers']['company']}}} \\\\"""
+        \\texttt{{{invoice['customers']['company']}}} \\\\""" 
     if invoice['customer_order_number']:
         latex_source += f"""
-        \\texttt{{{invoice['customer_order_number']}}} \\\\"""
+        \\texttt{{{invoice['customer_order_number']}}} \\\\""" 
     latex_source += f"""
         \\texttt{{{invoice['customers']['email']}}} \\\\
         \\texttt{{{invoice['customers']['phone']}}} \\\\
@@ -97,7 +103,7 @@ def generate_latex_invoice_uk(invoice, uk_time):
     """
     if invoice['addresses']['building_name']:
         latex_source += f"""
-        \\texttt{{{invoice['addresses']['building_name']}}} \\\\"""
+        \\texttt{{{invoice['addresses']['building_name']}}} \\\\""" 
     latex_source += f"""
         \\texttt{{{invoice['addresses']['street_address']}}} \\\\
         \\texttt{{{invoice['addresses']['suburb']}}} \\texttt{{{invoice['addresses']['postal_code']}}} \\\\
@@ -114,11 +120,29 @@ def generate_latex_invoice_uk(invoice, uk_time):
         Invoice Number: \\texttt{{{str(invoice['InvoiceID']).zfill(5)}}} \\\\
         Date Issued: \\texttt{{{uk_time.strftime("%d-%b-%Y")}}}
     \\end{{minipage}}
-    \\begin{{small}}
-    \\begin{{longtable}}{{|p{{0.4\\textwidth}}|>{{\\centering\\arraybackslash}}p{{0.1\\textwidth}}|p{{0.1\\textwidth}}|p{{0.1\\textwidth}}|p{{0.1\\textwidth}}|p{{0.1\\textwidth}}|}}
-        \\hline
-        \\makecell{{\\textbf{{Item}} \\\\ \\textbf{{Description}}}} & \\makecell{{\\textbf{{Qty}}}} & \\makecell{{\\textbf{{Unit}} \\\\ \\textbf{{Price}}}} & \\makecell{{\\textbf{{Total}} \\\\ \\textbf{{excl. VAT}}}} & \\makecell{{\\textbf{{VAT}}}} & \\makecell{{\\textbf{{Total}}}} \\\\
-        \\hline
+    \\begingroup % limit the scope of the next two instructions
+    \\footnotesize % switch to 10pt font
+    \\setlength\\tabcolsep{{3pt}} % default: 6pt
+    \\begin{{longtable}}{{@{{}} L{{0.5}} C{{0.1}} R{{0.1}} R{{0.1}} R{{0.1}} R{{0.1}} @{{}}}}
+        \\toprule
+        \\makecell{{\\textbf{{Item Description}}}} & \\makecell{{\\textbf{{Qty}}}} & \\makecell{{\\textbf{{Unit Price}}}} & \\makecell{{\\textbf{{Total excl. VAT}}}} & \\makecell{{\\textbf{{VAT}}}} & \\makecell{{\\textbf{{Total}}}} \\\\
+        \\midrule
+        \\endfirsthead
+
+        \\multicolumn{{6}}{{@{{}}l}}{{{{\\bfseries\\tablename\\ \\thetable}}, continued from previous page}} \\\\
+        \\addlinespace
+        \\toprule
+        \\makecell{{\\textbf{{Item Description}}}} & \\makecell{{\\textbf{{Qty}}}} & \\makecell{{\\textbf{{Unit Price}}}} & \\makecell{{\\textbf{{Total excl. VAT}}}} & \\makecell{{\\textbf{{VAT}}}} & \\makecell{{\\textbf{{Total}}}} \\\\
+        \\midrule
+        \\endhead
+
+        \\midrule
+        \\multicolumn{{6}}{{r@{{}}}}{{(Continued on next page)}} \\\\
+        \\endfoot
+
+        \\bottomrule
+        \\endlastfoot
+
         {invoice_table_rows_uk(invoice)}
         \\hline
         \\multicolumn{{3}}{{c|}}{{}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{£{((invoice['Price']) * (5/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{£{(invoice['Price']*(1/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{£{invoice['Price']:.2f}}}}} \\\\
@@ -136,7 +160,7 @@ def generate_latex_invoice_uk(invoice, uk_time):
         \\cline{{4-6}}"""
     latex_source += f"""
     \\end{{longtable}}
-    \\end{{small}}
+    \\endgroup
     \\noindent
     Payment can be made by bank transfer to the following account:
     \\begin{{center}}

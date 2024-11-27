@@ -1,0 +1,67 @@
+\documentclass[12pt,a4paper,twoside]{report}
+\usepackage{booktabs,longtable,array,ragged2e}
+
+%% Define two new column types:
+\newcolumntype{L}[1]{>{\RaggedRight}p{#1\linewidth}}
+\newcolumntype{R}[1]{>{\RaggedLeft}p{#1\linewidth}}
+\newcolumntype{C}[1]{>{\Centering}p{#1\linewidth}}
+
+\begin{document}
+
+\begingroup % limit the scope of the next two instructions
+\footnotesize % switch to 10pt font
+\setlength\tabcolsep{3pt} % default: 6pt
+\begin{longtable}{@{} L{0.5} C{0.1} R{0.10} R{0.1} 
+                      R{0.1} R{0.1} @{}} 
+
+%% headers and footers:
+\toprule
+Item Description &
+Qty  & 
+Unit Price  & 
+Total excl. VAT & 
+VAT & 
+Total \\ 
+\midrule
+\endfirsthead
+
+\multicolumn{6}{@{}l}{{\bfseries\tablename\ \thetable}, 
+   continued from previous page} \\
+\addlinespace
+\toprule
+Item Description &
+Qty  & 
+Unit Price  & 
+Total excl. VAT & 
+VAT & 
+Total \\ 
+\midrule
+\endhead
+
+\midrule
+\multicolumn{6}{r@{}}{(Continued on next page)} \\
+\endfoot
+  
+\bottomrule
+\endlastfoot
+
+%% body of table:
+
+90deg 150mm square corner joiner
+ext-750
+ & 1 & £46.82 & 
+ £46.82
+  & £9.36 & £56.18 \\
+\midrule
+90deg 150mm square corner joiner
+ext-750
+ & 1 & £46.82 & 
+ £46.82
+  & £9.36 & £56.18 \\
+
+
+\end{longtable}
+\endgroup
+
+
+\end{document}
