@@ -113,31 +113,33 @@ def generate_latex_invoice_uk(invoice, uk_time):
         Invoice Number: \\texttt{{{str(invoice['InvoiceID']).zfill(5)}}} \\\\
         Date Issued: \\texttt{{{uk_time.strftime("%d-%b-%Y")}}}
     \\end{{minipage}}
-    \\begin{{longtable}}{{|p{{0.5\\textwidth}}|>{{\\centering\\arraybackslash}}p{{0.1\\textwidth}}|p{{0.2\\textwidth}}|p{{0.1\\textwidth}}|}}
+    \\begin{{longtable}}{{|p{{\\textwidth}}|>{{\\centering\\arraybackslash}}p{{\\textwidth}}|p{{\\textwidth}}|p{{\\textwidth}}|p{{\\textwidth}}|p{{\\textwidth}}|}}
         \\hline
-        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{Unit Price}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{Total}}}} \\\\
+        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{Unit Price}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{Total excl. VAT}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{VAT}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{Total}}}} \\\\
         \\hline
         {invoice_table_rows_uk(invoice)}
         \\hline
-        \\multicolumn{{2}}{{c|}}{{}} & Subtotal & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{((invoice['Price'] - invoice['freight_charged']) * (5/6)):.2f}}}}} \\\\
-        \\cline{{3-4}}
-        \\multicolumn{{2}}{{c|}}{{}} & Freight & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(invoice['freight_charged'] * (5/6)):.2f}}}}} \\\\
-        \\cline{{3-4}}
-        \\multicolumn{{2}}{{c|}}{{}} & VAT & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(invoice['Price']*(1/6)):.2f}}}}} \\\\
-        \\cline{{3-4}}"""
+        \\multicolumn{{4}}{{c|}}{{}} & Subtotal & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{((invoice['Price'] - invoice['freight_charged']) * (5/6)):.2f}}}}} \\\\
+        \\cline{{5-6}}
+        \\multicolumn{{4}}{{c|}}{{}} & Freight & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(invoice['freight_charged'] * (5/6)):.2f}}}}} \\\\
+        \\cline{{5-6}}
+        \\multicolumn{{4}}{{c|}}{{}} & Total excl. VAT & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(invoice['Price'] * (5/6)):.2f}}}}} \\\\
+        \\cline{{5-6}}
+        \\multicolumn{{4}}{{c|}}{{}} & VAT & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(invoice['Price']*(1/6)):.2f}}}}} \\\\
+        \\cline{{5-6}}"""
     if invoice['amount_paid']:
         latex_source += f"""
-        \\multicolumn{{2}}{{c|}}{{}} & Total inc VAT & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{invoice['Price']:.2f}}}}} \\\\
-        \\cline{{3-4}}
-        \\multicolumn{{2}}{{c|}}{{}} & Amount Paid & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{invoice['amount_paid']:.2f}}}}} \\\\
-        \\cline{{3-4}}
-        \\multicolumn{{2}}{{c|}}{{}} & Balance due inc VAT & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(invoice['Price'] - invoice['amount_paid']):.2f}}}}} \\\\
-        \\cline{{3-4}}
+        \\multicolumn{{4}}{{c|}}{{}} & Total inc. VAT & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{invoice['Price']:.2f}}}}} \\\\
+        \\cline{{5-6}}
+        \\multicolumn{{4}}{{c|}}{{}} & Amount Paid & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{invoice['amount_paid']:.2f}}}}} \\\\
+        \\cline{{5-6}}
+        \\multicolumn{{4}}{{c|}}{{}} & Balance due inc VAT & \\multicolumn{{1}}{{r|}}{{\\textbf{{£{(invoice['Price'] - invoice['amount_paid']):.2f}}}}} \\\\
+        \\cline{{5-6}}
         """
     else:
         latex_source += f"""
-        \\multicolumn{{2}}{{c|}}{{}} & Balance due inc VAT & \\multicolumn{{1}}{{r|}}{{\\texttt{{{(invoice['Price']):.2f}}}}} \\\\
-        \\cline{{3-4}}"""
+        \\multicolumn{{4}}{{c|}}{{}} & Balance due inc VAT & \\multicolumn{{1}}{{r|}}{{\\textbf{{£{(invoice['Price']):.2f}}}}} \\\\
+        \\cline{{5-6}}"""
     latex_source += f"""
     \\end{{longtable}}
     \\noindent
@@ -156,7 +158,7 @@ def generate_latex_invoice_uk(invoice, uk_time):
 def invoice_table_rows_uk(invoice):
     table_rows = ""
     for product in invoice["InvoiceComponentsT"]:
-        table_rows += f"\\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(product['price'] * (5/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(product['price'] * product['Quantity'] * (5/6)):.2f}}}}} \\\\ \n"
+        table_rows += f"\\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(product['price'] * (5/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(product['price'] * product['Quantity'] * (5/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(product['price'] * product['Quantity'] * (1/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(product['price'] * product['Quantity']):.2f}}}}} \\\\ \n"
         table_rows += "\\hline \n"
     return table_rows
 
