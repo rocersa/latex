@@ -177,10 +177,10 @@ def generate_latex_invoice_uk(invoice, uk_time):
 def invoice_table_rows_uk(invoice):
     table_rows = ""
     for product in invoice["InvoiceComponentsT"]:
-        table_rows += f"\\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{£{(product['price'] * (5/6)):.2f}}} & \\texttt{{£{(product['price'] * product['Quantity'] * (5/6)):.2f}}}}} & \\texttt{{£{(product['price'] * product['Quantity'] * (1/6)):.2f}}} & \\texttt{{£{(product['price'] * product['Quantity']):.2f}}} \\\\ \n"
+        table_rows += f"\\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(product['price'] * (5/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(product['price'] * product['Quantity'] * (5/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(product['price'] * product['Quantity'] * (1/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(product['price'] * product['Quantity']):.2f}}}}} \\\\ \n"
         table_rows += "\\hline \n"
     if invoice['freight_charged'] != 0:
-        table_rows += f"\\texttt{{Freight: {invoice['freight_carrier']}}} & \\texttt{{1}} & \\texttt{{£{(invoice['freight_charged'] * (5/6)):.2f}}} & \\texttt{{£{(invoice['freight_charged'] * (5/6)):.2f}}} & \\texttt{{£{(invoice['freight_charged'] * (1/6)):.2f}}} & \\texttt{{£{(invoice['freight_charged']):.2f}}} \\\\ \n"
+        table_rows += f"\\texttt{{Freight: {invoice['freight_carrier']}}} & \\texttt{{1}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(invoice['freight_charged'] * (5/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(invoice['freight_charged'] * (5/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(invoice['freight_charged'] * (1/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{(invoice['freight_charged']):.2f}}}}} \\\\ \n"
         table_rows += "\\hline \n"
     return table_rows
 
