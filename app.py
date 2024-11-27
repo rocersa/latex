@@ -116,11 +116,11 @@ def generate_latex_invoice_uk(invoice, uk_time):
     \\begin{{small}}
     \\begin{{longtable}}{{|p{{0.4\\textwidth}}|>{{\\centering\\arraybackslash}}p{{0.1\\textwidth}}|p{{0.1\\textwidth}}|p{{0.1\\textwidth}}|p{{0.1\\textwidth}}|p{{0.1\\textwidth}}|}}
         \\hline
-        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{Unit \$}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{T-VAT}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{VAT}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{Total}}}} \\\\
+        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{Unit Price}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{Total excl. VAT}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{VAT}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{Total}}}} \\\\
         \\hline
         {invoice_table_rows_uk(invoice)}
         \\hline
-        \\multicolumn{{3}}{{c|}}{{}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{£{((invoice['Price'] - invoice['freight_charged']) * (5/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{£{(invoice['Price']*(1/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{£{invoice['Price']:.2f}}}}} \\\\
+        \\multicolumn{{3}}{{c|}}{{}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{£{((invoice['Price']) * (5/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{£{(invoice['Price']*(1/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{£{invoice['Price']:.2f}}}}} \\\\
         \\cline{{4-6}}"""
     if invoice['amount_paid']:
         latex_source += f"""
