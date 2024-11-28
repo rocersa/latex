@@ -272,17 +272,17 @@ def generate_latex_invoice_nz(invoice, nz_time):
 
         {invoice_table_rows_uk(invoice)}
         \\hline
-        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{${((invoice['Price']) * (5/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{${(invoice['Price']*(1/6)):.2f}}}}} & \\multicolumn{{1}}{{r}}{{\\textbf{{${invoice['Price']:.2f}}}}} \\\\
+        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{\${((invoice['Price']) * (5/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{\${(invoice['Price']*(1/6)):.2f}}}}} & \\multicolumn{{1}}{{r}}{{\\textbf{{\${invoice['Price']:.2f}}}}} \\\\
         \\cline{{4-6}}"""
     if invoice['amount_paid']:
         latex_source += f"""
-        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{2}}{{r|}}{{Amount Paid}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{${invoice['amount_paid']:.2f}}}}} \\\\
+        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{2}}{{r|}}{{Amount Paid}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{\${invoice['amount_paid']:.2f}}}}} \\\\
         \\cline{{4-6}}
-        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{2}}{{r|}}{{Balance due inc. GST}} & \\multicolumn{{1}}{{r}}{{\\textbf{{${(invoice['Price'] - invoice['amount_paid']):.2f}}}}} \\\\
+        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{2}}{{r|}}{{Balance due inc. GST}} & \\multicolumn{{1}}{{r}}{{\\textbf{{\${(invoice['Price'] - invoice['amount_paid']):.2f}}}}} \\\\
         """
     else:
         latex_source += f"""
-        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{2}}{{r|}}{{Balance due inc. GST}} & \\multicolumn{{1}}{{r}}{{\\textbf{{${(invoice['Price']):.2f}}}}} \\\\"""
+        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{2}}{{r|}}{{Balance due inc. GST}} & \\multicolumn{{1}}{{r}}{{\\textbf{{\${(invoice['Price']):.2f}}}}} \\\\"""
     latex_source += f"""
     \\end{{longtable}}
     \\endgroup
@@ -300,10 +300,10 @@ def generate_latex_invoice_nz(invoice, nz_time):
 def invoice_table_rows_nz(invoice):
     table_rows = ""
     for product in invoice["InvoiceComponentsT"]:
-        table_rows += f"\\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{${(product['price'] * (5/6)):.2f}}} & \\texttt{{${(product['price'] * product['Quantity'] * (5/6)):.2f}}} & \\texttt{{${(product['price'] * product['Quantity'] * (1/6)):.2f}}} & \\texttt{{${(product['price'] * product['Quantity']):.2f}}} \\\\ \n"
+        table_rows += f"\\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{\${(product['price'] * (5/6)):.2f}}} & \\texttt{{\${(product['price'] * product['Quantity'] * (5/6)):.2f}}} & \\texttt{{\${(product['price'] * product['Quantity'] * (1/6)):.2f}}} & \\texttt{{\${(product['price'] * product['Quantity']):.2f}}} \\\\ \n"
         table_rows += "\\hline \n"
     if invoice['freight_charged'] != 0:
-        table_rows += f"\\texttt{{Freight: {invoice['freight_carrier']}}} & \\texttt{{1}} & \\texttt{{${(invoice['freight_charged'] * (5/6)):.2f}}} & \\texttt{{${(invoice['freight_charged'] * (5/6)):.2f}}} & \\texttt{{${(invoice['freight_charged'] * (1/6)):.2f}}} & \\texttt{{${(invoice['freight_charged']):.2f}}} \\\\ \n"
+        table_rows += f"\\texttt{{Freight: {invoice['freight_carrier']}}} & \\texttt{{1}} & \\texttt{{\${(invoice['freight_charged'] * (5/6)):.2f}}} & \\texttt{{\${(invoice['freight_charged'] * (5/6)):.2f}}} & \\texttt{{\${(invoice['freight_charged'] * (1/6)):.2f}}} & \\texttt{{\${(invoice['freight_charged']):.2f}}} \\\\ \n"
         table_rows += "\\hline \n"
     return table_rows
 
@@ -398,17 +398,17 @@ def generate_latex_invoice_au(invoice, au_time):
 
         {invoice_table_rows_uk(invoice)}
         \\hline
-        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{${((invoice['Price']) * (5/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{${(invoice['Price']*(1/6)):.2f}}}}} & \\multicolumn{{1}}{{r}}{{\\textbf{{${invoice['Price']:.2f}}}}} \\\\
+        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{\${((invoice['Price']) * (5/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{\${(invoice['Price']*(1/6)):.2f}}}}} & \\multicolumn{{1}}{{r}}{{\\textbf{{\${invoice['Price']:.2f}}}}} \\\\
         \\cline{{4-6}}"""
     if invoice['amount_paid']:
         latex_source += f"""
-        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{2}}{{r|}}{{Amount Paid}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{${invoice['amount_paid']:.2f}}}}} \\\\
+        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{2}}{{r|}}{{Amount Paid}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{\${invoice['amount_paid']:.2f}}}}} \\\\
         \\cline{{4-6}}
-        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{2}}{{r|}}{{Balance due inc. GST}} & \\multicolumn{{1}}{{r}}{{\\textbf{{${(invoice['Price'] - invoice['amount_paid']):.2f}}}}} \\\\
+        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{2}}{{r|}}{{Balance due inc. GST}} & \\multicolumn{{1}}{{r}}{{\\textbf{{\${(invoice['Price'] - invoice['amount_paid']):.2f}}}}} \\\\
         """
     else:
         latex_source += f"""
-        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{2}}{{r|}}{{Balance due inc. GST}} & \\multicolumn{{1}}{{r}}{{\\textbf{{${(invoice['Price']):.2f}}}}} \\\\"""
+        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{2}}{{r|}}{{Balance due inc. GST}} & \\multicolumn{{1}}{{r}}{{\\textbf{{\${(invoice['Price']):.2f}}}}} \\\\"""
     latex_source += f"""
     \\end{{longtable}}
     \\endgroup
@@ -427,10 +427,10 @@ def generate_latex_invoice_au(invoice, au_time):
 def invoice_table_rows_au(invoice):
     table_rows = ""
     for product in invoice["InvoiceComponentsT"]:
-        table_rows += f"\\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{${(product['price'] * (5/6)):.2f}}} & \\texttt{{${(product['price'] * product['Quantity'] * (5/6)):.2f}}} & \\texttt{{${(product['price'] * product['Quantity'] * (1/6)):.2f}}} & \\texttt{{${(product['price'] * product['Quantity']):.2f}}} \\\\ \n"
+        table_rows += f"\\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{\${(product['price'] * (5/6)):.2f}}} & \\texttt{{\${(product['price'] * product['Quantity'] * (5/6)):.2f}}} & \\texttt{{\${(product['price'] * product['Quantity'] * (1/6)):.2f}}} & \\texttt{{\${(product['price'] * product['Quantity']):.2f}}} \\\\ \n"
         table_rows += "\\hline \n"
     if invoice['freight_charged'] != 0:
-        table_rows += f"\\texttt{{Freight: {invoice['freight_carrier']}}} & \\texttt{{1}} & \\texttt{{${(invoice['freight_charged'] * (5/6)):.2f}}} & \\texttt{{${(invoice['freight_charged'] * (5/6)):.2f}}} & \\texttt{{${(invoice['freight_charged'] * (1/6)):.2f}}} & \\texttt{{${(invoice['freight_charged']):.2f}}} \\\\ \n"
+        table_rows += f"\\texttt{{Freight: {invoice['freight_carrier']}}} & \\texttt{{1}} & \\texttt{{\${(invoice['freight_charged'] * (5/6)):.2f}}} & \\texttt{{\${(invoice['freight_charged'] * (5/6)):.2f}}} & \\texttt{{\${(invoice['freight_charged'] * (1/6)):.2f}}} & \\texttt{{\${(invoice['freight_charged']):.2f}}} \\\\ \n"
         table_rows += "\\hline \n"
     return table_rows
 
