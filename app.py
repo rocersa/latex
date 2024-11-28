@@ -127,13 +127,13 @@ def generate_latex_invoice_uk(invoice, uk_time):
     \\footnotesize % switch to 10pt font
     \\setlength\\tabcolsep{{3pt}} % default: 6pt
     \\begin{{longtable}}{{@{{}} L{{0.4}} C{{0.05}} R{{0.1}} R{{0.1}} R{{0.1}} R{{0.1}} @{{}}}}
-        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total excl. VAT}} & \\textbf{{VAT}} & \\textbf{{Total}} \\\\
+        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total excl. VAT}} & \\textbf{{VAT (20\%)}} & \\textbf{{Total}} \\\\
         \\midrule
         \\endfirsthead
 
         \\multicolumn{{6}}{{@{{}}l}}{{{{\\bfseries\\tablename\\ \\thetable}}, continued from previous page}} \\\\
         \\addlinespace
-        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total excl. VAT}} & \\textbf{{VAT (20%)}} & \\textbf{{Total}} \\\\
+        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total excl. VAT}} & \\textbf{{VAT (20\%)}} & \\textbf{{Total}} \\\\
         \\midrule
         \\endhead
 
@@ -254,13 +254,13 @@ def generate_latex_invoice_nz(invoice, nz_time):
     \\footnotesize % switch to 10pt font
     \\setlength\\tabcolsep{{3pt}} % default: 6pt
     \\begin{{longtable}}{{@{{}} L{{0.4}} C{{0.05}} R{{0.1}} R{{0.1}} R{{0.1}} R{{0.1}} @{{}}}}
-        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total excl. GST}} & \\textbf{{GST (15%)}} & \\textbf{{Total}} \\\\
+        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total excl. GST}} & \\textbf{{GST (15\%)}} & \\textbf{{Total}} \\\\
         \\midrule
         \\endfirsthead
 
         \\multicolumn{{6}}{{@{{}}l}}{{{{\\bfseries\\tablename\\ \\thetable}}, continued from previous page}} \\\\
         \\addlinespace
-        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total excl. GST}} & \\textbf{{GST (15%)}} & \\textbf{{Total}} \\\\
+        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total excl. GST}} & \\textbf{{GST (15\%)}} & \\textbf{{Total}} \\\\
         \\midrule
         \\endhead
 
@@ -380,13 +380,13 @@ def generate_latex_invoice_au(invoice, au_time):
     \\footnotesize % switch to 10pt font
     \\setlength\\tabcolsep{{3pt}} % default: 6pt
     \\begin{{longtable}}{{@{{}} L{{0.4}} C{{0.05}} R{{0.1}} R{{0.1}} R{{0.1}} R{{0.1}} @{{}}}}
-        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total excl. GST}} & \\textbf{{GST (10%)}} & \\textbf{{Total}} \\\\
+        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total excl. GST}} & \\textbf{{GST (10\%)}} & \\textbf{{Total}} \\\\
         \\midrule
         \\endfirsthead
 
         \\multicolumn{{6}}{{@{{}}l}}{{{{\\bfseries\\tablename\\ \\thetable}}, continued from previous page}} \\\\
         \\addlinespace
-        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total excl. GST}} & \\textbf{{GST (10%)}} & \\textbf{{Total}} \\\\
+        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total excl. GST}} & \\textbf{{GST (10\%)}} & \\textbf{{Total}} \\\\
         \\midrule
         \\endhead
 
