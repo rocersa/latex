@@ -270,7 +270,7 @@ def generate_latex_invoice_nz(invoice, nz_time):
 
         \\endlastfoot
 
-        {invoice_table_rows_uk(invoice)}
+        {invoice_table_rows_nz(invoice)}
         \\hline
         \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{\${((invoice['Price']) * (5/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{\${(invoice['Price']*(1/6)):.2f}}}}} & \\multicolumn{{1}}{{r}}{{\\textbf{{\${invoice['Price']:.2f}}}}} \\\\
         \\cline{{4-6}}"""
@@ -396,7 +396,7 @@ def generate_latex_invoice_au(invoice, au_time):
 
         \\endlastfoot
 
-        {invoice_table_rows_uk(invoice)}
+        {invoice_table_rows_au(invoice)}
         \\hline
         \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{\${((invoice['Price']) * (5/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{\${(invoice['Price']*(1/6)):.2f}}}}} & \\multicolumn{{1}}{{r}}{{\\textbf{{\${invoice['Price']:.2f}}}}} \\\\
         \\cline{{4-6}}"""
