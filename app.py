@@ -18,6 +18,7 @@ def generate_pdf_invoice():
     uk_time = utc_now.astimezone(pytz.timezone('Europe/London'))
     us_time = utc_now.astimezone(pytz.timezone('America/Los_Angeles'))
     nz_time = utc_now.astimezone(pytz.timezone('Pacific/Auckland'))
+    au_time = utc_now.astimezone(pytz.timezone('Australia/Sydney'))
     # Generate LaTeX source code
     if country == 'UK':
         latex_source = generate_latex_invoice_uk(invoice, uk_time)
@@ -25,6 +26,8 @@ def generate_pdf_invoice():
         latex_source = generate_latex_invoice_us(invoice, us_time)
     elif country == 'NZ':
         latex_source = generate_latex_invoice_nz(invoice, nz_time)
+    elif country == 'AU':
+        latex_source = generate_latex_invoice_au(invoice, au_time)
     
     # Use a secure temporary directory
     with tempfile.TemporaryDirectory() as tmpdirname:
@@ -130,7 +133,7 @@ def generate_latex_invoice_uk(invoice, uk_time):
 
         \\multicolumn{{6}}{{@{{}}l}}{{{{\\bfseries\\tablename\\ \\thetable}}, continued from previous page}} \\\\
         \\addlinespace
-        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total excl. VAT}} & \\textbf{{VAT}} & \\textbf{{Total}} \\\\
+        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total excl. VAT}} & \\textbf{{VAT (20%)}} & \\textbf{{Total}} \\\\
         \\midrule
         \\endhead
 
@@ -168,7 +171,6 @@ def generate_latex_invoice_uk(invoice, uk_time):
     \\end{{document}}
     """
     return latex_source
-
 def invoice_table_rows_uk(invoice):
     table_rows = ""
     for product in invoice["InvoiceComponentsT"]:
@@ -176,6 +178,259 @@ def invoice_table_rows_uk(invoice):
         table_rows += "\\hline \n"
     if invoice['freight_charged'] != 0:
         table_rows += f"\\texttt{{Freight: {invoice['freight_carrier']}}} & \\texttt{{1}} & \\texttt{{£{(invoice['freight_charged'] * (5/6)):.2f}}} & \\texttt{{£{(invoice['freight_charged'] * (5/6)):.2f}}} & \\texttt{{£{(invoice['freight_charged'] * (1/6)):.2f}}} & \\texttt{{£{(invoice['freight_charged']):.2f}}} \\\\ \n"
+        table_rows += "\\hline \n"
+    return table_rows
+
+def generate_latex_invoice_nz(invoice, nz_time):
+    # Generate LaTeX content here (similar to the LaTeX source in your Node.js example)
+    latex_source = f"""
+    \\documentclass[a4paper,12pt]{{article}}
+    \\usepackage{{graphicx}}
+    \\usepackage{{geometry}}
+    \\geometry{{a4paper, margin=1cm}}
+    \\usepackage{{array}}
+    \\usepackage{{longtable}}
+    \\usepackage{{booktabs}}
+    \\usepackage{{ragged2e}}
+    \\pagestyle{{empty}}
+
+    %% Define new column types:
+    \\newcolumntype{{L}}[1]{{>{{\\RaggedRight}}p{{#1\\linewidth}}}}
+    \\newcolumntype{{R}}[1]{{>{{\\RaggedLeft}}p{{#1\\linewidth}}}}
+    \\newcolumntype{{C}}[1]{{>{{\\Centering}}p{{#1\\linewidth}}}}
+
+    \\begin{{document}}
+    
+    \\begin{{center}}
+        \\textbf{{\\Huge {{COR-TEN-STEEL NZ}}}}
+    \\end{{center}}
+    \\vspace{{0.5cm}}
+    \\noindent
+    \\begin{{minipage}}[t]{{0.45\\textwidth}}
+        \\raggedright
+        \\small
+        Otaki \\\\
+        5512 \\\\
+        04 886 5801 \\\\
+        nz@cor-ten-steel.co.nz \\\\
+        www.cor-ten-steel.co.nz \\\\
+        \\vspace{{0.5cm}}
+        \\noindent
+        \\texttt{{{invoice['customers']['first_name']}}} \\texttt{{{invoice['customers']['last_name']}}} \\\\""" 
+    if invoice['customers']['company']:
+        latex_source += f"""
+        \\texttt{{{invoice['customers']['company']}}} \\\\""" 
+    if invoice['customer_order_number']:
+        latex_source += f"""
+        \\texttt{{{invoice['customer_order_number']}}} \\\\""" 
+    latex_source += f"""
+        \\texttt{{{invoice['customers']['email']}}} \\\\
+        \\texttt{{{invoice['customers']['phone']}}} \\\\
+    """
+    if invoice['customers']['second_phone']:
+        latex_source += f"""
+    \\texttt{{{invoice['customers']['second_phone']}}} \\\\
+    """
+    if invoice['addresses']['building_name']:
+        latex_source += f"""
+        \\texttt{{{invoice['addresses']['building_name']}}} \\\\""" 
+    latex_source += f"""
+        \\texttt{{{invoice['addresses']['street_address']}}} \\\\
+        \\texttt{{{invoice['addresses']['suburb']}}} \\texttt{{{invoice['addresses']['postal_code']}}} \\\\
+        \\texttt{{{invoice['addresses']['city']}}} \\\\
+        \\texttt{{{invoice['addresses']['country']}}}
+    \\end{{minipage}}
+    \\hfill
+    \\begin{{minipage}}[t]{{0.45\\textwidth}}
+        \\raggedleft
+        \\small
+        Tax Invoice \\\\
+        GST Number: 66 558 215 \\\\
+        \\vspace{{1cm}}
+        Invoice Number: \\texttt{{{str(invoice['InvoiceID']).zfill(5)}}} \\\\
+        Date Issued: \\texttt{{{nz_time.strftime("%d-%b-%Y")}}}
+    \\end{{minipage}}
+    \\begingroup % limit the scope of the next two instructions
+    \\footnotesize % switch to 10pt font
+    \\setlength\\tabcolsep{{3pt}} % default: 6pt
+    \\begin{{longtable}}{{@{{}} L{{0.4}} C{{0.05}} R{{0.1}} R{{0.1}} R{{0.1}} R{{0.1}} @{{}}}}
+        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total excl. GST}} & \\textbf{{GST (15%)}} & \\textbf{{Total}} \\\\
+        \\midrule
+        \\endfirsthead
+
+        \\multicolumn{{6}}{{@{{}}l}}{{{{\\bfseries\\tablename\\ \\thetable}}, continued from previous page}} \\\\
+        \\addlinespace
+        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total excl. GST}} & \\textbf{{GST (15%)}} & \\textbf{{Total}} \\\\
+        \\midrule
+        \\endhead
+
+        \\midrule
+        \\multicolumn{{6}}{{r@{{}}}}{{(Continued on next page)}} \\\\
+        \\endfoot
+
+        \\endlastfoot
+
+        {invoice_table_rows_uk(invoice)}
+        \\hline
+        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{${((invoice['Price']) * (5/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{${(invoice['Price']*(1/6)):.2f}}}}} & \\multicolumn{{1}}{{r}}{{\\textbf{{${invoice['Price']:.2f}}}}} \\\\
+        \\cline{{4-6}}"""
+    if invoice['amount_paid']:
+        latex_source += f"""
+        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{2}}{{r|}}{{Amount Paid}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{${invoice['amount_paid']:.2f}}}}} \\\\
+        \\cline{{4-6}}
+        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{2}}{{r|}}{{Balance due inc. GST}} & \\multicolumn{{1}}{{r}}{{\\textbf{{${(invoice['Price'] - invoice['amount_paid']):.2f}}}}} \\\\
+        """
+    else:
+        latex_source += f"""
+        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{2}}{{r|}}{{Balance due inc. GST}} & \\multicolumn{{1}}{{r}}{{\\textbf{{${(invoice['Price']):.2f}}}}} \\\\"""
+    latex_source += f"""
+    \\end{{longtable}}
+    \\endgroup
+    \\noindent
+    Payment can be made by bank transfer to the following account:
+    \\begin{{center}}
+    \\texttt{{Account/Business Name: Rocersa Limited}} \\\\
+    \\texttt{{Account Number: 02-0506-0143690-002}} \\\\
+    \\texttt{{Reference: {str(invoice['InvoiceID']).zfill(5)}}}
+    \\end{{center}}
+    
+    \\end{{document}}
+    """
+    return latex_source
+def invoice_table_rows_nz(invoice):
+    table_rows = ""
+    for product in invoice["InvoiceComponentsT"]:
+        table_rows += f"\\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{${(product['price'] * (5/6)):.2f}}} & \\texttt{{${(product['price'] * product['Quantity'] * (5/6)):.2f}}} & \\texttt{{${(product['price'] * product['Quantity'] * (1/6)):.2f}}} & \\texttt{{${(product['price'] * product['Quantity']):.2f}}} \\\\ \n"
+        table_rows += "\\hline \n"
+    if invoice['freight_charged'] != 0:
+        table_rows += f"\\texttt{{Freight: {invoice['freight_carrier']}}} & \\texttt{{1}} & \\texttt{{${(invoice['freight_charged'] * (5/6)):.2f}}} & \\texttt{{${(invoice['freight_charged'] * (5/6)):.2f}}} & \\texttt{{${(invoice['freight_charged'] * (1/6)):.2f}}} & \\texttt{{${(invoice['freight_charged']):.2f}}} \\\\ \n"
+        table_rows += "\\hline \n"
+    return table_rows
+
+def generate_latex_invoice_au(invoice, au_time):
+    # Generate LaTeX content here (similar to the LaTeX source in your Node.js example)
+    latex_source = f"""
+    \\documentclass[a4paper,12pt]{{article}}
+    \\usepackage{{graphicx}}
+    \\usepackage{{geometry}}
+    \\geometry{{a4paper, margin=1cm}}
+    \\usepackage{{array}}
+    \\usepackage{{longtable}}
+    \\usepackage{{booktabs}}
+    \\usepackage{{ragged2e}}
+    \\pagestyle{{empty}}
+
+    %% Define new column types:
+    \\newcolumntype{{L}}[1]{{>{{\\RaggedRight}}p{{#1\\linewidth}}}}
+    \\newcolumntype{{R}}[1]{{>{{\\RaggedLeft}}p{{#1\\linewidth}}}}
+    \\newcolumntype{{C}}[1]{{>{{\\Centering}}p{{#1\\linewidth}}}}
+
+    \\begin{{document}}
+    
+    \\begin{{center}}
+        \\textbf{{\\Huge {{COR-TEN-STEEL AU}}}}
+    \\end{{center}}
+    \\vspace{{0.5cm}}
+    \\noindent
+    \\begin{{minipage}}[t]{{0.45\\textwidth}}
+        \\raggedright
+        \\small
+        Riverstone 2765 \\\\
+        NSW \\\\
+        02 8007 3949 \\\\
+        aus@cor-ten-steel.com.au \\\\
+        www.cor-ten-steel.com.au \\\\
+        \\vspace{{0.5cm}}
+        \\noindent
+        \\texttt{{{invoice['customers']['first_name']}}} \\texttt{{{invoice['customers']['last_name']}}} \\\\""" 
+    if invoice['customers']['company']:
+        latex_source += f"""
+        \\texttt{{{invoice['customers']['company']}}} \\\\""" 
+    if invoice['customer_order_number']:
+        latex_source += f"""
+        \\texttt{{{invoice['customer_order_number']}}} \\\\""" 
+    latex_source += f"""
+        \\texttt{{{invoice['customers']['email']}}} \\\\
+        \\texttt{{{invoice['customers']['phone']}}} \\\\
+    """
+    if invoice['customers']['second_phone']:
+        latex_source += f"""
+    \\texttt{{{invoice['customers']['second_phone']}}} \\\\
+    """
+    if invoice['addresses']['building_name']:
+        latex_source += f"""
+        \\texttt{{{invoice['addresses']['building_name']}}} \\\\""" 
+    latex_source += f"""
+        \\texttt{{{invoice['addresses']['street_address']}}} \\\\
+        \\texttt{{{invoice['addresses']['suburb']}}} \\texttt{{{invoice['addresses']['postal_code']}}} \\\\
+        \\texttt{{{invoice['addresses']['city']}}} \\\\
+        \\texttt{{{invoice['addresses']['country']}}}
+    \\end{{minipage}}
+    \\hfill
+    \\begin{{minipage}}[t]{{0.45\\textwidth}}
+        \\raggedleft
+        \\small
+        Tax Invoice \\\\
+        GST/ABN Number: 35 671 639 843 \\\\
+        \\vspace{{1cm}}
+        Invoice Number: \\texttt{{{str(invoice['InvoiceID']).zfill(5)}}} \\\\
+        Date Issued: \\texttt{{{au_time.strftime("%d-%b-%Y")}}}
+    \\end{{minipage}}
+    \\begingroup % limit the scope of the next two instructions
+    \\footnotesize % switch to 10pt font
+    \\setlength\\tabcolsep{{3pt}} % default: 6pt
+    \\begin{{longtable}}{{@{{}} L{{0.4}} C{{0.05}} R{{0.1}} R{{0.1}} R{{0.1}} R{{0.1}} @{{}}}}
+        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total excl. GST}} & \\textbf{{GST (10%)}} & \\textbf{{Total}} \\\\
+        \\midrule
+        \\endfirsthead
+
+        \\multicolumn{{6}}{{@{{}}l}}{{{{\\bfseries\\tablename\\ \\thetable}}, continued from previous page}} \\\\
+        \\addlinespace
+        \\textbf{{Item Description}} & \\textbf{{Qty}} & \\textbf{{Unit Price}} & \\textbf{{Total excl. GST}} & \\textbf{{GST (10%)}} & \\textbf{{Total}} \\\\
+        \\midrule
+        \\endhead
+
+        \\midrule
+        \\multicolumn{{6}}{{r@{{}}}}{{(Continued on next page)}} \\\\
+        \\endfoot
+
+        \\endlastfoot
+
+        {invoice_table_rows_uk(invoice)}
+        \\hline
+        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{${((invoice['Price']) * (5/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{${(invoice['Price']*(1/6)):.2f}}}}} & \\multicolumn{{1}}{{r}}{{\\textbf{{${invoice['Price']:.2f}}}}} \\\\
+        \\cline{{4-6}}"""
+    if invoice['amount_paid']:
+        latex_source += f"""
+        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{2}}{{r|}}{{Amount Paid}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{${invoice['amount_paid']:.2f}}}}} \\\\
+        \\cline{{4-6}}
+        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{2}}{{r|}}{{Balance due inc. GST}} & \\multicolumn{{1}}{{r}}{{\\textbf{{${(invoice['Price'] - invoice['amount_paid']):.2f}}}}} \\\\
+        """
+    else:
+        latex_source += f"""
+        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{2}}{{r|}}{{Balance due inc. GST}} & \\multicolumn{{1}}{{r}}{{\\textbf{{${(invoice['Price']):.2f}}}}} \\\\"""
+    latex_source += f"""
+    \\end{{longtable}}
+    \\endgroup
+    \\noindent
+    Payment can be made by bank transfer to the following account:
+    \\begin{{center}}
+    \\texttt{{Account/Business Name: Rocersa Limited}} \\\\
+    \\texttt{{BSB: 06 2000}} \\\\
+    \\texttt{{ACC: 14651089}} \\\\
+    \\texttt{{Reference: {str(invoice['InvoiceID']).zfill(5)}}}
+    \\end{{center}}
+    
+    \\end{{document}}
+    """
+    return latex_source
+def invoice_table_rows_au(invoice):
+    table_rows = ""
+    for product in invoice["InvoiceComponentsT"]:
+        table_rows += f"\\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{${(product['price'] * (5/6)):.2f}}} & \\texttt{{${(product['price'] * product['Quantity'] * (5/6)):.2f}}} & \\texttt{{${(product['price'] * product['Quantity'] * (1/6)):.2f}}} & \\texttt{{${(product['price'] * product['Quantity']):.2f}}} \\\\ \n"
+        table_rows += "\\hline \n"
+    if invoice['freight_charged'] != 0:
+        table_rows += f"\\texttt{{Freight: {invoice['freight_carrier']}}} & \\texttt{{1}} & \\texttt{{${(invoice['freight_charged'] * (5/6)):.2f}}} & \\texttt{{${(invoice['freight_charged'] * (5/6)):.2f}}} & \\texttt{{${(invoice['freight_charged'] * (1/6)):.2f}}} & \\texttt{{${(invoice['freight_charged']):.2f}}} \\\\ \n"
         table_rows += "\\hline \n"
     return table_rows
 
