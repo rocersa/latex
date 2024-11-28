@@ -183,6 +183,7 @@ def invoice_table_rows_uk(invoice):
 
 def generate_latex_invoice_nz(invoice, nz_time):
     # Generate LaTeX content here (similar to the LaTeX source in your Node.js example)
+    tax = 0.15
     latex_source = f"""
     \\documentclass[a4paper,12pt]{{article}}
     \\usepackage{{graphicx}}
@@ -270,9 +271,9 @@ def generate_latex_invoice_nz(invoice, nz_time):
 
         \\endlastfoot
 
-        {invoice_table_rows_nz(invoice)}
+        {invoice_table_rows_nz(invoice, tax)}
         \\hline
-        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{\${((invoice['Price']) * (5/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{\${(invoice['Price']*(1/6)):.2f}}}}} & \\multicolumn{{1}}{{r}}{{\\textbf{{\${invoice['Price']:.2f}}}}} \\\\
+        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{\${((invoice['Price']) * (1/(1 + tax))):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{\${(invoice['Price']*(tax/ (1 + tax))):.2f}}}}} & \\multicolumn{{1}}{{r}}{{\\textbf{{\${invoice['Price']:.2f}}}}} \\\\
         \\cline{{4-6}}"""
     if invoice['amount_paid']:
         latex_source += f"""
@@ -297,18 +298,18 @@ def generate_latex_invoice_nz(invoice, nz_time):
     \\end{{document}}
     """
     return latex_source
-def invoice_table_rows_nz(invoice):
+def invoice_table_rows_nz(invoice, tax):
     table_rows = ""
     for product in invoice["InvoiceComponentsT"]:
-        table_rows += f"\\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{\${(product['price'] * (5/6)):.2f}}} & \\texttt{{\${(product['price'] * product['Quantity'] * (5/6)):.2f}}} & \\texttt{{\${(product['price'] * product['Quantity'] * (1/6)):.2f}}} & \\texttt{{\${(product['price'] * product['Quantity']):.2f}}} \\\\ \n"
+        table_rows += f"\\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{\${(product['price'] * (1/(1 + tax))):.2f}}} & \\texttt{{\${(product['price'] * product['Quantity'] * (1/(1 + tax))):.2f}}} & \\texttt{{\${(product['price'] * product['Quantity'] * (tax/ (1 + tax))):.2f}}} & \\texttt{{\${(product['price'] * product['Quantity']):.2f}}} \\\\ \n"
         table_rows += "\\hline \n"
     if invoice['freight_charged'] != 0:
-        table_rows += f"\\texttt{{Freight: {invoice['freight_carrier']}}} & \\texttt{{1}} & \\texttt{{\${(invoice['freight_charged'] * (5/6)):.2f}}} & \\texttt{{\${(invoice['freight_charged'] * (5/6)):.2f}}} & \\texttt{{\${(invoice['freight_charged'] * (1/6)):.2f}}} & \\texttt{{\${(invoice['freight_charged']):.2f}}} \\\\ \n"
+        table_rows += f"\\texttt{{Freight: {invoice['freight_carrier']}}} & \\texttt{{1}} & \\texttt{{\${(invoice['freight_charged'] * (1/(1 + tax))):.2f}}} & \\texttt{{\${(invoice['freight_charged'] * (1/(1 + tax))):.2f}}} & \\texttt{{\${(invoice['freight_charged'] * (tax/ (1 + tax))):.2f}}} & \\texttt{{\${(invoice['freight_charged']):.2f}}} \\\\ \n"
         table_rows += "\\hline \n"
     return table_rows
 
 def generate_latex_invoice_au(invoice, au_time):
-    # Generate LaTeX content here (similar to the LaTeX source in your Node.js example)
+    tax = 0.1
     latex_source = f"""
     \\documentclass[a4paper,12pt]{{article}}
     \\usepackage{{graphicx}}
@@ -396,9 +397,9 @@ def generate_latex_invoice_au(invoice, au_time):
 
         \\endlastfoot
 
-        {invoice_table_rows_au(invoice)}
+        {invoice_table_rows_au(invoice, tax)}
         \\hline
-        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{\${((invoice['Price']) * (5/6)):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{\${(invoice['Price']*(1/6)):.2f}}}}} & \\multicolumn{{1}}{{r}}{{\\textbf{{\${invoice['Price']:.2f}}}}} \\\\
+        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{\${((invoice['Price']) * (1/(1 + tax))):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{\${(invoice['Price']*(tax/ (1 + tax))):.2f}}}}} & \\multicolumn{{1}}{{r}}{{\\textbf{{\${invoice['Price']:.2f}}}}} \\\\
         \\cline{{4-6}}"""
     if invoice['amount_paid']:
         latex_source += f"""
@@ -424,13 +425,13 @@ def generate_latex_invoice_au(invoice, au_time):
     \\end{{document}}
     """
     return latex_source
-def invoice_table_rows_au(invoice):
+def invoice_table_rows_au(invoice, tax):
     table_rows = ""
     for product in invoice["InvoiceComponentsT"]:
-        table_rows += f"\\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{\${(product['price'] * (5/6)):.2f}}} & \\texttt{{\${(product['price'] * product['Quantity'] * (5/6)):.2f}}} & \\texttt{{\${(product['price'] * product['Quantity'] * (1/6)):.2f}}} & \\texttt{{\${(product['price'] * product['Quantity']):.2f}}} \\\\ \n"
+        table_rows += f"\\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{\${(product['price'] * (1/(1 + tax))):.2f}}} & \\texttt{{\${(product['price'] * product['Quantity'] * (1/(1 + tax))):.2f}}} & \\texttt{{\${(product['price'] * product['Quantity'] * (tax/ (1 + tax))):.2f}}} & \\texttt{{\${(product['price'] * product['Quantity']):.2f}}} \\\\ \n"
         table_rows += "\\hline \n"
     if invoice['freight_charged'] != 0:
-        table_rows += f"\\texttt{{Freight: {invoice['freight_carrier']}}} & \\texttt{{1}} & \\texttt{{\${(invoice['freight_charged'] * (5/6)):.2f}}} & \\texttt{{\${(invoice['freight_charged'] * (5/6)):.2f}}} & \\texttt{{\${(invoice['freight_charged'] * (1/6)):.2f}}} & \\texttt{{\${(invoice['freight_charged']):.2f}}} \\\\ \n"
+        table_rows += f"\\texttt{{Freight: {invoice['freight_carrier']}}} & \\texttt{{1}} & \\texttt{{\${(invoice['freight_charged'] * (1/(1 + tax))):.2f}}} & \\texttt{{\${(invoice['freight_charged'] * (1/(1 + tax))):.2f}}} & \\texttt{{\${(invoice['freight_charged'] * (tax/ (1 + tax))):.2f}}} & \\texttt{{\${(invoice['freight_charged']):.2f}}} \\\\ \n"
         table_rows += "\\hline \n"
     return table_rows
 
