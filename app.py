@@ -336,6 +336,7 @@ def generate_latex_invoice_au(invoice, au_time):
     \\begin{{minipage}}[t]{{0.45\\textwidth}}
         \\raggedright
         \\small
+        53 Hobart St \\\\
         Riverstone 2765 \\\\
         NSW \\\\
         02 8007 3949 \\\\
