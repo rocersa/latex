@@ -559,13 +559,14 @@ def generate_pdf_picklist():
     utc_now = datetime.now(pytz.utc)
     uk_time = utc_now.astimezone(pytz.timezone('Europe/London'))
     us_time = utc_now.astimezone(pytz.timezone('America/Los_Angeles'))
+    us_time = utc_now.astimezone(pytz.timezone('Pacific/Auckland'))
     # Generate LaTeX source code
     if country == 'UK':
         latex_source = generate_latex_picklist_uk(invoice, info, components, uk_time)
     elif country == 'US':
         latex_source = generate_latex_picklist_us(invoice, info, components, us_time)
     elif country == 'NZ':
-        latex_source = generate_latex_picklist_nz(invoice, info, components, us_time)
+        latex_source = generate_latex_picklist_nz(invoice, info, components, nz_time)
     
     # Use a secure temporary directory
     with tempfile.TemporaryDirectory() as tmpdirname:
@@ -575,7 +576,6 @@ def generate_pdf_picklist():
         # Write LaTeX source to a file
         with open(tex_file_path, 'w') as f:
             f.write(latex_source)
-
         # Run pdflatex to generate PDF
         try:
             subprocess.run(['pdflatex', '-output-directory', tmpdirname, tex_file_path], check=True)
@@ -703,7 +703,7 @@ def picklist_table_rows_uk(invoice, components):
         table_rows += "\\hline \n"
     return table_rows
 
-def generate_latex_picklist_nz(invoice, info, components, uk_time):
+def generate_latex_picklist_nz(invoice, info, components, nz_time):
     # Generate LaTeX content here (similar to the LaTeX source in your Node.js example)
     latex_source = f"""
     \\documentclass[a4paper,12pt]{{article}}
@@ -773,7 +773,7 @@ def generate_latex_picklist_nz(invoice, info, components, uk_time):
         \\vspace{{1cm}}
         \\small
         Invoice Number: \\texttt{{{str(invoice['InvoiceID']).zfill(5)}}} \\\\
-        Date Issued: \\texttt{{{uk_time.strftime("%d-%b-%Y %H:%M")}}} 
+        Date Issued: \\texttt{{{nz_time.strftime("%d-%b-%Y %H:%M")}}} 
     \\end{{minipage}}
     
     \\vspace{{0.5cm}}
