@@ -559,7 +559,7 @@ def generate_pdf_picklist():
     utc_now = datetime.now(pytz.utc)
     uk_time = utc_now.astimezone(pytz.timezone('Europe/London'))
     us_time = utc_now.astimezone(pytz.timezone('America/Los_Angeles'))
-    us_time = utc_now.astimezone(pytz.timezone('Pacific/Auckland'))
+    nz_time = utc_now.astimezone(pytz.timezone('Pacific/Auckland'))
     # Generate LaTeX source code
     if country == 'UK':
         latex_source = generate_latex_picklist_uk(invoice, info, components, uk_time)
