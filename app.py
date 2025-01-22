@@ -210,6 +210,7 @@ def generate_latex_invoice_nz(invoice, nz_time):
     \\begin{{minipage}}[t]{{0.45\\textwidth}}
         \\raggedright
         \\small
+        14 Riverbank Road \\\\
         Otaki \\\\
         5512 \\\\
         04 886 5801 \\\\
@@ -563,6 +564,8 @@ def generate_pdf_picklist():
         latex_source = generate_latex_picklist_uk(invoice, info, components, uk_time)
     elif country == 'US':
         latex_source = generate_latex_picklist_us(invoice, info, components, us_time)
+    elif country == 'NZ':
+        latex_source = generate_latex_picklist_nz(invoice, info, components, us_time)
     
     # Use a secure temporary directory
     with tempfile.TemporaryDirectory() as tmpdirname:
@@ -693,8 +696,118 @@ def generate_latex_picklist_uk(invoice, info, components, uk_time):
     \\end{{document}}
     """
     return latex_source
-
 def picklist_table_rows_uk(invoice, components):
+    table_rows = ""
+    for product in components:
+        table_rows += f"\\texttt{{{product['ProductsT']['ProductCode']}}} & \\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{{(product['ProductsT']['Weight'] * product['Quantity']):.1f}}}  \\\\ \n"
+        table_rows += "\\hline \n"
+    return table_rows
+
+def generate_latex_picklist_nz(invoice, info, components, uk_time):
+    # Generate LaTeX content here (similar to the LaTeX source in your Node.js example)
+    latex_source = f"""
+    \\documentclass[a4paper,12pt]{{article}}
+    \\usepackage{{graphicx}}
+    \\usepackage{{geometry}}
+    \\geometry{{a4paper, margin=1cm}}
+    \\usepackage{{array}}
+    \\usepackage{{longtable}}
+    \\usepackage{{anyfontsize}}
+    \\pagestyle{{empty}}
+
+    \\begin{{document}}
+    
+    \\vspace{{0.5cm}}
+
+    \\noindent
+    \\texttt{{Deliver to:}} \\\\
+
+    \\textbf{{\\fontsize{{20}}{{24}}\\selectfont {invoice['customers']['first_name']}}} \\textbf{{\\fontsize{{20}}{{24}}\\selectfont {invoice['customers']['last_name']}}} \\\\
+    """
+    if invoice['customers']['company']:
+        latex_source += f"""
+    \\texttt{{{invoice['customers']['company']}}} \\\\
+    """
+    latex_source += f"""
+    """
+    if invoice['addresses']['building_name']:
+        latex_source += f"""
+
+    \\textbf{{\\fontsize{{30}}{{36}}\\selectfont {invoice['addresses']['building_name']}}} \\\\
+
+    """
+    latex_source += f"""
+    \\textbf{{\\fontsize{{30}}{{36}}\\selectfont {invoice['addresses']['street_address']}}} \\\\
+ 
+    \\textbf{{\\fontsize{{50}}{{60}}\\selectfont {invoice['addresses']['suburb']}}} \\\\
+
+    \\textbf{{\\fontsize{{70}}{{84}}\\selectfont {invoice['addresses']['postal_code']}}} \\\\
+
+    \\noindent
+    \\textsf{{\\Large {invoice['customers']['email']}}} \\\\
+    \\textsf{{\\Large {invoice['customers']['phone']}}} \\\\
+    """
+    if invoice['customers']['second_phone']:
+        latex_source += f"""\\textsf{{\\Large {invoice['customers']['second_phone']}}} \\\\"""
+    latex_source += f"""
+    \\noindent
+    \\textsf{{\\Large {invoice['delivery_instructions']}}} \\\\
+
+    \\vspace{{0.5cm}}
+    
+    \\noindent
+    \\begin{{minipage}}[t]{{0.45\\textwidth}}
+        \\raggedright
+        \\small
+        COR-TEN-STEEL NZ \\\\
+        14 Riverbank Road \\\\
+        Otaki 5512 \\\\
+        Tel: 04 886 5801 \\\\
+        Email: nz@cor-ten-steel.co.nz \\\\
+ 
+    \\end{{minipage}}
+    \\hfill
+    \\begin{{minipage}}[t]{{0.45\\textwidth}}
+        \\raggedleft
+        \\textbf{{\\fontsize{{20}}{{24}}\\selectfont Picklist}} \\\\
+        \\vspace{{1cm}}
+        \\small
+        Invoice Number: \\texttt{{{str(invoice['InvoiceID']).zfill(5)}}} \\\\
+        Date Issued: \\texttt{{{uk_time.strftime("%d-%b-%Y %H:%M")}}} 
+    \\end{{minipage}}
+    
+    \\vspace{{0.5cm}}
+
+    \\noindent
+    \\rule{{\\textwidth}}{{0.5pt}}
+
+    \\vspace{{0.5cm}}
+
+    \\noindent
+    \\begin{{tabular}}{{l l}}
+    \\textbf{{Total Items:}} & \\texttt{{{info['total_items']}}} \\\\ 
+    \\textbf{{Total Weight:}} & \\texttt{{{info['total_weight']}}} \\\\ 
+    \\textbf{{Carrier:}} & \\texttt{{{invoice['freight_carrier']}}} \\\\ 
+    \\textbf{{Stickers:}} & \\texttt{{{invoice['stickers']}}} \\\\ 
+    \\textbf{{Packing Instructions:}} & \\texttt{{{invoice['packing_instructions']}}} \\\\ 
+    \\textbf{{Con Note:}} & \\texttt{{{invoice['con_note']}}} \\\\ 
+    \\end{{tabular}}
+
+    \\vspace{{0.5cm}}
+
+    \\begin{{longtable}}{{|l|l|l|l|}}
+        \\hline
+        \\textbf{{Code}} & \\textbf{{Description}} & \\textbf{{Qty}} & \\textbf{{Weight (kgs)}} \\\\
+        \\hline
+        {picklist_table_rows_nz(invoice, components)}
+    \\end{{longtable}}
+    
+
+
+    \\end{{document}}
+    """
+    return latex_source
+def picklist_table_rows_nz(invoice, components):
     table_rows = ""
     for product in components:
         table_rows += f"\\texttt{{{product['ProductsT']['ProductCode']}}} & \\texttt{{{product['ProductsT']['NameMetric']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{{(product['ProductsT']['Weight'] * product['Quantity']):.1f}}}  \\\\ \n"
@@ -798,7 +911,6 @@ def generate_latex_picklist_us(invoice, info, components, us_time):
     \\end{{document}}
     """
     return latex_source
-
 def picklist_table_rows_us(invoice, components):
     table_rows = ""
     for product in components:
