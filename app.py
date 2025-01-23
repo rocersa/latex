@@ -509,9 +509,9 @@ def generate_latex_invoice_us(invoice, us_time):
         latex_source += f"""
         \\multicolumn{{2}}{{c|}}{{}} & Subtotal & \\$\\texttt{{{(invoice['Price'] * (100/(100 + invoice['us_tax_rate'])) - invoice['freight_charged']):.2f}}} \\\\
         \\cline{{3-4}}
-        \\multicolumn{{2}}{{c|}}{{}} & Freight & \\$\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
+        \\multicolumn{{2}}{{c|}}{{}} & Tax & \\$\\texttt{{{((invoice['Price'] - invoice['freight_charged']) * (invoice['us_tax_rate'] / (100 + invoice['us_tax_rate']))):.2f}}} \\\\
         \\cline{{3-4}}
-        \\multicolumn{{2}}{{c|}}{{}} & Tax & \\$\\texttt{{{(invoice['Price'] * (invoice['us_tax_rate'] / (100 + invoice['us_tax_rate']))):.2f}}} \\\\
+        \\multicolumn{{2}}{{c|}}{{}} & Freight & \\$\\texttt{{{invoice['freight_charged']:.2f}}} \\\\
         \\cline{{3-4}}
         \\multicolumn{{2}}{{c|}}{{}} & Balance Due & \\$\\texttt{{{(invoice['Price'] ):.2f}}} \\\\
         \\cline{{3-4}}
@@ -541,7 +541,6 @@ def generate_latex_invoice_us(invoice, us_time):
     \\end{{document}}
     """
     return latex_source
-
 def invoice_table_rows_us(invoice):
     table_rows = ""
     for product in invoice["InvoiceComponentsT"]:
