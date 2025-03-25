@@ -84,7 +84,7 @@ def generate_latex_invoice_uk(invoice, uk_time):
         \\small
         Cadley \\\\
         SN8 4NE \\\\
-        0118 234 9909 \\\\
+        0179 356 9121 \\\\
         uk@cor-ten-steel.co.uk \\\\
         www.cor-ten-steel.co.uk \\\\
         \\vspace{{0.5cm}}
@@ -340,7 +340,7 @@ def generate_latex_invoice_au(invoice, au_time):
         53 Hobart St \\\\
         Riverstone 2765 \\\\
         NSW \\\\
-        02 8007 3949 \\\\
+        02 9000 1521 \\\\
         aus@cor-ten-steel.com.au \\\\
         www.cor-ten-steel.com.au \\\\
         \\vspace{{0.5cm}}
@@ -461,7 +461,7 @@ def generate_latex_invoice_us(invoice, us_time):
         Mesa Street \\\\
         Hesperia \\\\
         92345 CA \\\\
-        Tel: 760-995-2555 \\\\
+        Tel: 323-673-5742 \\\\
         Email: usa@cor-ten-steel.com \\\\
         \\vspace{{0.5cm}}
         \\texttt{{{invoice['customers']['first_name']}}} \\texttt{{{invoice['customers']['last_name']}}} \\\\
@@ -650,7 +650,7 @@ def generate_latex_picklist_uk(invoice, info, components, uk_time):
         COR-TEN-STEEL UK \\\\
         Cadley \\\\
         SN8 4NE \\\\
-        Tel: 0118 234 9909 \\\\
+        Tel: 0179 356 9121 \\\\
         Email: uk@cor-ten-steel.co.uk \\\\
  
     \\end{{minipage}}
@@ -865,7 +865,7 @@ def generate_latex_picklist_us(invoice, info, components, us_time):
         Mesa Street \\\\
         Hesperia \\\\
         92345 CA \\\\
-        Tel: 760-995-2555 \\\\
+        Tel: 323-673-5742 \\\\
         Email: usa@cor-ten-steel.com \\\\
  
     \\end{{minipage}}
