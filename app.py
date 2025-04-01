@@ -171,7 +171,7 @@ def generate_latex_invoice(invoice, time, country):
 
         {invoice_table_rows(invoice, tax_rate, country)}
         \\hline
-        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{£{((invoice['Price']) * (1/(1 + tax_rate))):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{£{(invoice['price'] * (tax_rate / (1 + tax_rate))):.2f}}}}} & \\multicolumn{{1}}{{r}}{{\\textbf{{£{invoice['Price']:.2f}}}}} \\\\
+        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{£{((invoice['price']) * (1/(1 + tax_rate))):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{£{(invoice['price'] * (tax_rate / (1 + tax_rate))):.2f}}}}} & \\multicolumn{{1}}{{r}}{{\\textbf{{£{invoice['price']:.2f}}}}} \\\\
         \\cline{{4-6}}
     """
     if invoice['amount_paid']:
