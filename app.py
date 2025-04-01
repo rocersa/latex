@@ -21,13 +21,13 @@ def generate_pdf_invoice():
     au_time = utc_now.astimezone(pytz.timezone('Australia/Sydney'))
     # Generate LaTeX source code
     if country == 'UK':
-        latex_source = generate_latex_invoice(invoice, uk_time, country)
+        latex_source = generate_latex_source(invoice, uk_time, country)
     elif country == 'US':
-        latex_source = generate_latex_invoice(invoice, us_time, country)
+        latex_source = generate_latex_source(invoice, us_time, country)
     elif country == 'NZ':
-        latex_source = generate_latex_invoice(invoice, nz_time, country)
+        latex_source = generate_latex_source(invoice, nz_time, country)
     elif country == 'AU':
-        latex_source = generate_latex_invoice(invoice, au_time, country)
+        latex_source = generate_latex_source(invoice, au_time, country)
 
     # Use a secure temporary directory
     with tempfile.TemporaryDirectory() as tmpdirname:
@@ -54,7 +54,7 @@ def generate_pdf_invoice():
         # Send the generated PDF file
         return send_file(pdf_file_path, as_attachment=True)
 
-def generate_latex_invoice(invoice, time, country):
+def generate_latex_source(invoice, time, country):
     # Define country-specific details
     country_details = {
         'UK': {
@@ -120,25 +120,25 @@ def generate_latex_invoice(invoice, time, country):
         {details['address']} \\\\
         \\vspace{{0.5cm}}
         \\noindent
-        \\texttt{{{invoice['customers']['first_name']}}} \\texttt{{{invoice['customers']['last_name']}}} \\\\
+        \\texttt{{{escape_latex(invoice['customers']['first_name'])}}} \\texttt{{{escape_latex(invoice['customers']['last_name'])}}} \\\\
     """
     if invoice['customers']['company']:
         latex_source += f"""
-        \\texttt{{{invoice['customers']['company']}}} \\\\
+        \\texttt{{{escape_latex(invoice['customers']['company'])}}} \\\\
         """
     latex_source += f"""
-        \\texttt{{{invoice['customers']['email']}}} \\\\
-        \\texttt{{{invoice['customers']['phone']}}} \\\\
+        \\texttt{{{escape_latex(invoice['customers']['email'])}}} \\\\
+        \\texttt{{{escape_latex(invoice['customers']['phone'])}}} \\\\
     """
     if invoice['customers']['second_phone']:
         latex_source += f"""
         \\texttt{{{invoice['customers']['second_phone']}}} \\\\
         """
     latex_source += f"""
-        \\texttt{{{invoice['addresses']['street_address']}}} \\\\
-        \\texttt{{{invoice['addresses']['suburb']}}} \\texttt{{{invoice['addresses']['postal_code']}}} \\\\
-        \\texttt{{{invoice['addresses']['city']}}} \\\\
-        \\texttt{{{invoice['addresses']['country']}}}
+        \\texttt{{{escape_latex(invoice['addresses']['street_address'])}}} \\\\
+        \\texttt{{{escape_latex(invoice['addresses']['suburb'])}}} \\texttt{{{escape_latex(invoice['addresses']['postal_code'])}}} \\\\
+        \\texttt{{{escape_latex(invoice['addresses']['city'])}}} \\\\
+        \\texttt{{{escape_latex(invoice['addresses']['country'])}}}
     \\end{{minipage}}
     \\hfill
     \\begin{{minipage}}[t]{{0.45\\textwidth}}
@@ -197,7 +197,7 @@ def generate_latex_invoice(invoice, time, country):
     
     \\end{{document}}
     """
-    return latex_source
+    return escape_latex(latex_source)
 
 
 def invoice_table_rows(invoice, tax_rate, country ):
@@ -205,18 +205,18 @@ def invoice_table_rows(invoice, tax_rate, country ):
         currency = "£"
         name = "name_metric"
     elif country == 'US':
-        currency = "\$"
+        currency = "\\$"
         name = "name_imperial"
     else:
-        currency = "\$"
+        currency = "\\$"
         name = "name_metric"
 
     table_rows = ""
     for product in invoice["invoice_components"]:
-        table_rows += f"\\texttt{{{product['products'][name]}}} & \\texttt{{{product['quantity']}}} & \\texttt{{{currency}{(product['price'] * (1/(1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(product['price'] * product['quantity'] * (1/(1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(product['price'] * product['quantity'] * (tax_rate / (1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(product['price'] * product['quantity']):.2f}}} \\\\ \n"
+        table_rows += f"\\texttt{{{escape_latex(product['products'][name])}}} & \\texttt{{{product['quantity']}}} & \\texttt{{{currency}{(product['price'] * (1/(1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(product['price'] * product['quantity'] * (1/(1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(product['price'] * product['quantity'] * (tax_rate / (1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(product['price'] * product['quantity']):.2f}}} \\\\ \n"
         table_rows += "\\hline \n"
     if invoice['freight_charged'] != 0:
-        table_rows += f"\\texttt{{Freight: {invoice['freight_carrier']}}} & \\texttt{{1}} & \\texttt{{{currency}{(invoice['freight_charged'] * (1/(1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(invoice['freight_charged'] * (1/(1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(invoice['freight_charged'] * (tax_rate / (1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(invoice['freight_charged']):.2f}}} \\\\ \n"
+        table_rows += f"\\texttt{{Freight: {escape_latex(invoice['freight_carrier'])}}} & \\texttt{{1}} & \\texttt{{{currency}{(invoice['freight_charged'] * (1/(1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(invoice['freight_charged'] * (1/(1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(invoice['freight_charged'] * (tax_rate / (1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(invoice['freight_charged']):.2f}}} \\\\ \n"
         table_rows += "\\hline \n"
     return table_rows
 
@@ -704,6 +704,20 @@ def picklist_table_rows_us(invoice, components):
         table_rows += f"\\texttt{{{product['ProductsT']['ProductCode']}}} & \\texttt{{{product['ProductsT']['NameImperial']}}} & \\texttt{{{product['Quantity']}}} & \\texttt{{{(product['ProductsT']['Weight'] * product['Quantity']):.1f}}}  \\\\ \n"
         table_rows += "\\hline \n"
     return table_rows
+
+def escape_latex(text):
+    if not isinstance(text, str):
+        return text  # Return non-string data as-is
+    return (text.replace('\\', '\\textbackslash{}')  # Escape backslashes
+                .replace('%', '\\%')
+                .replace('_', '\\_')
+                .replace('$', '\\$')
+                .replace('&', '\\&')
+                .replace('#', '\\#')
+                .replace('{', '\\{')
+                .replace('}', '\\}')
+                .replace('~', '\\textasciitilde{}')
+                .replace('^', '\\textasciicircum{}'))
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
