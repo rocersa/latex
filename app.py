@@ -21,13 +21,13 @@ def generate_pdf_invoice():
     au_time = utc_now.astimezone(pytz.timezone('Australia/Sydney'))
     # Generate LaTeX source code
     if country == 'UK':
-        latex_source = generate_latex_source(invoice, uk_time, country)
+        latex_source = generate_latex_source(invoice, uk_time, country, '£')
     elif country == 'US':
-        latex_source = generate_latex_source(invoice, us_time, country)
+        latex_source = generate_latex_source(invoice, us_time, country, '\\$')
     elif country == 'NZ':
-        latex_source = generate_latex_source(invoice, nz_time, country)
+        latex_source = generate_latex_source(invoice, nz_time, country, '\\$')
     elif country == 'AU':
-        latex_source = generate_latex_source(invoice, au_time, country)
+        latex_source = generate_latex_source(invoice, au_time, country, '\\$')
 
     # Use a secure temporary directory
     with tempfile.TemporaryDirectory() as tmpdirname:
@@ -54,7 +54,7 @@ def generate_pdf_invoice():
         # Send the generated PDF file
         return send_file(pdf_file_path, as_attachment=True)
 
-def generate_latex_source(invoice, time, country):
+def generate_latex_source(invoice, time, country, currency):
     # Define country-specific details
     country_details = {
         'UK': {
@@ -171,12 +171,12 @@ def generate_latex_source(invoice, time, country):
 
         {invoice_table_rows(invoice, tax_rate, country)}
         \\hline
-        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{£{((invoice['price']) * (1/(1 + tax_rate))):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{£{(invoice['price'] * (tax_rate / (1 + tax_rate))):.2f}}}}} & \\multicolumn{{1}}{{r}}{{\\textbf{{£{invoice['price']:.2f}}}}} \\\\
+        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{{currency}{((invoice['price']) * (1/(1 + tax_rate))):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{{currency}{(invoice['price'] * (tax_rate / (1 + tax_rate))):.2f}}}}} & \\multicolumn{{1}}{{r}}{{\\textbf{{{currency}{invoice['price']:.2f}}}}} \\\\
         \\cline{{4-6}}
     """
     if invoice['amount_paid']:
         latex_source += f"""
-        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{2}}{{r|}}{{Amount Paid}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{£{invoice['amount_paid']:.2f}}}}} \\\\
+        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{2}}{{r|}}{{Amount Paid}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{{currency}{invoice['amount_paid']:.2f}}}}} \\\\
         \\cline{{4-6}}
         \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{2}}{{r|}}{{Balance due inc. {tax_label}}} & \\multicolumn{{1}}{{r}}{{\\textbf{{£{(invoice['price'] - invoice['amount_paid']):.2f}}}}} \\\\
         """
@@ -200,15 +200,10 @@ def generate_latex_source(invoice, time, country):
     return latex_source
 
 
-def invoice_table_rows(invoice, tax_rate, country ):
-    if country == 'UK':
-        currency = "£"
-        name = "name_metric"
-    elif country == 'US':
-        currency = "\\$"
+def invoice_table_rows(invoice, tax_rate, country, currency):
+    if country == 'US':
         name = "name_imperial"
     else:
-        currency = "\\$"
         name = "name_metric"
 
     table_rows = ""
