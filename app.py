@@ -197,7 +197,7 @@ def generate_latex_source(invoice, time, country):
     
     \\end{{document}}
     """
-    return escape_latex(latex_source)
+    return latex_source
 
 
 def invoice_table_rows(invoice, tax_rate, country ):
