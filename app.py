@@ -169,7 +169,7 @@ def generate_latex_source(invoice, time, country, currency):
 
         \\endlastfoot
 
-        {invoice_table_rows(invoice, tax_rate, country)}
+        {invoice_table_rows(invoice, tax_rate, country, currency)}
         \\hline
         \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{{currency}{((invoice['price']) * (1/(1 + tax_rate))):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{{currency}{(invoice['price'] * (tax_rate / (1 + tax_rate))):.2f}}}}} & \\multicolumn{{1}}{{r}}{{\\textbf{{{currency}{invoice['price']:.2f}}}}} \\\\
         \\cline{{4-6}}
