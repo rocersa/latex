@@ -19,7 +19,7 @@ RUN python3 -m venv /usr/src/app/venv
 WORKDIR /usr/src/app
 
 # Copy the requirements file and install dependencies in the virtual environment
-COPY requirements.txt ./
+COPY requirements.txt ./ 
 RUN /usr/src/app/venv/bin/pip install --no-cache-dir -r requirements.txt
 
 # Copy the Flask application code into the container
@@ -31,5 +31,5 @@ ENV PATH="/usr/src/app/venv/bin:${PATH}"
 # Expose the port the app runs on
 EXPOSE 5000
 
-# Define the command to run the Flask application
-CMD ["python", "app.py"]
+# Define the command to run the Flask application with Gunicorn
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "app:app"]
