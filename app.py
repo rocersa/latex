@@ -205,10 +205,10 @@ def invoice_table_rows(invoice, tax_rate, country ):
         currency = "£"
         name = "name_metric"
     elif country == 'US':
-        currency = "$"
+        currency = "\$"
         name = "name_imperial"
     else:
-        currency = "$"
+        currency = "\$"
         name = "name_metric"
 
     table_rows = ""
