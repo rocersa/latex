@@ -179,11 +179,11 @@ def generate_latex_invoice(invoice, time, country, currency):
         latex_source += f"""
         \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{2}}{{r|}}{{Amount Paid}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{{currency}{invoice['amount_paid']:.2f}}}}} \\\\
         \\cline{{4-6}}
-        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{2}}{{r|}}{{Balance due inc. {tax_label}}} & \\multicolumn{{1}}{{r}}{{\\textbf{{£{(invoice['price'] - invoice['amount_paid']):.2f}}}}} \\\\
+        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{2}}{{r|}}{{Balance due inc. {tax_label}}} & \\multicolumn{{1}}{{r}}{{\\textbf{{{currency}{(invoice['price'] - invoice['amount_paid']):.2f}}}}} \\\\
         """
     else:
         latex_source += f"""
-        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{2}}{{r|}}{{Balance due inc. {tax_label}}} & \\multicolumn{{1}}{{r}}{{\\textbf{{£{(invoice['price']):.2f}}}}} \\\\
+        \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{2}}{{r|}}{{Balance due inc. {tax_label}}} & \\multicolumn{{1}}{{r}}{{\\textbf{{{currency}{(invoice['price']):.2f}}}}} \\\\
         """
     latex_source += f"""
     \\end{{longtable}}
