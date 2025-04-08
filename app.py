@@ -20,6 +20,7 @@ def generate_pdf_invoice():
     nz_time = utc_now.astimezone(pytz.timezone('Pacific/Auckland'))
     au_time = utc_now.astimezone(pytz.timezone('Australia/Sydney'))
     # Generate LaTeX source code
+    country = country.upper()
     if country == 'UK':
         latex_source = generate_latex_invoice(invoice, uk_time, country, '£')
     elif country == 'US':
