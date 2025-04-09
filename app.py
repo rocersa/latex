@@ -318,6 +318,7 @@ def generate_latex_picklist(invoice, info, components, time, country):
     latex_source += f"""
     \\textbf{{\\fontsize{{30}}{{36}}\\selectfont {escape_latex(invoice['addresses']['street_address'])}}} \\\\
     \\textbf{{\\fontsize{{50}}{{60}}\\selectfont {escape_latex(invoice['addresses']['suburb'])}}} \\\\
+    \\textbf{{\\fontsize{{50}}{{60}}\\selectfont {escape_latex(invoice['addresses']['city'])}}} \\\\
     \\textbf{{\\fontsize{{70}}{{84}}\\selectfont {escape_latex(invoice['addresses']['postal_code'])}}} \\\\
     \\noindent
     \\textsf{{\\Large {escape_latex(invoice['customers']['email'])}}} \\\\
