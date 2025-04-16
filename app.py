@@ -107,7 +107,7 @@ def generate_latex_invoice(invoice, time, country, currency):
             'tax_rate': invoice.get('us_tax_rate', 0) / 100,
             'bank_details': '\\texttt{ACH Routing Number: 121000358} \\\\ \\texttt{Account Number: 325056815335}',
         },
-        4: {
+        8: {
             'header': 'GABION1 USA',
             'address': 'Mesa Street \\\\ Hesperia \\\\ 92345 CA \\\\ Tel: 323-673-5742 \\\\ Email: usa@gabion1.com',
             'tax_label': 'Tax',
