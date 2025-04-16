@@ -330,7 +330,7 @@ def generate_latex_picklist(invoice, info, components, time, country):
     }
 
     details = country_details[invoice['subdivision_id']]
-
+    weight_multiplier = 2.20462 if country == "US" else 1 
     # Generate the LaTeX source
     latex_source = f"""
     \\documentclass[a4paper,12pt]{{article}}
@@ -405,7 +405,7 @@ def generate_latex_picklist(invoice, info, components, time, country):
     \\noindent
     \\begin{{tabular}}{{l l}}
     \\textbf{{Total Items:}} & \\texttt{{{info['total_items']}}} \\\\ 
-    \\textbf{{Total Weight:}} & \\texttt{{{info['total_weight']}}} \\\\ 
+    \\textbf{{Total Weight ({'lbs' if country == 'US' else 'kgs'}):}} & \\texttt{{{(invoice['weight'] * weight_multiplier):.1f}}} \\\\ 
     \\textbf{{Carrier:}} & \\texttt{{{escape_latex(invoice['freight_carrier'])}}} \\\\ 
     \\textbf{{Stickers:}} & \\texttt{{{escape_latex(invoice['stickers'])}}} \\\\ 
     \\textbf{{Packing Instructions:}} & \\texttt{{{escape_latex(invoice['packing_instructions'])}}} \\\\ 
@@ -416,7 +416,7 @@ def generate_latex_picklist(invoice, info, components, time, country):
 
     \\begin{{longtable}}{{|l|l|l|l|}}
         \\hline
-        \\textbf{{Code}} & \\textbf{{Description}} & \\textbf{{Qty}} & \\textbf{{Weight (kgs)}} \\\\
+        \\textbf{{Code}} & \\textbf{{Description}} & \\textbf{{Qty}} & \\textbf{{Weight ({'lbs' if country == 'US' else 'kgs'})}} \\\\
         \\hline
         {picklist_table_rows(components, country)}
     \\end{{longtable}}
@@ -428,10 +428,10 @@ def generate_latex_picklist(invoice, info, components, time, country):
 def picklist_table_rows(components, country):
     # Use metric or imperial names based on the country
     name_key = "name_imperial" if country == "US" else "name_metric"
-
+    weight_multiplier = 2.20462 if country == "US" else 1 
     table_rows = ""
     for product in components:
-        table_rows += f"\\texttt{{{escape_latex(product['products']['code'])}}} & \\texttt{{{escape_latex(product['products'][name_key])}}} & \\texttt{{{product['quantity']}}} & \\texttt{{{(product['products']['weight'] * product['quantity']):.1f}}} \\\\ \n"
+        table_rows += f"\\texttt{{{escape_latex(product['products']['code'])}}} & \\texttt{{{escape_latex(product['products'][name_key])}}} & \\texttt{{{product['quantity']}}} & \\texttt{{{(product['products']['weight'] * product['quantity'] * weight_multiplier):.1f}}} \\\\ \n"
         table_rows += "\\hline \n"
     return table_rows
 
