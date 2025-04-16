@@ -427,7 +427,7 @@ def generate_latex_picklist(invoice, info, components, time, country):
 
 def picklist_table_rows(components, country):
     # Use metric or imperial names based on the country
-    name_key = "name_imperial" if country == "us" else "name_metric"
+    name_key = "name_imperial" if country == "US" else "name_metric"
 
     table_rows = ""
     for product in components:
