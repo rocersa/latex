@@ -295,25 +295,41 @@ def generate_pdf_picklist():
 def generate_latex_picklist(invoice, info, components, time, country):
     # Define country-specific details
     country_details = {
-        'UK': {
+        3: {
             'header': 'COR-TEN-STEEL UK',
             'address': 'Cadley \\\\ SN8 4NE \\\\ Tel: 0179 356 9121 \\\\ Email: uk@cor-ten-steel.co.uk',
         },
-        'NZ': {
+        7: {
+            'header': 'GABION1 UK',
+            'address': 'Cadley \\\\ SN8 4NE \\\\ Tel: 0179 356 9120 \\\\ Email: uk@gabion1.co.uk',
+        },
+        1: {
             'header': 'COR-TEN-STEEL NZ',
             'address': '14 Riverbank Road \\\\ Otaki 5512 \\\\ Tel: 04 888 0359 \\\\ Email: nz@cor-ten-steel.co.nz',
         },
-        'AU': {
+        5: {
+            'header': 'GABION1 NZ',
+            'address': '14 Riverbank Road \\\\ Otaki 5512 \\\\ Tel: 04 888 0358 \\\\ Email: nz@gabion1.co.nz',
+        },
+        2: {
             'header': 'COR-TEN-STEEL AU',
             'address': '53 Hobart St \\\\ Riverstone 2765 \\\\ NSW \\\\ Tel: 02 9000 1521 \\\\ Email: aus@cor-ten-steel.com.au',
         },
-        'US': {
+        6: {
+            'header': 'GABION1 AU',
+            'address': '53 Hobart St \\\\ Riverstone 2765 \\\\ NSW \\\\ Tel: 02 9000 1520 \\\\ Email: aus@gabion1.com.au',
+        },
+        4: {
             'header': 'COR-TEN-STEEL USA',
             'address': 'Mesa Street \\\\ Hesperia \\\\ 92345 CA \\\\ Tel: 323-673-5742 \\\\ Email: usa@cor-ten-steel.com',
         },
+        8: {
+            'header': 'GABION1 USA',
+            'address': 'Mesa Street \\\\ Hesperia \\\\ 92345 CA \\\\ Tel: 323-310-9676 \\\\ Email: usa@gabion1.com',
+        },
     }
 
-    details = country_details[country.upper()]
+    details = country_details[invoice['subdivision_id']]
 
     # Generate the LaTeX source
     latex_source = f"""
@@ -411,7 +427,7 @@ def generate_latex_picklist(invoice, info, components, time, country):
 
 def picklist_table_rows(components, country):
     # Use metric or imperial names based on the country
-    name_key = "name_imperial" if country == "US" else "name_metric"
+    name_key = "name_imperial" if country == "us" else "name_metric"
 
     table_rows = ""
     for product in components:
