@@ -67,14 +67,14 @@ def generate_latex_invoice(invoice, time, country, currency):
         },
         7: {
             'header': 'GABION1 UK',
-            'address': 'Cadley \\\\ SN8 4NE \\\\ 0179 356 9121 \\\\ uk@gabion1.co.uk \\\\ www.gabion1.co.uk',
+            'address': 'Cadley \\\\ SN8 4NE \\\\ 0179 356 9120 \\\\ uk@gabion1.co.uk \\\\ www.gabion1.co.uk',
             'tax_label': 'VAT (20\\%)',
             'tax_rate': 0.2,
             'bank_details': '\\texttt{Sort Code: 40-05-16} \\\\ \\texttt{Account Number: 02371960}',
         },
         1: {
             'header': 'COR-TEN-STEEL NZ',
-            'address': '14 Riverbank Road \\\\ Otaki \\\\ 5512 \\\\ 04 888 0358 \\\\ nz@cor-ten-steel.co.nz \\\\ www.cor-ten-steel.co.nz',
+            'address': '14 Riverbank Road \\\\ Otaki \\\\ 5512 \\\\ 04 888 0359 \\\\ nz@cor-ten-steel.co.nz \\\\ www.cor-ten-steel.co.nz',
             'tax_label': 'GST (15\\%)',
             'tax_rate': 0.15,
             'bank_details': '\\texttt{Account Number: 02-0506-0143690-002}',
@@ -95,7 +95,7 @@ def generate_latex_invoice(invoice, time, country, currency):
         },
         6: {
             'header': 'COR-TEN-STEEL AU',
-            'address': '53 Hobart St \\\\ Riverstone 2765 \\\\ NSW \\\\ 02 9000 1521 \\\\ aus@gabion1.com.au \\\\ www.gabion1.com.au',
+            'address': '53 Hobart St \\\\ Riverstone 2765 \\\\ NSW \\\\ 02 9000 1520 \\\\ aus@gabion1.com.au \\\\ www.gabion1.com.au',
             'tax_label': 'GST (10\\%)',
             'tax_rate': 0.1,
             'bank_details': '\\texttt{BSB: 06 2000} \\\\ \\texttt{ACC: 14651089}',
@@ -109,7 +109,7 @@ def generate_latex_invoice(invoice, time, country, currency):
         },
         8: {
             'header': 'GABION1 USA',
-            'address': 'Mesa Street \\\\ Hesperia \\\\ 92345 CA \\\\ Tel: 323-673-5742 \\\\ Email: usa@gabion1.com',
+            'address': 'Mesa Street \\\\ Hesperia \\\\ 92345 CA \\\\ Tel: 323-310-9676 \\\\ Email: usa@gabion1.com',
             'tax_label': 'Tax',
             'tax_rate': invoice.get('us_tax_rate', 0) / 100,
             'bank_details': '\\texttt{ACH Routing Number: 121000358} \\\\ \\texttt{Account Number: 325056815335}',
