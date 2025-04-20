@@ -418,26 +418,23 @@ def generate_latex_picklist(invoice, info, components, time, country):
         \\hline
         \\textbf{{Code}} & \\textbf{{Description}} & \\textbf{{Qty}} & \\textbf{{Weight ({'lbs' if country == 'US' else 'kgs'})}} \\\\
         \\hline
-        {picklist_table_rows(components, country)}
+        {picklist_table_rows(components, country, invoice.bracewire)}
     \\end{{longtable}}
 
     \\end{{document}}
     """
     return latex_source
 
-def picklist_table_rows(components, country):
+def picklist_table_rows(components, country, bracewire):
     # Use metric or imperial names based on the country
     name_key = "name_imperial" if country == "US" else "name_metric"
-    weight_multiplier = 2.20462 if country == "US" else 1 
+    weight_multiplier = 2.20462 if country == "US" else 1
     table_rows = ""
     for product in components:
         table_rows += f"\\texttt{{{escape_latex(product['products']['code'])}}} & \\texttt{{{escape_latex(product['products'][name_key])}}} & \\texttt{{{product['quantity']}}} & \\texttt{{{(product['products']['weight'] * product['quantity'] * weight_multiplier):.1f}}} \\\\ \n"
         table_rows += "\\hline \n"
-    total_bracewire = sum(
-    (component['products']['bracewire'] or 0) * component['quantity'] for component in components
-    )   
-    if total_bracewire > 0:
-        table_rows += f"\\texttt{{GabBra}} & \\texttt{{Bracewire}} & \\texttt{{1}} & \\texttt{{{total_bracewire:.1f}}} \\\\ \n"
+    if bracewire > 0:
+        table_rows += f"\\texttt{{GabBra}} & \\texttt{{Bracewire}} & \\texttt{{1}} & \\texttt{{{(bracewire * weight_multiplier):.1f}}} \\\\ \n"
         table_rows += "\\hline \n"
     return table_rows
 
