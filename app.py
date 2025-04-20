@@ -418,7 +418,7 @@ def generate_latex_picklist(invoice, info, components, time, country):
         \\hline
         \\textbf{{Code}} & \\textbf{{Description}} & \\textbf{{Qty}} & \\textbf{{Weight ({'lbs' if country == 'US' else 'kgs'})}} \\\\
         \\hline
-        {picklist_table_rows(components, country, invoice.bracewire)}
+        {picklist_table_rows(components, country, invoice['bracewire'])}
     \\end{{longtable}}
 
     \\end{{document}}
