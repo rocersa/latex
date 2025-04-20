@@ -434,8 +434,7 @@ def picklist_table_rows(components, country):
         table_rows += f"\\texttt{{{escape_latex(product['products']['code'])}}} & \\texttt{{{escape_latex(product['products'][name_key])}}} & \\texttt{{{product['quantity']}}} & \\texttt{{{(product['products']['weight'] * product['quantity'] * weight_multiplier):.1f}}} \\\\ \n"
         table_rows += "\\hline \n"
     total_bracewire = sum(
-    (component['products']['bracewire'] or 0) * component['quantity']
-    for component in components if 'bracewire' in component['products']
+    (component['products']['bracewire'] or 0) * component['quantity'] for component in components
     )   
     if total_bracewire > 0:
         table_rows += f"\\texttt{{GabBra}} & \\texttt{{Bracewire}} & \\texttt{{1}} & \\texttt{{{total_bracewire:.1f}}} \\\\ \n"
