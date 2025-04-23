@@ -433,7 +433,7 @@ def picklist_table_rows(components, country, bracewire):
     for product in components:
         table_rows += f"\\texttt{{{escape_latex(product['products']['code'])}}} & \\texttt{{{escape_latex(product['products'][name_key])}}} & \\texttt{{{product['quantity']}}} & \\texttt{{{(product['products']['weight'] * product['quantity'] * weight_multiplier):.1f}}} \\\\ \n"
         table_rows += "\\hline \n"
-    if bracewire > 0:
+    if bracewire and bracewire > 0:
         table_rows += f"\\texttt{{GabBra}} & \\texttt{{Bracewire}} & \\texttt{{1}} & \\texttt{{{(bracewire * weight_multiplier):.1f}}} \\\\ \n"
         table_rows += "\\hline \n"
     return table_rows
