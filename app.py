@@ -171,6 +171,10 @@ def generate_latex_invoice(invoice, time, country, currency):
         latex_source += f"""
         \\texttt{{{invoice['customers']['second_phone']}}} \\\\
         """
+    if invoice["addresses"]["building_name"]:
+        latex_source += f"""
+    \\texttt{{{escape_latex(invoice['addresses']['building_name'])}}} \\\\
+    """
     latex_source += f"""
         \\texttt{{{escape_latex(invoice['addresses']['street_address'])}}} \\\\
         \\texttt{{{escape_latex(invoice['addresses']['suburb'])}}} \\texttt{{{escape_latex(invoice['addresses']['postal_code'])}}} \\\\
@@ -377,16 +381,22 @@ def generate_latex_picklist(invoice, info, components, time, country):
     """
     if invoice["customers"]["company"]:
         latex_source += f"""
+    \\noindent
     \\texttt{{{escape_latex(invoice['customers']['company'])}}} \\\\
     """
     if invoice["addresses"]["building_name"]:
         latex_source += f"""
+    \\noindent
     \\textbf{{\\fontsize{{30}}{{36}}\\selectfont {escape_latex(invoice['addresses']['building_name'])}}} \\\\
     """
     latex_source += f"""
+    \\noindent
     \\textbf{{\\fontsize{{30}}{{36}}\\selectfont {escape_latex(invoice['addresses']['street_address'])}}} \\\\
+    \\noindent
     \\textbf{{\\fontsize{{50}}{{60}}\\selectfont {escape_latex(invoice['addresses']['suburb'])}}} \\\\
+    \\noindent
     \\textbf{{\\fontsize{{50}}{{60}}\\selectfont {escape_latex(invoice['addresses']['city'])}}} \\\\
+    \\noindent
     \\textbf{{\\fontsize{{70}}{{84}}\\selectfont {escape_latex(invoice['addresses']['postal_code'])}}} \\\\
     \\noindent
     \\textsf{{\\Large {escape_latex(invoice['customers']['email'])}}} \\\\
