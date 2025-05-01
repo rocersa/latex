@@ -9,44 +9,44 @@ import pytz
 app = Flask(__name__)
 CORS(app)
 
-@app.route('/generate-pdf-invoice', methods=['POST'])
+
+@app.route("/generate-pdf-invoice", methods=["POST"])
 def generate_pdf_invoice():
     data = request.json
-    invoice = data.get('invoice')
-    country = data.get('country')
+    invoice = data.get("invoice")
+    country = data.get("country")
     utc_now = datetime.now(pytz.utc)
-    uk_time = utc_now.astimezone(pytz.timezone('Europe/London'))
-    us_time = utc_now.astimezone(pytz.timezone('America/Los_Angeles'))
-    nz_time = utc_now.astimezone(pytz.timezone('Pacific/Auckland'))
-    au_time = utc_now.astimezone(pytz.timezone('Australia/Sydney'))
+    uk_time = utc_now.astimezone(pytz.timezone("Europe/London"))
+    us_time = utc_now.astimezone(pytz.timezone("America/Los_Angeles"))
+    nz_time = utc_now.astimezone(pytz.timezone("Pacific/Auckland"))
+    au_time = utc_now.astimezone(pytz.timezone("Australia/Sydney"))
     # Generate LaTeX source code
     country = country.upper()
-    if country == 'UK':
-        latex_source = generate_latex_invoice(invoice, uk_time, country, '£')
-    elif country == 'US':
-        latex_source = generate_latex_invoice(invoice, us_time, country, '\\$')
-    elif country == 'NZ':
-        latex_source = generate_latex_invoice(invoice, nz_time, country, '\\$')
-    elif country == 'AU':
-        latex_source = generate_latex_invoice(invoice, au_time, country, '\\$')
+    if country == "UK":
+        latex_source = generate_latex_invoice(invoice, uk_time, country, "£")
+    elif country == "US":
+        latex_source = generate_latex_invoice(invoice, us_time, country, "\\$")
+    elif country == "NZ":
+        latex_source = generate_latex_invoice(invoice, nz_time, country, "\\$")
+    elif country == "AU":
+        latex_source = generate_latex_invoice(invoice, au_time, country, "\\$")
 
     # Use a secure temporary directory
     with tempfile.TemporaryDirectory() as tmpdirname:
-        tex_file_path = os.path.join(tmpdirname, 'invoice.tex')
-        pdf_file_path = os.path.join(tmpdirname, 'invoice.pdf')
+        tex_file_path = os.path.join(tmpdirname, "invoice.tex")
+        pdf_file_path = os.path.join(tmpdirname, "invoice.pdf")
 
         # Write LaTeX source to a file
-        with open(tex_file_path, 'w') as f:
+        with open(tex_file_path, "w") as f:
             f.write(latex_source)
 
         # Run pdflatex to generate PDF
         try:
-            subprocess.run(['pdflatex', '-output-directory', tmpdirname, tex_file_path], check=True)
+            subprocess.run(
+                ["pdflatex", "-output-directory", tmpdirname, tex_file_path], check=True
+            )
         except subprocess.CalledProcessError as e:
-            return jsonify({
-                "error": "PDF generation failed",
-                "details": e.stderr
-            }), 500
+            return jsonify({"error": "PDF generation failed", "details": e.stderr}), 500
 
         # Ensure the generated PDF file exists
         if not os.path.exists(pdf_file_path):
@@ -55,70 +55,78 @@ def generate_pdf_invoice():
         # Send the generated PDF file
         return send_file(pdf_file_path, as_attachment=True)
 
+
 def generate_latex_invoice(invoice, time, country, currency):
     # Define country-specific details
     country_details = {
         3: {
-            'header': 'COR-TEN-STEEL UK',
-            'address': 'Cadley \\\\ SN8 4NE \\\\ 0179 356 9121 \\\\ uk@cor-ten-steel.co.uk \\\\ www.cor-ten-steel.co.uk',
-            'tax_label': 'VAT (20\\%)',
-            'tax_rate': 0.2,
-            'bank_details': '\\texttt{Sort Code: 40-05-16} \\\\ \\texttt{Account Number: 02371960}',
+            "header": "COR-TEN-STEEL UK",
+            "address": "Cadley \\\\ SN8 4NE \\\\ 0179 356 9121 \\\\ uk@cor-ten-steel.co.uk \\\\ www.cor-ten-steel.co.uk",
+            "tax_label": "VAT (20\\%)",
+            "tax_rate": 0.2,
+            "invoice_number": f'C{invoice["id"]:05}',
+            "bank_details": f'\\texttt{{Sort Code: 40-05-16}} \\\\ \\texttt{{Account Number: 02371960}} \\\\ \\texttt{{Reference: C{invoice["id"]:05}}}',
         },
         7: {
-            'header': 'GABION1 UK',
-            'address': 'Cadley \\\\ SN8 4NE \\\\ 0179 356 9120 \\\\ uk@gabion1.co.uk \\\\ www.gabion1.co.uk',
-            'tax_label': 'VAT (20\\%)',
-            'tax_rate': 0.2,
-            'bank_details': '\\texttt{Sort Code: 40-05-16} \\\\ \\texttt{Account Number: 02371960}',
+            "header": "GABION1 UK",
+            "address": "Cadley \\\\ SN8 4NE \\\\ 0179 356 9120 \\\\ uk@gabion1.co.uk \\\\ www.gabion1.co.uk",
+            "tax_label": "VAT (20\\%)",
+            "tax_rate": 0.2,
+            "invoice_number": f'G{invoice["id"]:05}',
+            "bank_details": f'\\texttt{{Sort Code: 40-05-16}} \\\\ \\texttt{{Account Number: 02371960}} \\\\ \\texttt{{Reference: G{invoice["id"]:05}}}',
         },
         1: {
-            'header': 'COR-TEN-STEEL NZ',
-            'address': '14 Riverbank Road \\\\ Otaki \\\\ 5512 \\\\ 04 888 0359 \\\\ nz@cor-ten-steel.co.nz \\\\ www.cor-ten-steel.co.nz',
-            'tax_label': 'GST (15\\%)',
-            'tax_rate': 0.15,
-            'bank_details': '\\texttt{Account Number: 02-0506-0143690-002}',
+            "header": "COR-TEN-STEEL NZ",
+            "address": "14 Riverbank Road \\\\ Otaki \\\\ 5512 \\\\ 04 888 0359 \\\\ nz@cor-ten-steel.co.nz \\\\ www.cor-ten-steel.co.nz",
+            "tax_label": "GST (15\\%)",
+            "tax_rate": 0.15,
+            "invoice_number": f'C{invoice["id"]:05}',
+            "bank_details": f'\\texttt{{Account Number: 02-0506-0143690-002}} \\\\ \\texttt{{Reference: C{invoice["id"]:05}}}',
         },
         5: {
-            'header': 'GABION1 NZ',
-            'address': '14 Riverbank Road \\\\ Otaki \\\\ 5512 \\\\ 04 888 0358 \\\\ nz@gabion1.co.nz \\\\ www.gabion1.co.nz',
-            'tax_label': 'GST (15\\%)',
-            'tax_rate': 0.15,
-            'bank_details': '\\texttt{Account Number: 02-0506-0143690-002}',
+            "header": "GABION1 NZ",
+            "address": "14 Riverbank Road \\\\ Otaki \\\\ 5512 \\\\ 04 888 0358 \\\\ nz@gabion1.co.nz \\\\ www.gabion1.co.nz",
+            "tax_label": "GST (15\\%)",
+            "tax_rate": 0.15,
+            "invoice_number": f'G{invoice["id"]:05}',
+            "bank_details": f'\\texttt{{Account Number: 02-0506-0143690-002}} \\\\ \\texttt{{Reference: G{invoice["id"]:05}}}',
         },
         2: {
-            'header': 'COR-TEN-STEEL AU',
-            'address': '53 Hobart St \\\\ Riverstone 2765 \\\\ NSW \\\\ 02 9000 1521 \\\\ aus@cor-ten-steel.com.au \\\\ www.cor-ten-steel.com.au',
-            'tax_label': 'GST (10\\%)',
-            'tax_rate': 0.1,
-            'bank_details': '\\texttt{BSB: 06 2000} \\\\ \\texttt{ACC: 14651089}',
+            "header": "COR-TEN-STEEL AU",
+            "address": "53 Hobart St \\\\ Riverstone 2765 \\\\ NSW \\\\ 02 9000 1521 \\\\ aus@cor-ten-steel.com.au \\\\ www.cor-ten-steel.com.au",
+            "tax_label": "GST (10\\%)",
+            "tax_rate": 0.1,
+            "invoice_number": f'C{invoice["id"]:05}',
+            "bank_details": f'\\texttt{{BSB: 06 2000}} \\\\ \\texttt{{ACC: 14651089}} \\\\ \\texttt{{Reference: C{invoice["id"]:05}}}',
         },
         6: {
-            'header': 'COR-TEN-STEEL AU',
-            'address': '53 Hobart St \\\\ Riverstone 2765 \\\\ NSW \\\\ 02 9000 1520 \\\\ aus@gabion1.com.au \\\\ www.gabion1.com.au',
-            'tax_label': 'GST (10\\%)',
-            'tax_rate': 0.1,
-            'bank_details': '\\texttt{BSB: 06 2000} \\\\ \\texttt{ACC: 14651089}',
+            "header": "GABION1 AU",
+            "address": "53 Hobart St \\\\ Riverstone 2765 \\\\ NSW \\\\ 02 9000 1520 \\\\ aus@gabion1.com.au \\\\ www.gabion1.com.au",
+            "tax_label": "GST (10\\%)",
+            "tax_rate": 0.1,
+            "invoice_number": f'G{invoice["id"]:05}',
+            "bank_details": f'\\texttt{{BSB: 06 2000}} \\\\ \\texttt{{ACC: 14651089}} \\\\ \\texttt{{Reference: G{invoice["id"]:05}}}',
         },
         4: {
-            'header': 'COR-TEN-STEEL USA',
-            'address': 'Mesa Street \\\\ Hesperia \\\\ 92345 CA \\\\ Tel: 323-673-5742 \\\\ Email: usa@cor-ten-steel.com',
-            'tax_label': 'Tax',
-            'tax_rate': invoice.get('us_tax_rate', 0) / 100,
-            'bank_details': '\\texttt{ACH Routing Number: 121000358} \\\\ \\texttt{Account Number: 325056815335}',
+            "header": "COR-TEN-STEEL USA",
+            "address": "Mesa Street \\\\ Hesperia \\\\ 92345 CA \\\\ Tel: 323-673-5742 \\\\ Email: usa@cor-ten-steel.com",
+            "tax_label": "Tax",
+            "tax_rate": invoice.get("us_tax_rate", 0) / 100,
+            "invoice_number": f'C{invoice["id"]:05}',
+            "bank_details": f'\\texttt{{ACH Routing Number: 121000358}} \\\\ \\texttt{{Account Number: 325056815335}} \\\\ \\texttt{{Reference: C{invoice["id"]:05}}}',
         },
-          8: {
-            'header': 'GABION1 USA',
-            'address': 'Mesa Street \\\\ Hesperia \\\\ 92345 CA \\\\ Tel: 323-310-9676 \\\\ Email: usa@gabion1.com',
-            'tax_label': 'Tax',
-            'tax_rate': invoice.get('us_tax_rate', 0) / 100,
-            'bank_details': f'\\texttt{{ACH Routing Number: 121000358}} \\\\ \\texttt{{Account Number: 325056815335}} \\\\ \\texttt{{Reference: G{invoice["id"]:05}}}',
+        8: {
+            "header": "GABION1 USA",
+            "address": "Mesa Street \\\\ Hesperia \\\\ 92345 CA \\\\ Tel: 323-310-9676 \\\\ Email: usa@gabion1.com",
+            "tax_label": "Tax",
+            "tax_rate": invoice.get("us_tax_rate", 0) / 100,
+            "invoice_number": f'G{invoice["id"]:05}',
+            "bank_details": f'\\texttt{{ACH Routing Number: 121000358}} \\\\ \\texttt{{Account Number: 325056815335}} \\\\ \\texttt{{Reference: G{invoice["id"]:05}}}',
         },
     }
-
-    details = country_details[invoice['subdivision_id']]
-    tax_rate = details['tax_rate']
-    tax_label = details['tax_label']
+    details = country_details[invoice["subdivision_id"]]
+    tax_rate = details["tax_rate"]
+    tax_label = details["tax_label"]
 
     latex_source = f"""
     \\documentclass[a4paper,12pt]{{article}}
@@ -151,7 +159,7 @@ def generate_latex_invoice(invoice, time, country, currency):
         \\noindent
         \\texttt{{{escape_latex(invoice['customers']['first_name'])}}} \\texttt{{{escape_latex(invoice['customers']['last_name'])}}} \\\\
     """
-    if invoice['customers']['company']:
+    if invoice["customers"]["company"]:
         latex_source += f"""
         \\texttt{{{escape_latex(invoice['customers']['company'])}}} \\\\
         """
@@ -159,7 +167,7 @@ def generate_latex_invoice(invoice, time, country, currency):
         \\texttt{{{escape_latex(invoice['customers']['email'])}}} \\\\
         \\texttt{{{escape_latex(invoice['customers']['phone'])}}} \\\\
     """
-    if invoice['customers']['second_phone']:
+    if invoice["customers"]["second_phone"]:
         latex_source += f"""
         \\texttt{{{invoice['customers']['second_phone']}}} \\\\
         """
@@ -175,7 +183,7 @@ def generate_latex_invoice(invoice, time, country, currency):
         \\small
         Tax Invoice \\\\
         \\vspace{{1cm}}
-        Invoice Number: \\texttt{{{str(invoice['id']).zfill(5)}}} \\\\
+        Invoice Number: \\texttt{{{details['invoice_number']}}} \\\\
         Date Issued: \\texttt{{{time.strftime("%d-%b-%Y")}}}
     \\end{{minipage}}
     \\begingroup
@@ -203,7 +211,7 @@ def generate_latex_invoice(invoice, time, country, currency):
         \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{{currency}{((invoice['price']) * (1/(1 + tax_rate))):.2f}}}}} & \\multicolumn{{1}}{{r|}}{{\\textbf{{{currency}{(invoice['price'] * (tax_rate / (1 + tax_rate))):.2f}}}}} & \\multicolumn{{1}}{{r}}{{\\textbf{{{currency}{invoice['price']:.2f}}}}} \\\\
         \\cline{{4-6}}
     """
-    if invoice['amount_paid']:
+    if invoice["amount_paid"]:
         latex_source += f"""
         \\multicolumn{{3}}{{c}}{{}} & \\multicolumn{{2}}{{r|}}{{Amount Paid}} & \\multicolumn{{1}}{{r|}}{{\\texttt{{{currency}{invoice['amount_paid']:.2f}}}}} \\\\
         \\cline{{4-6}}
@@ -221,14 +229,16 @@ def generate_latex_invoice(invoice, time, country, currency):
     \\begin{{center}}
     \\texttt{{Account/Business Name: Rocersa Limited}} \\\\
     {details['bank_details']} \\\\
+    \\texttt{{Reference: {details['invoice_number']}}}
     \\end{{center}}
     
     \\end{{document}}
     """
     return latex_source
 
+
 def invoice_table_rows(invoice, tax_rate, country, currency):
-    if country == 'US':
+    if country == "US":
         name = "name_imperial"
     else:
         name = "name_metric"
@@ -237,50 +247,58 @@ def invoice_table_rows(invoice, tax_rate, country, currency):
     for product in invoice["invoice_components"]:
         table_rows += f"\\texttt{{{escape_latex(product['products'][name])}}} & \\texttt{{{product['quantity']}}} & \\texttt{{{currency}{(product['price'] * (1/(1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(product['price'] * product['quantity'] * (1/(1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(product['price'] * product['quantity'] * (tax_rate / (1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(product['price'] * product['quantity']):.2f}}} \\\\ \n"
         table_rows += "\\hline \n"
-    if invoice['freight_charged'] != 0:
+    if invoice["freight_charged"] != 0:
         table_rows += f"\\texttt{{Freight: {escape_latex(invoice['freight_carrier'])}}} & \\texttt{{1}} & \\texttt{{{currency}{(invoice['freight_charged'] * (1/(1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(invoice['freight_charged'] * (1/(1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(invoice['freight_charged'] * (tax_rate / (1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(invoice['freight_charged']):.2f}}} \\\\ \n"
         table_rows += "\\hline \n"
     return table_rows
 
-@app.route('/generate-pdf-picklist', methods=['POST'])
+
+@app.route("/generate-pdf-picklist", methods=["POST"])
 def generate_pdf_picklist():
     data = request.json
-    invoice = data.get('invoice')
-    info = data.get('info')
-    components = data.get('components')
-    country = data.get('country')
+    invoice = data.get("invoice")
+    info = data.get("info")
+    components = data.get("components")
+    country = data.get("country")
     utc_now = datetime.now(pytz.utc)
-    uk_time = utc_now.astimezone(pytz.timezone('Europe/London'))
-    us_time = utc_now.astimezone(pytz.timezone('America/Los_Angeles'))
-    nz_time = utc_now.astimezone(pytz.timezone('Pacific/Auckland'))
-    au_time = utc_now.astimezone(pytz.timezone('Australia/Sydney'))
+    uk_time = utc_now.astimezone(pytz.timezone("Europe/London"))
+    us_time = utc_now.astimezone(pytz.timezone("America/Los_Angeles"))
+    nz_time = utc_now.astimezone(pytz.timezone("Pacific/Auckland"))
+    au_time = utc_now.astimezone(pytz.timezone("Australia/Sydney"))
     # Generate LaTeX source code
     country = country.upper()
-    if country == 'UK':
-        latex_source = generate_latex_picklist(invoice, info, components, uk_time, country)
-    elif country == 'US':
-        latex_source = generate_latex_picklist(invoice, info, components, us_time, country)
-    elif country == 'NZ':
-        latex_source = generate_latex_picklist(invoice, info, components, nz_time, country)
-    elif country == 'AU':
-        latex_source = generate_latex_picklist(invoice, info, components, au_time, country)
-    
+    if country == "UK":
+        latex_source = generate_latex_picklist(
+            invoice, info, components, uk_time, country
+        )
+    elif country == "US":
+        latex_source = generate_latex_picklist(
+            invoice, info, components, us_time, country
+        )
+    elif country == "NZ":
+        latex_source = generate_latex_picklist(
+            invoice, info, components, nz_time, country
+        )
+    elif country == "AU":
+        latex_source = generate_latex_picklist(
+            invoice, info, components, au_time, country
+        )
+
     # Use a secure temporary directory
     with tempfile.TemporaryDirectory() as tmpdirname:
-        tex_file_path = os.path.join(tmpdirname, 'picklist.tex')
-        pdf_file_path = os.path.join(tmpdirname, 'picklist.pdf')
+        tex_file_path = os.path.join(tmpdirname, "picklist.tex")
+        pdf_file_path = os.path.join(tmpdirname, "picklist.pdf")
 
         # Write LaTeX source to a file
-        with open(tex_file_path, 'w') as f:
+        with open(tex_file_path, "w") as f:
             f.write(latex_source)
         # Run pdflatex to generate PDF
         try:
-            subprocess.run(['pdflatex', '-output-directory', tmpdirname, tex_file_path], check=True)
+            subprocess.run(
+                ["pdflatex", "-output-directory", tmpdirname, tex_file_path], check=True
+            )
         except subprocess.CalledProcessError as e:
-            return jsonify({
-                "error": "PDF generation failed",
-                "details": e.stderr
-            }), 500
+            return jsonify({"error": "PDF generation failed", "details": e.stderr}), 500
 
         # Ensure the generated PDF file exists
         if not os.path.exists(pdf_file_path):
@@ -289,45 +307,54 @@ def generate_pdf_picklist():
         # Send the generated PDF file
         return send_file(pdf_file_path, as_attachment=True)
 
+
 def generate_latex_picklist(invoice, info, components, time, country):
     # Define country-specific details
     country_details = {
         3: {
-            'header': 'COR-TEN-STEEL UK',
-            'address': 'Cadley \\\\ SN8 4NE \\\\ Tel: 0179 356 9121 \\\\ Email: uk@cor-ten-steel.co.uk',
+            "header": "COR-TEN-STEEL UK",
+            "address": "Cadley \\\\ SN8 4NE \\\\ Tel: 0179 356 9121 \\\\ Email: uk@cor-ten-steel.co.uk",
+            "invoice_number": f'C{invoice["id"]:05}',
         },
         7: {
-            'header': 'GABION1 UK',
-            'address': 'Cadley \\\\ SN8 4NE \\\\ Tel: 0179 356 9120 \\\\ Email: uk@gabion1.co.uk',
+            "header": "GABION1 UK",
+            "address": "Cadley \\\\ SN8 4NE \\\\ Tel: 0179 356 9120 \\\\ Email: uk@gabion1.co.uk",
+            "invoice_number": f'G{invoice["id"]:05}',
         },
         1: {
-            'header': 'COR-TEN-STEEL NZ',
-            'address': '14 Riverbank Road \\\\ Otaki 5512 \\\\ Tel: 04 888 0359 \\\\ Email: nz@cor-ten-steel.co.nz',
+            "header": "COR-TEN-STEEL NZ",
+            "address": "14 Riverbank Road \\\\ Otaki 5512 \\\\ Tel: 04 888 0359 \\\\ Email: nz@cor-ten-steel.co.nz",
+            "invoice_number": f'C{invoice["id"]:05}',
         },
         5: {
-            'header': 'GABION1 NZ',
-            'address': '14 Riverbank Road \\\\ Otaki 5512 \\\\ Tel: 04 888 0358 \\\\ Email: nz@gabion1.co.nz',
+            "header": "GABION1 NZ",
+            "address": "14 Riverbank Road \\\\ Otaki 5512 \\\\ Tel: 04 888 0358 \\\\ Email: nz@gabion1.co.nz",
+            "invoice_number": f'G{invoice["id"]:05}',
         },
         2: {
-            'header': 'COR-TEN-STEEL AU',
-            'address': '53 Hobart St \\\\ Riverstone 2765 \\\\ NSW \\\\ Tel: 02 9000 1521 \\\\ Email: aus@cor-ten-steel.com.au',
+            "header": "COR-TEN-STEEL AU",
+            "address": "53 Hobart St \\\\ Riverstone 2765 \\\\ NSW \\\\ Tel: 02 9000 1521 \\\\ Email: aus@cor-ten-steel.com.au",
+            "invoice_number": f'C{invoice["id"]:05}',
         },
         6: {
-            'header': 'GABION1 AU',
-            'address': '53 Hobart St \\\\ Riverstone 2765 \\\\ NSW \\\\ Tel: 02 9000 1520 \\\\ Email: aus@gabion1.com.au',
+            "header": "GABION1 AU",
+            "address": "53 Hobart St \\\\ Riverstone 2765 \\\\ NSW \\\\ Tel: 02 9000 1520 \\\\ Email: aus@gabion1.com.au",
+            "invoice_number": f'G{invoice["id"]:05}',
         },
         4: {
-            'header': 'COR-TEN-STEEL USA',
-            'address': 'Mesa Street \\\\ Hesperia \\\\ 92345 CA \\\\ Tel: 323-673-5742 \\\\ Email: usa@cor-ten-steel.com',
+            "header": "COR-TEN-STEEL USA",
+            "address": "Mesa Street \\\\ Hesperia \\\\ 92345 CA \\\\ Tel: 323-673-5742 \\\\ Email: usa@cor-ten-steel.com",
+            "invoice_number": f'C{invoice["id"]:05}',
         },
         8: {
-            'header': 'GABION1 USA',
-            'address': 'Mesa Street \\\\ Hesperia \\\\ 92345 CA \\\\ Tel: 323-310-9676 \\\\ Email: usa@gabion1.com',
+            "header": "GABION1 USA",
+            "address": "Mesa Street \\\\ Hesperia \\\\ 92345 CA \\\\ Tel: 323-310-9676 \\\\ Email: usa@gabion1.com",
+            "invoice_number": f'G{invoice["id"]:05}',
         },
     }
 
-    details = country_details[invoice['subdivision_id']]
-    weight_multiplier = 2.20462 if country == "US" else 1 
+    details = country_details[invoice["subdivision_id"]]
+    weight_multiplier = 2.20462 if country == "US" else 1
     # Generate the LaTeX source
     latex_source = f"""
     \\documentclass[a4paper,12pt]{{article}}
@@ -348,11 +375,11 @@ def generate_latex_picklist(invoice, info, components, time, country):
 
     \\textbf{{\\fontsize{{20}}{{24}}\\selectfont {escape_latex(invoice['customers']['first_name'])}}} \\textbf{{\\fontsize{{20}}{{24}}\\selectfont {escape_latex(invoice['customers']['last_name'])}}} \\\\
     """
-    if invoice['customers']['company']:
+    if invoice["customers"]["company"]:
         latex_source += f"""
     \\texttt{{{escape_latex(invoice['customers']['company'])}}} \\\\
     """
-    if invoice['addresses']['building_name']:
+    if invoice["addresses"]["building_name"]:
         latex_source += f"""
     \\textbf{{\\fontsize{{30}}{{36}}\\selectfont {escape_latex(invoice['addresses']['building_name'])}}} \\\\
     """
@@ -365,7 +392,138 @@ def generate_latex_picklist(invoice, info, components, time, country):
     \\textsf{{\\Large {escape_latex(invoice['customers']['email'])}}} \\\\
     \\textsf{{\\Large {escape_latex(invoice['customers']['phone'])}}} \\\\
     """
-    if invoice['customers']['second_phone']:
+    if invoice["customers"]["second_phone"]:
+        latex_source += f"""
+    \\textsf{{\\Large {escape_latex(invoice['customers']['second_phone'])}}} \\\\
+    """
+    latex_source += f"""
+    \\noindent
+    \\textsf{{\\Large {escape_latex(invoice['delivery_instructions'])}}} \\\\
+
+    \\vspace{{0.5cm}}
+    
+    \\noindent
+    \\begin{{minipage}}[t]{{0.45\\textwidth}}
+        \\raggedright
+        \\small
+        {details['header']} \\\\
+        {details['address']} \\\\
+    \\end{{minipage}}
+    \\hfill
+    \\begin{{minipage}}[t]{{0.45\\textwidth}}
+        \\raggedleft
+        \\textbf{{\\fontsize{{20}}{{24}}\\selectfont Picklist}} \\\\
+        \\vspace{{1cm}}
+        \\small
+        Invoice Number: \\texttt{{{details['invoice_number']}}} \\\\
+        Date Issued: \\texttt{{{time.strftime("%d-%b-%Y %H:%M")}}} 
+    \\end{{minipage}}
+    
+    \\vspace{{0.5cm}}
+
+    \\noindent
+    \\rule{{\\textwidth}}{{0.5pt}}
+
+    \\vspace{{0.5cm}}
+
+    \\noindent
+    \\begin{{tabular}}{{l l}}
+    \\textbf{{Total Items:}} & \\texttt{{{info['total_items']}}} \\\\ 
+    \\textbf{{Total Weight ({'lbs' if country == 'US' else 'kgs'}):}} & \\texttt{{{(invoice['weight'] * weight_multiplier):.1f}}} \\\\ 
+    \\textbf{{Carrier:}} & \\texttt{{{escape_latex(invoice['freight_carrier'])}}} \\\\ 
+    \\textbf{{Stickers:}} & \\texttt{{{escape_latex(invoice['stickers'])}}} \\\\ 
+    \\textbf{{Packing Instructions:}} & \\texttt{{{escape_latex(invoice['packing_instructions'])}}} \\\\ 
+    \\textbf{{Con Note:}} & \\texttt{{{escape_latex(invoice['con_note'])}}} \\\\ 
+    \\end{{tabular}}
+
+    \\vspace{{0.5cm}}
+
+    \\begin{{longtable}}{{|l|l|l|l|}}
+        \\hline
+        \\textbf{{Code}} & \\textbf{{Description}} & \\textbf{{Qty}} & \\textbf{{Weight ({'lbs' if country == 'US' else 'kgs'})}} \\\\
+        \\hline
+        {picklist_table_rows(components, country, invoice['bracewire'])}
+    \\end{{longtable}}
+
+    \\end{{document}}
+    """
+    return latex_source
+    # Define country-specific details
+    country_details = {
+        3: {
+            "header": "COR-TEN-STEEL UK",
+            "address": "Cadley \\\\ SN8 4NE \\\\ Tel: 0179 356 9121 \\\\ Email: uk@cor-ten-steel.co.uk",
+        },
+        7: {
+            "header": "GABION1 UK",
+            "address": "Cadley \\\\ SN8 4NE \\\\ Tel: 0179 356 9120 \\\\ Email: uk@gabion1.co.uk",
+        },
+        1: {
+            "header": "COR-TEN-STEEL NZ",
+            "address": "14 Riverbank Road \\\\ Otaki 5512 \\\\ Tel: 04 888 0359 \\\\ Email: nz@cor-ten-steel.co.nz",
+        },
+        5: {
+            "header": "GABION1 NZ",
+            "address": "14 Riverbank Road \\\\ Otaki 5512 \\\\ Tel: 04 888 0358 \\\\ Email: nz@gabion1.co.nz",
+        },
+        2: {
+            "header": "COR-TEN-STEEL AU",
+            "address": "53 Hobart St \\\\ Riverstone 2765 \\\\ NSW \\\\ Tel: 02 9000 1521 \\\\ Email: aus@cor-ten-steel.com.au",
+        },
+        6: {
+            "header": "GABION1 AU",
+            "address": "53 Hobart St \\\\ Riverstone 2765 \\\\ NSW \\\\ Tel: 02 9000 1520 \\\\ Email: aus@gabion1.com.au",
+        },
+        4: {
+            "header": "COR-TEN-STEEL USA",
+            "address": "Mesa Street \\\\ Hesperia \\\\ 92345 CA \\\\ Tel: 323-673-5742 \\\\ Email: usa@cor-ten-steel.com",
+        },
+        8: {
+            "header": "GABION1 USA",
+            "address": "Mesa Street \\\\ Hesperia \\\\ 92345 CA \\\\ Tel: 323-310-9676 \\\\ Email: usa@gabion1.com",
+        },
+    }
+
+    details = country_details[invoice["subdivision_id"]]
+    weight_multiplier = 2.20462 if country == "US" else 1
+    # Generate the LaTeX source
+    latex_source = f"""
+    \\documentclass[a4paper,12pt]{{article}}
+    \\usepackage{{graphicx}}
+    \\usepackage{{geometry}}
+    \\geometry{{a4paper, margin=1cm}}
+    \\usepackage{{array}}
+    \\usepackage{{longtable}}
+    \\usepackage{{anyfontsize}}
+    \\pagestyle{{empty}}
+
+    \\begin{{document}}
+    
+    \\vspace{{0.5cm}}
+
+    \\noindent
+    \\texttt{{Deliver to:}} \\\\
+
+    \\textbf{{\\fontsize{{20}}{{24}}\\selectfont {escape_latex(invoice['customers']['first_name'])}}} \\textbf{{\\fontsize{{20}}{{24}}\\selectfont {escape_latex(invoice['customers']['last_name'])}}} \\\\
+    """
+    if invoice["customers"]["company"]:
+        latex_source += f"""
+    \\texttt{{{escape_latex(invoice['customers']['company'])}}} \\\\
+    """
+    if invoice["addresses"]["building_name"]:
+        latex_source += f"""
+    \\textbf{{\\fontsize{{30}}{{36}}\\selectfont {escape_latex(invoice['addresses']['building_name'])}}} \\\\
+    """
+    latex_source += f"""
+    \\textbf{{\\fontsize{{30}}{{36}}\\selectfont {escape_latex(invoice['addresses']['street_address'])}}} \\\\
+    \\textbf{{\\fontsize{{50}}{{60}}\\selectfont {escape_latex(invoice['addresses']['suburb'])}}} \\\\
+    \\textbf{{\\fontsize{{50}}{{60}}\\selectfont {escape_latex(invoice['addresses']['city'])}}} \\\\
+    \\textbf{{\\fontsize{{70}}{{84}}\\selectfont {escape_latex(invoice['addresses']['postal_code'])}}} \\\\
+    \\noindent
+    \\textsf{{\\Large {escape_latex(invoice['customers']['email'])}}} \\\\
+    \\textsf{{\\Large {escape_latex(invoice['customers']['phone'])}}} \\\\
+    """
+    if invoice["customers"]["second_phone"]:
         latex_source += f"""
     \\textsf{{\\Large {escape_latex(invoice['customers']['second_phone'])}}} \\\\
     """
@@ -422,6 +580,7 @@ def generate_latex_picklist(invoice, info, components, time, country):
     """
     return latex_source
 
+
 def picklist_table_rows(components, country, bracewire):
     # Use metric or imperial names based on the country
     name_key = "name_imperial" if country == "US" else "name_metric"
@@ -435,19 +594,23 @@ def picklist_table_rows(components, country, bracewire):
         table_rows += "\\hline \n"
     return table_rows
 
+
 def escape_latex(text):
     if not isinstance(text, str):
         return text  # Return non-string data as-is
-    return (text.replace('\\', '\\textbackslash{}')  # Escape backslashes
-                .replace('%', '\\%')
-                .replace('_', '\\_')
-                .replace('$', '\\$')
-                .replace('&', '\\&')
-                .replace('#', '\\#')
-                .replace('{', '\\{')
-                .replace('}', '\\}')
-                .replace('~', '\\textasciitilde{}')
-                .replace('^', '\\textasciicircum{}'))
+    return (
+        text.replace("\\", "\\textbackslash{}")  # Escape backslashes
+        .replace("%", "\\%")
+        .replace("_", "\\_")
+        .replace("$", "\\$")
+        .replace("&", "\\&")
+        .replace("#", "\\#")
+        .replace("{", "\\{")
+        .replace("}", "\\}")
+        .replace("~", "\\textasciitilde{}")
+        .replace("^", "\\textasciicircum{}")
+    )
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
