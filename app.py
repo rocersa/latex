@@ -112,7 +112,7 @@ def generate_latex_invoice(invoice, time, country, currency):
             'address': 'Mesa Street \\\\ Hesperia \\\\ 92345 CA \\\\ Tel: 323-310-9676 \\\\ Email: usa@gabion1.com',
             'tax_label': 'Tax',
             'tax_rate': invoice.get('us_tax_rate', 0) / 100,
-            'bank_details': '\\texttt{ACH Routing Number: 121000358} \\\\ \\texttt{Account Number: 325056815335}',
+            'bank_details': '\\texttt{{ACH Routing Number: 121000358}} \\\\ \\texttt{{Account Number: 325056815335}} \\\\ \\texttt{{Reference: G{str(invoice["id"]).zfill(5)}}}',
         },
     }
 
@@ -221,13 +221,11 @@ def generate_latex_invoice(invoice, time, country, currency):
     \\begin{{center}}
     \\texttt{{Account/Business Name: Rocersa Limited}} \\\\
     {details['bank_details']} \\\\
-    \\texttt{{Reference: {str(invoice['id']).zfill(5)}}}
     \\end{{center}}
     
     \\end{{document}}
     """
     return latex_source
-
 
 def invoice_table_rows(invoice, tax_rate, country, currency):
     if country == 'US':
@@ -243,7 +241,6 @@ def invoice_table_rows(invoice, tax_rate, country, currency):
         table_rows += f"\\texttt{{Freight: {escape_latex(invoice['freight_carrier'])}}} & \\texttt{{1}} & \\texttt{{{currency}{(invoice['freight_charged'] * (1/(1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(invoice['freight_charged'] * (1/(1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(invoice['freight_charged'] * (tax_rate / (1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(invoice['freight_charged']):.2f}}} \\\\ \n"
         table_rows += "\\hline \n"
     return table_rows
-
 
 @app.route('/generate-pdf-picklist', methods=['POST'])
 def generate_pdf_picklist():
