@@ -65,7 +65,7 @@ def generate_latex_invoice(invoice, time, country, currency):
             "tax_label": "VAT (20\\%)",
             "tax_rate": 0.2,
             "invoice_number": f'C{invoice["id"]:05}',
-            "bank_details": f'\\texttt{{Sort Code: 40-05-16}} \\\\ \\texttt{{Account Number: 02371960}} \\\\ \\texttt{{Reference: C{invoice["id"]:05}}}',
+            "bank_details": f"\\texttt{{Sort Code: 40-05-16}} \\\\ \\texttt{{Account Number: 02371960}}",
         },
         7: {
             "header": "GABION1 UK",
@@ -73,7 +73,7 @@ def generate_latex_invoice(invoice, time, country, currency):
             "tax_label": "VAT (20\\%)",
             "tax_rate": 0.2,
             "invoice_number": f'G{invoice["id"]:05}',
-            "bank_details": f'\\texttt{{Sort Code: 40-05-16}} \\\\ \\texttt{{Account Number: 02371960}} \\\\ \\texttt{{Reference: G{invoice["id"]:05}}}',
+            "bank_details": f"\\texttt{{Sort Code: 40-05-16}} \\\\ \\texttt{{Account Number: 02371960}}",
         },
         1: {
             "header": "COR-TEN-STEEL NZ",
@@ -81,7 +81,7 @@ def generate_latex_invoice(invoice, time, country, currency):
             "tax_label": "GST (15\\%)",
             "tax_rate": 0.15,
             "invoice_number": f'C{invoice["id"]:05}',
-            "bank_details": f'\\texttt{{Account Number: 02-0506-0143690-002}} \\\\ \\texttt{{Reference: C{invoice["id"]:05}}}',
+            "bank_details": f"\\texttt{{Account Number: 02-0506-0143690-002}}",
         },
         5: {
             "header": "GABION1 NZ",
@@ -89,7 +89,7 @@ def generate_latex_invoice(invoice, time, country, currency):
             "tax_label": "GST (15\\%)",
             "tax_rate": 0.15,
             "invoice_number": f'G{invoice["id"]:05}',
-            "bank_details": f'\\texttt{{Account Number: 02-0506-0143690-002}} \\\\ \\texttt{{Reference: G{invoice["id"]:05}}}',
+            "bank_details": f"\\texttt{{Account Number: 02-0506-0143690-002}}",
         },
         2: {
             "header": "COR-TEN-STEEL AU",
@@ -97,7 +97,7 @@ def generate_latex_invoice(invoice, time, country, currency):
             "tax_label": "GST (10\\%)",
             "tax_rate": 0.1,
             "invoice_number": f'C{invoice["id"]:05}',
-            "bank_details": f'\\texttt{{BSB: 06 2000}} \\\\ \\texttt{{ACC: 14651089}} \\\\ \\texttt{{Reference: C{invoice["id"]:05}}}',
+            "bank_details": f"\\texttt{{BSB: 06 2000}} \\\\ \\texttt{{ACC: 14651089}}",
         },
         6: {
             "header": "GABION1 AU",
@@ -105,7 +105,7 @@ def generate_latex_invoice(invoice, time, country, currency):
             "tax_label": "GST (10\\%)",
             "tax_rate": 0.1,
             "invoice_number": f'G{invoice["id"]:05}',
-            "bank_details": f'\\texttt{{BSB: 06 2000}} \\\\ \\texttt{{ACC: 14651089}} \\\\ \\texttt{{Reference: G{invoice["id"]:05}}}',
+            "bank_details": f"\\texttt{{BSB: 06 2000}} \\\\ \\texttt{{ACC: 14651089}}",
         },
         4: {
             "header": "COR-TEN-STEEL USA",
@@ -113,7 +113,7 @@ def generate_latex_invoice(invoice, time, country, currency):
             "tax_label": "Tax",
             "tax_rate": invoice.get("us_tax_rate", 0) / 100,
             "invoice_number": f'C{invoice["id"]:05}',
-            "bank_details": f'\\texttt{{ACH Routing Number: 121000358}} \\\\ \\texttt{{Account Number: 325056815335}} \\\\ \\texttt{{Reference: C{invoice["id"]:05}}}',
+            "bank_details": f"\\texttt{{ACH Routing Number: 121000358}} \\\\ \\texttt{{Account Number: 325056815335}}",
         },
         8: {
             "header": "GABION1 USA",
@@ -121,7 +121,7 @@ def generate_latex_invoice(invoice, time, country, currency):
             "tax_label": "Tax",
             "tax_rate": invoice.get("us_tax_rate", 0) / 100,
             "invoice_number": f'G{invoice["id"]:05}',
-            "bank_details": f'\\texttt{{ACH Routing Number: 121000358}} \\\\ \\texttt{{Account Number: 325056815335}} \\\\ \\texttt{{Reference: G{invoice["id"]:05}}}',
+            "bank_details": f"\\texttt{{ACH Routing Number: 121000358}} \\\\ \\texttt{{Account Number: 325056815335}}",
         },
     }
     details = country_details[invoice["subdivision_id"]]
