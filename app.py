@@ -61,7 +61,7 @@ def generate_latex_invoice(invoice, time, country, currency):
     country_details = {
         3: {
             "header": "COR-TEN-STEEL UK",
-            "address": "Cadley \\\\ SN8 4NE \\\\ 0179 356 9121 \\\\ uk@cor-ten-steel.co.uk \\\\ www.cor-ten-steel.co.uk",
+            "address": "Cadley \\\\ SN8 4NE \\\\ 01793 386001 \\\\ uk@cor-ten-steel.co.uk \\\\ www.cor-ten-steel.co.uk",
             "tax_label": "VAT (20\\%)",
             "tax_rate": 0.2,
             "invoice_number": f'C{invoice["id"]:05}',
@@ -69,7 +69,7 @@ def generate_latex_invoice(invoice, time, country, currency):
         },
         7: {
             "header": "GABION1 UK",
-            "address": "Cadley \\\\ SN8 4NE \\\\ 0179 356 9120 \\\\ uk@gabion1.co.uk \\\\ www.gabion1.co.uk",
+            "address": "Cadley \\\\ SN8 4NE \\\\ 01793 386000 \\\\ uk@gabion1.co.uk \\\\ www.gabion1.co.uk",
             "tax_label": "VAT (20\\%)",
             "tax_rate": 0.2,
             "invoice_number": f'G{invoice["id"]:05}',
@@ -77,7 +77,7 @@ def generate_latex_invoice(invoice, time, country, currency):
         },
         1: {
             "header": "COR-TEN-STEEL NZ",
-            "address": "14 Riverbank Road \\\\ Otaki \\\\ 5512 \\\\ 04 888 0359 \\\\ nz@cor-ten-steel.co.nz \\\\ www.cor-ten-steel.co.nz",
+            "address": "14 Riverbank Road \\\\ Otaki \\\\ 5512 \\\\ 04 888 7441 \\\\ nz@cor-ten-steel.co.nz \\\\ www.cor-ten-steel.co.nz",
             "tax_label": "GST (15\\%)",
             "tax_rate": 0.15,
             "invoice_number": f'C{invoice["id"]:05}',
@@ -85,7 +85,7 @@ def generate_latex_invoice(invoice, time, country, currency):
         },
         5: {
             "header": "GABION1 NZ",
-            "address": "14 Riverbank Road \\\\ Otaki \\\\ 5512 \\\\ 04 888 0358 \\\\ nz@gabion1.co.nz \\\\ www.gabion1.co.nz",
+            "address": "14 Riverbank Road \\\\ Otaki \\\\ 5512 \\\\ 04 888 7440 \\\\ nz@gabion1.co.nz \\\\ www.gabion1.co.nz",
             "tax_label": "GST (15\\%)",
             "tax_rate": 0.15,
             "invoice_number": f'G{invoice["id"]:05}',
@@ -93,7 +93,7 @@ def generate_latex_invoice(invoice, time, country, currency):
         },
         2: {
             "header": "COR-TEN-STEEL AU",
-            "address": "53 Hobart St \\\\ Riverstone 2765 \\\\ NSW \\\\ 02 9000 1521 \\\\ aus@cor-ten-steel.com.au \\\\ www.cor-ten-steel.com.au",
+            "address": "53 Hobart St \\\\ Riverstone 2765 \\\\ NSW \\\\ 02 4062 0026 \\\\ aus@cor-ten-steel.com.au \\\\ www.cor-ten-steel.com.au",
             "tax_label": "GST (10\\%)",
             "tax_rate": 0.1,
             "invoice_number": f'C{invoice["id"]:05}',
@@ -101,7 +101,7 @@ def generate_latex_invoice(invoice, time, country, currency):
         },
         6: {
             "header": "GABION1 AU",
-            "address": "53 Hobart St \\\\ Riverstone 2765 \\\\ NSW \\\\ 02 9000 1520 \\\\ aus@gabion1.com.au \\\\ www.gabion1.com.au",
+            "address": "53 Hobart St \\\\ Riverstone 2765 \\\\ NSW \\\\ 02 4062 0025 \\\\ aus@gabion1.com.au \\\\ www.gabion1.com.au",
             "tax_label": "GST (10\\%)",
             "tax_rate": 0.1,
             "invoice_number": f'G{invoice["id"]:05}',
@@ -109,7 +109,7 @@ def generate_latex_invoice(invoice, time, country, currency):
         },
         4: {
             "header": "COR-TEN-STEEL USA",
-            "address": "Mesa Street \\\\ Hesperia \\\\ 92345 CA \\\\ Tel: 323-673-5742 \\\\ Email: usa@cor-ten-steel.com",
+            "address": "Mesa Street \\\\ Hesperia \\\\ 92345 CA \\\\ Tel: 323 300 2558 \\\\ Email: usa@cor-ten-steel.com",
             "tax_label": "Tax",
             "tax_rate": invoice.get("us_tax_rate", 0) / 100,
             "invoice_number": f'C{invoice["id"]:05}',
@@ -117,7 +117,7 @@ def generate_latex_invoice(invoice, time, country, currency):
         },
         8: {
             "header": "GABION1 USA",
-            "address": "Mesa Street \\\\ Hesperia \\\\ 92345 CA \\\\ Tel: 323-310-9676 \\\\ Email: usa@gabion1.com",
+            "address": "Mesa Street \\\\ Hesperia \\\\ 92345 CA \\\\ Tel: 323 300 2585 \\\\ Email: usa@gabion1.com",
             "tax_label": "Tax",
             "tax_rate": invoice.get("us_tax_rate", 0) / 100,
             "invoice_number": f'G{invoice["id"]:05}',
@@ -317,42 +317,42 @@ def generate_latex_picklist(invoice, info, components, time, country):
     country_details = {
         3: {
             "header": "COR-TEN-STEEL UK",
-            "address": "Cadley \\\\ SN8 4NE \\\\ Tel: 0179 356 9121 \\\\ Email: uk@cor-ten-steel.co.uk",
+            "address": "Cadley \\\\ SN8 4NE \\\\ Tel: 01793 386001 \\\\ Email: uk@cor-ten-steel.co.uk",
             "invoice_number": f'C{invoice["id"]:05}',
         },
         7: {
             "header": "GABION1 UK",
-            "address": "Cadley \\\\ SN8 4NE \\\\ Tel: 0179 356 9120 \\\\ Email: uk@gabion1.co.uk",
+            "address": "Cadley \\\\ SN8 4NE \\\\ Tel: 01793 386000 \\\\ Email: uk@gabion1.co.uk",
             "invoice_number": f'G{invoice["id"]:05}',
         },
         1: {
             "header": "COR-TEN-STEEL NZ",
-            "address": "14 Riverbank Road \\\\ Otaki 5512 \\\\ Tel: 04 888 0359 \\\\ Email: nz@cor-ten-steel.co.nz",
+            "address": "14 Riverbank Road \\\\ Otaki 5512 \\\\ Tel: 04 888 7441 \\\\ Email: nz@cor-ten-steel.co.nz",
             "invoice_number": f'C{invoice["id"]:05}',
         },
         5: {
             "header": "GABION1 NZ",
-            "address": "14 Riverbank Road \\\\ Otaki 5512 \\\\ Tel: 04 888 0358 \\\\ Email: nz@gabion1.co.nz",
+            "address": "14 Riverbank Road \\\\ Otaki 5512 \\\\ Tel: 04 888 7440 \\\\ Email: nz@gabion1.co.nz",
             "invoice_number": f'G{invoice["id"]:05}',
         },
         2: {
             "header": "COR-TEN-STEEL AU",
-            "address": "53 Hobart St \\\\ Riverstone 2765 \\\\ NSW \\\\ Tel: 02 9000 1521 \\\\ Email: aus@cor-ten-steel.com.au",
+            "address": "53 Hobart St \\\\ Riverstone 2765 \\\\ NSW \\\\ Tel: 02 4062 0026 \\\\ Email: aus@cor-ten-steel.com.au",
             "invoice_number": f'C{invoice["id"]:05}',
         },
         6: {
             "header": "GABION1 AU",
-            "address": "53 Hobart St \\\\ Riverstone 2765 \\\\ NSW \\\\ Tel: 02 9000 1520 \\\\ Email: aus@gabion1.com.au",
+            "address": "53 Hobart St \\\\ Riverstone 2765 \\\\ NSW \\\\ Tel: 02 4062 0025 \\\\ Email: aus@gabion1.com.au",
             "invoice_number": f'G{invoice["id"]:05}',
         },
         4: {
             "header": "COR-TEN-STEEL USA",
-            "address": "Mesa Street \\\\ Hesperia \\\\ 92345 CA \\\\ Tel: 323-673-5742 \\\\ Email: usa@cor-ten-steel.com",
+            "address": "Mesa Street \\\\ Hesperia \\\\ 92345 CA \\\\ Tel: 323 300 2558 \\\\ Email: usa@cor-ten-steel.com",
             "invoice_number": f'C{invoice["id"]:05}',
         },
         8: {
             "header": "GABION1 USA",
-            "address": "Mesa Street \\\\ Hesperia \\\\ 92345 CA \\\\ Tel: 323-310-9676 \\\\ Email: usa@gabion1.com",
+            "address": "Mesa Street \\\\ Hesperia \\\\ 92345 CA \\\\ Tel: 323 300 2585 \\\\ Email: usa@gabion1.com",
             "invoice_number": f'G{invoice["id"]:05}',
         },
     }
