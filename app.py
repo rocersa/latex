@@ -64,6 +64,7 @@ def generate_latex_invoice(invoice, time, country, currency):
             "address": "Cadley \\\\ SN8 4NE \\\\ 01793 386001 \\\\ uk@cor-ten-steel.co.uk \\\\ www.cor-ten-steel.co.uk",
             "tax_label": "VAT (20\\%)",
             "tax_rate": 0.2,
+            "tax_number": "VAT Number: 161 6032 40",
             "invoice_number": f'C{invoice["id"]:05}',
             "bank_details": f"\\texttt{{VAT Number: 161 6032 40}} \\\\ \\texttt{{Sort Code: 40-05-16}} \\\\ \\texttt{{Account Number: 02371960}}",
         },
@@ -72,6 +73,7 @@ def generate_latex_invoice(invoice, time, country, currency):
             "address": "Cadley \\\\ SN8 4NE \\\\ 01793 386000 \\\\ uk@gabion1.co.uk \\\\ www.gabion1.co.uk",
             "tax_label": "VAT (20\\%)",
             "tax_rate": 0.2,
+            "tax_number": "VAT Number: 161 6032 40",
             "invoice_number": f'G{invoice["id"]:05}',
             "bank_details": f"\\texttt{{VAT Number: 161 6032 40}} \\\\ \\texttt{{Sort Code: 40-05-16}} \\\\ \\texttt{{Account Number: 02371960}}",
         },
@@ -80,6 +82,7 @@ def generate_latex_invoice(invoice, time, country, currency):
             "address": "14 Riverbank Road \\\\ Otaki \\\\ 5512 \\\\ 04 888 7441 \\\\ nz@cor-ten-steel.co.nz \\\\ www.cor-ten-steel.co.nz",
             "tax_label": "GST (15\\%)",
             "tax_rate": 0.15,
+            "tax_number": "GST Number: 66 558 215",
             "invoice_number": f'C{invoice["id"]:05}',
             "bank_details": f"\\texttt{{GST Number: 66 558 215}} \\\\ \\texttt{{Account Number: 02-0506-0143690-002}}",
         },
@@ -88,6 +91,7 @@ def generate_latex_invoice(invoice, time, country, currency):
             "address": "14 Riverbank Road \\\\ Otaki \\\\ 5512 \\\\ 04 888 7440 \\\\ nz@gabion1.co.nz \\\\ www.gabion1.co.nz",
             "tax_label": "GST (15\\%)",
             "tax_rate": 0.15,
+            "tax_number": "GST Number: 66 558 215",
             "invoice_number": f'G{invoice["id"]:05}',
             "bank_details": f"\\texttt{{GST Number: 66 558 215}} \\\\ \\texttt{{Account Number: 02-0506-0143690-002}}",
         },
@@ -96,6 +100,7 @@ def generate_latex_invoice(invoice, time, country, currency):
             "address": "53 Hobart St \\\\ Riverstone 2765 \\\\ NSW \\\\ 02 4062 0026 \\\\ aus@cor-ten-steel.com.au \\\\ www.cor-ten-steel.com.au",
             "tax_label": "GST (10\\%)",
             "tax_rate": 0.1,
+            "tax_number": "GST Number: 35 671 639 843",
             "invoice_number": f'C{invoice["id"]:05}',
             "bank_details": f"\\texttt{{GST Number: 35 671 639 843}} \\\\ \\texttt{{BSB: 06 2000}} \\\\ \\texttt{{ACC: 14651089}}",
         },
@@ -104,6 +109,7 @@ def generate_latex_invoice(invoice, time, country, currency):
             "address": "53 Hobart St \\\\ Riverstone 2765 \\\\ NSW \\\\ 02 4062 0025 \\\\ aus@gabion1.com.au \\\\ www.gabion1.com.au",
             "tax_label": "GST (10\\%)",
             "tax_rate": 0.1,
+            "tax_number": "GST Number: 35 671 639 843",
             "invoice_number": f'G{invoice["id"]:05}',
             "bank_details": f"\\texttt{{GST Number: 35 671 639 843}} \\\\ \\texttt{{BSB: 06 2000}} \\\\ \\texttt{{ACC: 14651089}}",
         },
@@ -112,6 +118,7 @@ def generate_latex_invoice(invoice, time, country, currency):
             "address": "Mesa Street \\\\ Hesperia \\\\ 92345 CA \\\\ Tel: 323 300 2558 \\\\ Email: usa@cor-ten-steel.com",
             "tax_label": "Tax",
             "tax_rate": invoice.get("us_tax_rate", 0) / 100,
+            "tax_number": "EIN: 47-3791745",
             "invoice_number": f'C{invoice["id"]:05}',
             "bank_details": f"\\texttt{{EIN: 47-3791745}} \\\\ \\texttt{{ACH Routing Number: 121000358}} \\\\ \\texttt{{Account Number: 325056815335}}",
         },
@@ -120,6 +127,7 @@ def generate_latex_invoice(invoice, time, country, currency):
             "address": "Mesa Street \\\\ Hesperia \\\\ 92345 CA \\\\ Tel: 323 300 2585 \\\\ Email: usa@gabion1.com",
             "tax_label": "Tax",
             "tax_rate": invoice.get("us_tax_rate", 0) / 100,
+            "tax_number": "EIN: 47-3791745",
             "invoice_number": f'G{invoice["id"]:05}',
             "bank_details": f"\\texttt{{EIN: 47-3791745}} \\\\ \\texttt{{Account Number: 325056815335}}",
         },
@@ -186,6 +194,7 @@ def generate_latex_invoice(invoice, time, country, currency):
         \\raggedleft
         \\small
         Tax Invoice \\\\
+        {{{details['tax_number']}}} \\\\
         \\vspace{{1cm}}
         Invoice Number: \\texttt{{{details['invoice_number']}}} \\\\
         Date Issued: \\texttt{{{time.strftime("%d-%b-%Y")}}}
