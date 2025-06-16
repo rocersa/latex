@@ -120,7 +120,7 @@ def generate_latex_invoice(invoice, time, country, currency):
             "tax_rate": invoice.get("us_tax_rate", 0) / 100,
             "tax_number": "EIN: 47-3791745",
             "invoice_number": f'C{invoice["id"]:05}',
-            "bank_details": "",
+            "bank_details": ".",
         },
         8: {
             "header": "GABION1 USA",
@@ -129,7 +129,7 @@ def generate_latex_invoice(invoice, time, country, currency):
             "tax_rate": invoice.get("us_tax_rate", 0) / 100,
             "tax_number": "EIN: 47-3791745",
             "invoice_number": f'G{invoice["id"]:05}',
-            "bank_details": "",
+            "bank_details": ".",
         },
     }
     details = country_details[invoice["subdivision_id"]]
