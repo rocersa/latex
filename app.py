@@ -238,13 +238,17 @@ def generate_latex_invoice(invoice, time, country, currency):
     \\end{{longtable}}
     \\endgroup
     \\noindent
-    Payment can be made by bank transfer to the following account:
-    \\begin{{center}}
-    
-    {details['bank_details']} \\\\
-    \\texttt{{Reference: {details['invoice_number']}}}
-    \\end{{center}}
-    
+    """
+    if (country != 'us'):
+        latex_source += f"""
+        Payment can be made by bank transfer to the following account:
+        \\begin{{center}}
+        
+        {details['bank_details']} \\\\
+        \\texttt{{Reference: {details['invoice_number']}}}
+        \\end{{center}}
+        """
+    latex_source += f"""
     \\end{{document}}
     """
     return latex_source
