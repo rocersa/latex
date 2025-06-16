@@ -66,7 +66,7 @@ def generate_latex_invoice(invoice, time, country, currency):
             "tax_rate": 0.2,
             "tax_number": "VAT Number: 161 6032 40",
             "invoice_number": f'C{invoice["id"]:05}',
-            "bank_details": f"\\texttt{{VAT Number: 161 6032 40}} \\\\ \\texttt{{Sort Code: 40-05-16}} \\\\ \\texttt{{Account Number: 02371960}}",
+            "bank_details": f"\\texttt{{Account/Business Name: Rocersa Limited}} \\\\ \\texttt{{VAT Number: 161 6032 40}} \\\\ \\texttt{{Sort Code: 40-05-16}} \\\\ \\texttt{{Account Number: 02371960}}",
         },
         7: {
             "header": "GABION1 UK",
@@ -75,7 +75,7 @@ def generate_latex_invoice(invoice, time, country, currency):
             "tax_rate": 0.2,
             "tax_number": "VAT Number: 161 6032 40",
             "invoice_number": f'G{invoice["id"]:05}',
-            "bank_details": f"\\texttt{{VAT Number: 161 6032 40}} \\\\ \\texttt{{Sort Code: 40-05-16}} \\\\ \\texttt{{Account Number: 02371960}}",
+            "bank_details": f"\\texttt{{Account/Business Name: Rocersa Limited}} \\\\ \\texttt{{VAT Number: 161 6032 40}} \\\\ \\texttt{{Sort Code: 40-05-16}} \\\\ \\texttt{{Account Number: 02371960}}",
         },
         1: {
             "header": "COR-TEN-STEEL NZ",
@@ -84,7 +84,7 @@ def generate_latex_invoice(invoice, time, country, currency):
             "tax_rate": 0.15,
             "tax_number": "GST Number: 66 558 215",
             "invoice_number": f'C{invoice["id"]:05}',
-            "bank_details": f"\\texttt{{GST Number: 66 558 215}} \\\\ \\texttt{{Account Number: 02-0506-0143690-002}}",
+            "bank_details": f"\\texttt{{Account/Business Name: Rocersa Limited}} \\\\ \\texttt{{GST Number: 66 558 215}} \\\\ \\texttt{{Account Number: 02-0506-0143690-002}}",
         },
         5: {
             "header": "GABION1 NZ",
@@ -93,7 +93,7 @@ def generate_latex_invoice(invoice, time, country, currency):
             "tax_rate": 0.15,
             "tax_number": "GST Number: 66 558 215",
             "invoice_number": f'G{invoice["id"]:05}',
-            "bank_details": f"\\texttt{{GST Number: 66 558 215}} \\\\ \\texttt{{Account Number: 02-0506-0143690-002}}",
+            "bank_details": f"\\texttt{{Account/Business Name: Rocersa Limited}} \\\\ \\texttt{{GST Number: 66 558 215}} \\\\ \\texttt{{Account Number: 02-0506-0143690-002}}",
         },
         2: {
             "header": "COR-TEN-STEEL AU",
@@ -102,7 +102,7 @@ def generate_latex_invoice(invoice, time, country, currency):
             "tax_rate": 0.1,
             "tax_number": "GST Number: 35 671 639 843",
             "invoice_number": f'C{invoice["id"]:05}',
-            "bank_details": f"\\texttt{{GST Number: 35 671 639 843}} \\\\ \\texttt{{BSB: 06 2000}} \\\\ \\texttt{{ACC: 14651089}}",
+            "bank_details": f"\\texttt{{Account/Business Name: Rocersa Limited}} \\\\ \\texttt{{GST Number: 35 671 639 843}} \\\\ \\texttt{{BSB: 06 2000}} \\\\ \\texttt{{ACC: 14651089}}",
         },
         6: {
             "header": "GABION1 AU",
@@ -111,7 +111,7 @@ def generate_latex_invoice(invoice, time, country, currency):
             "tax_rate": 0.1,
             "tax_number": "GST Number: 35 671 639 843",
             "invoice_number": f'G{invoice["id"]:05}',
-            "bank_details": f"\\texttt{{GST Number: 35 671 639 843}} \\\\ \\texttt{{BSB: 06 2000}} \\\\ \\texttt{{ACC: 14651089}}",
+            "bank_details": f"\\texttt{{Account/Business Name: Rocersa Limited}} \\\\ \\texttt{{GST Number: 35 671 639 843}} \\\\ \\texttt{{BSB: 06 2000}} \\\\ \\texttt{{ACC: 14651089}}",
         },
         4: {
             "header": "COR-TEN-STEEL USA",
@@ -120,7 +120,7 @@ def generate_latex_invoice(invoice, time, country, currency):
             "tax_rate": invoice.get("us_tax_rate", 0) / 100,
             "tax_number": "EIN: 47-3791745",
             "invoice_number": f'C{invoice["id"]:05}',
-            "bank_details": f"\\texttt{{EIN: 47-3791745}} \\\\ \\texttt{{ACH Routing Number: 121000358}} \\\\ \\texttt{{Account Number: 325056815335}}",
+            "bank_details": "",
         },
         8: {
             "header": "GABION1 USA",
@@ -129,7 +129,7 @@ def generate_latex_invoice(invoice, time, country, currency):
             "tax_rate": invoice.get("us_tax_rate", 0) / 100,
             "tax_number": "EIN: 47-3791745",
             "invoice_number": f'G{invoice["id"]:05}',
-            "bank_details": f"\\texttt{{EIN: 47-3791745}} \\\\ \\texttt{{Account Number: 325056815335}}",
+            "bank_details": "",
         },
     }
     details = country_details[invoice["subdivision_id"]]
@@ -240,7 +240,7 @@ def generate_latex_invoice(invoice, time, country, currency):
     \\noindent
     Payment can be made by bank transfer to the following account:
     \\begin{{center}}
-    \\texttt{{Account/Business Name: Rocersa Limited}} \\\\
+    
     {details['bank_details']} \\\\
     \\texttt{{Reference: {details['invoice_number']}}}
     \\end{{center}}
