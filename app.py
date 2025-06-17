@@ -239,7 +239,7 @@ def generate_latex_invoice(invoice, time, country, currency):
     \\endgroup
     \\noindent
     """
-    if (country != 'us'):
+    if (country != 'US'):
         latex_source += f"""
         Payment can be made by bank transfer to the following account:
         \\begin{{center}}
@@ -255,15 +255,18 @@ def generate_latex_invoice(invoice, time, country, currency):
 
 
 def invoice_table_rows(invoice, tax_rate, country, currency):
+    table_rows = ""
     if country == "US":
         name = "name_imperial"
+        for product in invoice["invoice_components"]:
+            table_rows += f"\\texttt{{{escape_latex(product['products'][name])}}} & \\texttt{{{product['quantity']}}} & \\texttt{{{currency}{(product['price']):.2f}}} & \\texttt{{{currency}{(product['price'] * product['quantity']):.2f}}} & \\texttt{{{currency}{(product['price'] * product['quantity'] * tax_rate):.2f}}} & \\texttt{{{currency}{(product['price'] * product['quantity'] * (1 + tax_rate)):.2f}}} \\\\ \n"
+            table_rows += "\\hline \n"
     else:
         name = "name_metric"
+        for product in invoice["invoice_components"]:
+            table_rows += f"\\texttt{{{escape_latex(product['products'][name])}}} & \\texttt{{{product['quantity']}}} & \\texttt{{{currency}{(product['price'] * (1/(1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(product['price'] * product['quantity'] * (1/(1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(product['price'] * product['quantity'] * (tax_rate / (1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(product['price'] * product['quantity']):.2f}}} \\\\ \n"
+            table_rows += "\\hline \n"
 
-    table_rows = ""
-    for product in invoice["invoice_components"]:
-        table_rows += f"\\texttt{{{escape_latex(product['products'][name])}}} & \\texttt{{{product['quantity']}}} & \\texttt{{{currency}{(product['price'] * (1/(1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(product['price'] * product['quantity'] * (1/(1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(product['price'] * product['quantity'] * (tax_rate / (1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(product['price'] * product['quantity']):.2f}}} \\\\ \n"
-        table_rows += "\\hline \n"
     if invoice["freight_charged"] != 0:
         table_rows += f"\\texttt{{Freight: {escape_latex(invoice['freight_carrier'])}}} & \\texttt{{1}} & \\texttt{{{currency}{(invoice['freight_charged'] * (1/(1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(invoice['freight_charged'] * (1/(1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(invoice['freight_charged'] * (tax_rate / (1 + tax_rate))):.2f}}} & \\texttt{{{currency}{(invoice['freight_charged']):.2f}}} \\\\ \n"
         table_rows += "\\hline \n"
