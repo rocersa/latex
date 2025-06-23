@@ -5,6 +5,9 @@ import subprocess
 import tempfile
 import os
 import pytz
+from GenerateInvoice import generate_invoice
+import GeneratePicklist
+import GenerateCuboid
 
 app = Flask(__name__)
 CORS(app)
@@ -12,6 +15,7 @@ CORS(app)
 
 @app.route("/generate-pdf-invoice", methods=["POST"])
 def generate_pdf_invoice():
+    print(generate_invoice("test"))
     data = request.json
     invoice = data.get("invoice")
     country = data.get("country")
@@ -239,7 +243,7 @@ def generate_latex_invoice(invoice, time, country, currency):
     \\endgroup
     \\noindent
     """
-    if (country != 'us'):
+    if (country != 'US'):
         latex_source += f"""
         Payment can be made by bank transfer to the following account:
         \\begin{{center}}
@@ -257,6 +261,7 @@ def generate_latex_invoice(invoice, time, country, currency):
 def invoice_table_rows(invoice, tax_rate, country, currency):
     if country == "US":
         name = "name_imperial"
+        tax_rate = 0
     else:
         name = "name_metric"
 
