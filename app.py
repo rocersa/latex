@@ -5,15 +5,18 @@ import subprocess
 import tempfile
 import os
 import pytz
-import GenerateInvoice
+import GenerateCuboid
 
 app = Flask(__name__)
 CORS(app)
 
 @app.route("/generate-cuboid", methods=["POST"])
 def generate_cuboid():
-    print(GenerateInvoice.generate_invoice("test"))
-    return 'hello world'
+    success, filename = GenerateCuboid.run(100, 300, 200)
+    if success:
+        return send_file(filename, mimetype='image/png')
+    else:
+        return 'Failed to generate image', 500
 
 @app.route("/generate-pdf-invoice", methods=["POST"])
 def generate_pdf_invoice():
