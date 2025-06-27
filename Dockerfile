@@ -12,6 +12,9 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# Install visualizations tools
+RUN apt-get install -y libosmesa6 libosmesa6-dev libgl1-mesa-glx libegl1-mesa mesa-utils
+
 # Create and activate a virtual environment
 RUN python3 -m venv /usr/src/app/venv
 
