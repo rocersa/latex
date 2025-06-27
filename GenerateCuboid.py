@@ -8,7 +8,7 @@ class GenerateCuboid:
         self.depth = depth
 
     def make_image(self, filename='ss.png'):
-        cuboid = pv.Box(bounds=[0,self.width, 0,self.height, 0,self.depth])
+        cuboid = pv.Box(bounds=[0,self.depth, 0,self.width, 0,self.height])
         plotter = pv.Plotter(off_screen=True)
         plotter.add_mesh(cuboid)
         plotter.screenshot(filename)
