@@ -14,7 +14,11 @@ CORS(app)
 
 @app.route("/generate-cuboid", methods=["POST"])
 def generate_cuboid():
-    success, filename = GenerateCuboid.run(100, 300, 200)
+    data = request.json
+    height = data.get("height", 100)
+    width = data.get("width", 300)
+    depth = data.get("depth", 200)
+    success, filename = GenerateCuboid.run(height, width, depth)
     if success:
         return send_file(filename, mimetype='image/png')
     else:
