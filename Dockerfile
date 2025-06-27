@@ -23,7 +23,7 @@ COPY requirements.txt ./
 RUN /usr/src/app/venv/bin/pip install --no-cache-dir -r requirements.txt
 
 # Copy the Flask application code into the container
-COPY app.py ./
+COPY . ./
 
 # Set environment variables to use the virtual environment
 ENV PATH="/usr/src/app/venv/bin:${PATH}"

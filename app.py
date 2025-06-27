@@ -5,17 +5,18 @@ import subprocess
 import tempfile
 import os
 import pytz
-from GenerateInvoice import generate_invoice
-import GeneratePicklist
-import GenerateCuboid
+import GenerateInvoice
 
 app = Flask(__name__)
 CORS(app)
 
+@app.route("/generate-cuboid", methods=["POST"])
+def generate_cuboid():
+    print(GenerateInvoice.generate_invoice("test"))
+    return 'hello world'
 
 @app.route("/generate-pdf-invoice", methods=["POST"])
 def generate_pdf_invoice():
-    print(generate_invoice("test"))
     data = request.json
     invoice = data.get("invoice")
     country = data.get("country")
