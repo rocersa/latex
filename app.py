@@ -482,7 +482,7 @@ def picklist_table_rows(components, country, bracewire):
     name_key = "name_imperial" if country == "US" else "name_metric"
     weight_multiplier = 2.20462 if country == "US" else 1
     table_rows = ""
-    for product in components.filter(lambda p: 'gabbra' not in p['products']['code'].lower()):
+    for product in filter(lambda p: 'gabbra' not in p['products']['code'].lower(), components):
         table_rows += f"\\texttt{{{escape_latex(product['products']['code'])}}} & \\texttt{{{escape_latex(product['products'][name_key])}}} & \\texttt{{{product['quantity']}}} & \\texttt{{{(product['products']['weight'] * product['quantity'] * weight_multiplier):.1f}}} \\\\ \n"
         table_rows += "\\hline \n"
     if bracewire and bracewire > 0:
